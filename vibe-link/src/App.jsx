@@ -148,24 +148,32 @@ export default function App() {
 
   useEffect(() => {
 
-    const savedScreen =
-      localStorage.getItem(
-        "vibeLinkScreen"
-      );
+  const savedScreen =
+    localStorage.getItem(
+      "vibeLinkScreen"
+    );
 
-    if (
-      savedScreen &&
-      savedScreen !==
-        "loading"
-    ) {
+  if (
+    savedScreen &&
+    savedScreen !== "loading" &&
+    savedScreen !== "signup" &&
+    savedScreen !== "otp" &&
+    savedScreen !== "completeProfile"
+  ) {
 
-      setScreen(
-        savedScreen
-      );
+    setScreen(
+      savedScreen
+    );
 
-    }
+  } else {
 
-  }, []);
+    localStorage.removeItem(
+      "vibeLinkScreen"
+    );
+
+  }
+
+}, []);
 
   useEffect(() => {
 
