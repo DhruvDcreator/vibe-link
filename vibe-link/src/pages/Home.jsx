@@ -32,10 +32,6 @@ import {
 } from "../firebase/firebase";
 
 import {
-  useEffect,
-} from "react";
-
-import {
   requestNotificationPermission,
 } from "../notifications";
 
