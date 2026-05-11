@@ -169,19 +169,21 @@ export default function App() {
 
   useEffect(() => {
 
-    if (
-      screen !==
-      "loading"
-    ) {
+  if (
+    screen !== "loading" &&
+    screen !== "signup" &&
+    screen !== "otp" &&
+    screen !== "completeProfile"
+  ) {
 
-      localStorage.setItem(
-        "vibeLinkScreen",
-        screen
-      );
+    localStorage.setItem(
+      "vibeLinkScreen",
+      screen
+    );
 
-    }
+  }
 
-  }, [screen]);
+}, [screen]);
 
   if (
     !authChecked
