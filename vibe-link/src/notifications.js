@@ -26,6 +26,7 @@ export const requestNotificationPermission =
         "granted"
       ) {
 
+        console.log("REQUESTING TOKEN");
         console.log(
           "Notification permission denied"
         );
@@ -34,6 +35,7 @@ export const requestNotificationPermission =
 
       }
 
+      console.log("REQUESTING TOKEN");
       const token =
         await getToken(
           messaging,

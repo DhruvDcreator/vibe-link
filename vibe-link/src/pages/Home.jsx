@@ -31,6 +31,14 @@ import {
   db,
 } from "../firebase/firebase";
 
+import {
+  useEffect,
+} from "react";
+
+import {
+  requestNotificationPermission,
+} from "../notifications";
+
 import Discover from "./Discover";
 
 import Profile from "./Profile";
@@ -42,6 +50,12 @@ import Chats from "./Chats";
 import ChatRoom from "./ChatRoom";
 
 export default function Home() {
+
+  useEffect(() => {
+
+  requestNotificationPermission();
+
+}, []);
 
   const [
     currentTab,
