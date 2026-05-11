@@ -104,7 +104,20 @@ export default function App() {
               "pendingSignup"
             );
 
+          const googleFlow =
+            localStorage.getItem(
+              "googleSignupFlow"
+            );
+
           if (
+            googleFlow
+          ) {
+
+            setScreen(
+              "signup"
+            );
+
+          } else if (
             user &&
             !pendingSignup
           ) {
@@ -395,10 +408,6 @@ export default function App() {
 
         setGeneratedOtp={
           setGeneratedOtp
-        }
-
-        isGoogleSignup={
-          isGoogleSignup
         }
 
         phone={phone}

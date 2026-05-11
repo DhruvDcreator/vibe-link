@@ -2,21 +2,6 @@ import { motion } from "framer-motion";
 
 import emailjs from "@emailjs/browser";
 
-import {
-  auth,
-  db,
-} from "../firebase/firebase";
-
-import {
-  EmailAuthProvider,
-  linkWithCredential,
-} from "firebase/auth";
-
-import {
-  doc,
-  updateDoc,
-} from "firebase/firestore";
-
 export default function CompleteProfile({
 
   setScreen,
@@ -30,8 +15,6 @@ export default function CompleteProfile({
   setShowPassword,
 
   setGeneratedOtp,
-
-  isGoogleSignup,
 
   phone,
   setPhone,
@@ -103,76 +86,6 @@ export default function CompleteProfile({
 
         }
 
-        const storedGoogleData =
-  JSON.parse(
-    localStorage.getItem(
-      "googleSignupData"
-    )
-  );
-
-const user =
-  auth.currentUser;
-
-        if (
-  !user &&
-  !storedGoogleData
-) {
-
-          alert(
-            "No user found"
-          );
-
-          return;
-
-        }
-
-        if (
-          isGoogleSignup
-        ) {
-
-          const credential =
-            EmailAuthProvider.credential(
-              email,
-              password
-            );
-
-          try {
-
-            await linkWithCredential(
-              user,
-              credential
-            );
-
-          } catch (error) {
-
-            if (
-              error.code !==
-              "auth/provider-already-linked"
-            ) {
-
-              throw error;
-
-            }
-
-          }
-
-        }
-
-        await updateDoc(
-          doc(
-            db,
-            "users",
-            user.uid
-          ),
-          {
-            phone,
-            age,
-            gender,
-            country,
-            bio,
-          }
-        );
-
         const otp =
           Math.floor(
             1000 +
@@ -207,21 +120,8 @@ const user =
           error
         );
 
-        if (
-          error.code ===
-          "auth/credential-already-in-use"
-        ) {
-
-          alert(
-            "This password/account combination already exists."
-          );
-
-          return;
-
-        }
-
         alert(
-          "Failed to save profile"
+          "Failed to continue"
         );
 
       }
