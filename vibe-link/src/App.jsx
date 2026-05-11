@@ -93,6 +93,10 @@ export default function App() {
 
   useEffect(() => {
 
+    localStorage.removeItem(
+      "vibeLinkScreen"
+    );
+
     const unsubscribe =
       onAuthStateChanged(
         auth,
@@ -104,20 +108,7 @@ export default function App() {
               "pendingSignup"
             );
 
-          const googleFlow =
-            localStorage.getItem(
-              "googleSignupFlow"
-            );
-
           if (
-            googleFlow
-          ) {
-
-            setScreen(
-              "signup"
-            );
-
-          } else if (
             user &&
             !pendingSignup
           ) {
@@ -148,50 +139,52 @@ export default function App() {
 
   useEffect(() => {
 
-  const savedScreen =
-    localStorage.getItem(
-      "vibeLinkScreen"
-    );
+    const savedScreen =
+      localStorage.getItem(
+        "vibeLinkScreen"
+      );
 
-  if (
-    savedScreen &&
-    savedScreen !== "loading" &&
-    savedScreen !== "signup" &&
-    savedScreen !== "otp" &&
-    savedScreen !== "completeProfile"
-  ) {
+    if (
+      savedScreen &&
+      savedScreen !==
+        "loading" &&
+      savedScreen !==
+        "signup" &&
+      savedScreen !==
+        "otp" &&
+      savedScreen !==
+        "completeProfile"
+    ) {
 
-    setScreen(
-      savedScreen
-    );
+      setScreen(
+        savedScreen
+      );
 
-  } else {
+    }
 
-    localStorage.removeItem(
-      "vibeLinkScreen"
-    );
-
-  }
-
-}, []);
+  }, []);
 
   useEffect(() => {
 
-  if (
-    screen !== "loading" &&
-    screen !== "signup" &&
-    screen !== "otp" &&
-    screen !== "completeProfile"
-  ) {
+    if (
+      screen !==
+        "loading" &&
+      screen !==
+        "signup" &&
+      screen !==
+        "otp" &&
+      screen !==
+        "completeProfile"
+    ) {
 
-    localStorage.setItem(
-      "vibeLinkScreen",
-      screen
-    );
+      localStorage.setItem(
+        "vibeLinkScreen",
+        screen
+      );
 
-  }
+    }
 
-}, [screen]);
+  }, [screen]);
 
   if (
     !authChecked
