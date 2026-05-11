@@ -1,9 +1,15 @@
+import {
+  useEffect,
+} from "react";
+
 import { motion } from "framer-motion";
 
 import emailjs from "@emailjs/browser";
 
 import {
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   fetchSignInMethodsForEmail,
 } from "firebase/auth";
 
@@ -60,10 +66,108 @@ export default function Signup({
       .split(/\s+/)
       .filter(Boolean).length;
 
+  useEffect(() => {
+
+  const handleRedirect =
+    async () => {
+
+      try {
+
+        const result =
+          await getRedirectResult(
+            auth
+          );
+
+        if (
+          !result
+        ) {
+          return;
+        }
+
+        const user =
+          result.user;
+
+        await auth.signOut();
+        localStorage.setItem(
+  "googleSignupData",
+  JSON.stringify({
+    email: user.email,
+    username:
+      (
+        user.displayName ||
+        ""
+      )
+        .replace(/\s+/g, "")
+        .slice(0, 10),
+  })
+);
+
+        setEmail(
+          user.email
+        );
+
+        setUsername(
+          (
+            user.displayName ||
+            ""
+          )
+            .replace(/\s+/g, "")
+            .slice(0, 10)
+        );
+
+        setIsGoogleSignup(
+          true
+        );
+
+        localStorage.removeItem(
+          "googleSignupFlow"
+        );
+
+        setScreen(
+          "completeProfile"
+        );
+
+      } catch (error) {
+
+        console.log(
+          error
+        );
+
+      }
+
+    };
+
+  handleRedirect();
+
+}, []);
+
   const googleSignup =
   async () => {
 
     try {
+
+      const isMobile =
+        /Android|iPhone|iPad|iPod/i.test(
+          navigator.userAgent
+        );
+
+      if (
+        isMobile
+      ) {
+
+        localStorage.setItem(
+          "googleSignupFlow",
+          "true"
+        );
+
+        await signInWithRedirect(
+          auth,
+          googleProvider
+        );
+
+        return;
+
+      }
 
       const result =
         await signInWithPopup(
@@ -74,27 +178,19 @@ export default function Signup({
       const user =
         result.user;
 
-      await setDoc(
-        doc(
-          db,
-          "users",
-          user.uid
-        ),
-        {
-          username:
-            user.displayName,
-
-          email:
-            user.email,
-        }
-      );
+      await auth.signOut();
 
       setEmail(
         user.email
       );
 
       setUsername(
-        user.displayName
+        (
+          user.displayName ||
+          ""
+        )
+          .replace(/\s+/g, "")
+          .slice(0, 10)
       );
 
       setIsGoogleSignup(
@@ -124,7 +220,147 @@ export default function Signup({
 
   };
 
+  const sendOtp =
+    async () => {
+
+      const validPassword =
+        password.length >= 8 &&
+        password.length <= 13 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /[0-9]/.test(password);
+
+      if (
+        !username ||
+        !email ||
+        !phone ||
+        !age ||
+        !gender ||
+        !country ||
+        !bio
+      ) {
+
+        alert(
+          "Please fill all fields"
+        );
+
+        return;
+
+      }
+
+      if (
+        !/^\d{10}$/.test(phone)
+      ) {
+
+        alert(
+          "Enter a valid phone number"
+        );
+
+        return;
+
+      }
+
+      if (
+        !validPassword
+      ) {
+
+        alert(
+          "Password requirements not met"
+        );
+
+        return;
+
+      }
+
+      try {
+
+        const usernameRef =
+          doc(
+            db,
+            "usernames",
+            username
+          );
+
+        const usernameSnap =
+          await getDoc(
+            usernameRef
+          );
+
+        if (
+          usernameSnap.exists()
+        ) {
+
+          alert(
+            "Username already taken"
+          );
+
+          return;
+
+        }
+
+        const signInMethods =
+          await fetchSignInMethodsForEmail(
+            auth,
+            email
+          );
+
+        if (
+          signInMethods.length >
+          0
+        ) {
+
+          alert(
+            "Account on this email already exists. Log in or use another email."
+          );
+
+          return;
+
+        }
+
+        const otp =
+          Math.floor(
+            1000 +
+            Math.random() *
+            9000
+          ).toString();
+
+        setGeneratedOtp(
+          otp
+        );
+
+        await emailjs.send(
+          "service_otz8q9a",
+          "template_y8t4pe2",
+          {
+            to_email:
+              email,
+
+            otp:
+              otp,
+          },
+          "uYochmrCEWfNwQTMA"
+        );
+
+        setScreen(
+          "otp"
+        );
+
+      } catch (error) {
+
+        console.log(
+          error
+        );
+
+        alert(
+          error.message
+        );
+
+      }
+
+    };
+
   return (
+
     <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden">
 
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
@@ -149,7 +385,9 @@ export default function Signup({
       >
 
         <h1 className="text-5xl font-black text-center bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
+
           CREATE ACCOUNT
+
         </h1>
 
         <button
@@ -158,7 +396,9 @@ export default function Signup({
           }
           className="w-full bg-white text-black py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300"
         >
+
           Continue with Google
+
         </button>
 
         <input
@@ -175,7 +415,9 @@ export default function Signup({
         />
 
         <p className="text-right text-sm text-zinc-400">
+
           {username.length}/10
+
         </p>
 
         <input
@@ -191,12 +433,18 @@ export default function Signup({
         />
 
         <input
-          type="text"
+          type="tel"
+          inputMode="numeric"
           placeholder="Phone Number"
           value={phone}
           onChange={(e) =>
             setPhone(
               e.target.value
+                .replace(
+                  /\D/g,
+                  ""
+                )
+                .slice(0, 10)
             )
           }
           className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-cyan-400"
@@ -230,9 +478,11 @@ export default function Signup({
             }
             className="absolute right-5 top-5"
           >
+
             {showPassword
               ? "🙈"
               : "👁️"}
+
           </button>
 
         </div>
@@ -244,6 +494,7 @@ export default function Signup({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {password.length >= 8
                 ? "✔"
@@ -251,6 +502,7 @@ export default function Signup({
             </span>
 
             Minimum 8 characters
+
           </div>
 
           <div className={`flex items-center gap-2 ${
@@ -258,6 +510,7 @@ export default function Signup({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {/[A-Z]/.test(password)
                 ? "✔"
@@ -265,6 +518,7 @@ export default function Signup({
             </span>
 
             One capital letter
+
           </div>
 
           <div className={`flex items-center gap-2 ${
@@ -272,6 +526,7 @@ export default function Signup({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {/[a-z]/.test(password)
                 ? "✔"
@@ -279,6 +534,7 @@ export default function Signup({
             </span>
 
             One small letter
+
           </div>
 
           <div className={`flex items-center gap-2 ${
@@ -286,6 +542,7 @@ export default function Signup({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {/[0-9]/.test(password)
                 ? "✔"
@@ -293,6 +550,7 @@ export default function Signup({
             </span>
 
             One number
+
           </div>
 
         </div>
@@ -318,12 +576,16 @@ export default function Signup({
             (_, i) =>
               i + 13
           ).map((num) => (
+
             <option
               key={num}
               value={num}
             >
+
               {num}
+
             </option>
+
           ))}
 
         </select>
@@ -337,6 +599,7 @@ export default function Signup({
           }
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         >
+
           <option value="">
             Select Gender
           </option>
@@ -352,6 +615,7 @@ export default function Signup({
           <option>
             Other
           </option>
+
         </select>
 
         <select
@@ -363,6 +627,7 @@ export default function Signup({
           }
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         >
+
           <option value="">
             Select Country
           </option>
@@ -382,6 +647,7 @@ export default function Signup({
           <option>
             Canada
           </option>
+
         </select>
 
         <textarea
@@ -410,168 +676,43 @@ export default function Signup({
         />
 
         <p className="text-right text-sm text-zinc-400">
+
           {bioWordCount}/50 words
+
         </p>
 
         <button
-          onClick={async () => {
-
-            const validPassword =
-              password.length >= 8 &&
-              password.length <= 13 &&
-              /[A-Z]/.test(password) &&
-              /[a-z]/.test(password) &&
-              /[0-9]/.test(password);
-
-            if (
-              !username ||
-              !email ||
-              !phone ||
-              !age ||
-              !gender ||
-              !country ||
-              !bio
-            ) {
-
-              alert(
-                "Please fill all fields"
-              );
-
-              return;
-
-            }
-
-            if (
-  !/^\d{10}$/.test(phone)
-) {
-
-  alert(
-    "Enter a valid phone number"
-  );
-
-  return;
-
-}
-
-            if (
-              !validPassword
-            ) {
-
-              alert(
-                "Password requirements not met"
-              );
-
-              return;
-
-            }
-
-            try {
-
-              const usernameRef =
-                doc(
-                  db,
-                  "usernames",
-                  username
-                );
-
-              const usernameSnap =
-                await getDoc(
-                  usernameRef
-                );
-
-              if (
-                usernameSnap.exists()
-              ) {
-
-                alert(
-                  "Username already taken"
-                );
-
-                return;
-
-              }
-
-              const signInMethods =
-  await fetchSignInMethodsForEmail(
-    auth,
-    email
-  );
-
-if (
-  signInMethods.length > 0
-) {
-
-  alert(
-    "Account on this email already exists. Log in or use a different email to create a new account."
-  );
-
-  return;
-
-}
-
-              const otp =
-                Math.floor(
-                  1000 +
-                  Math.random() *
-                  9000
-                ).toString();
-
-              setGeneratedOtp(
-                otp
-              );
-
-              await emailjs.send(
-                "service_otz8q9a",
-                "template_y8t4pe2",
-                {
-                  to_email:
-                    email,
-
-                  otp:
-                    otp,
-                },
-                "uYochmrCEWfNwQTMA"
-              );
-
-              setScreen(
-                "otp"
-              );
-
-            } catch (error) {
-
-              console.log(
-                error
-              );
-
-              alert(
-                error.message
-              );
-
-            }
-
-          }}
+          onClick={sendOtp}
           className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300"
         >
+
           SEND OTP
+
         </button>
-<motion.button
-  whileHover={{
-    scale: 1.1,
-  }}
-  whileTap={{
-    scale: 0.95,
-  }}
-  onClick={() =>
-    setScreen(
-      "loginOrSignup"
-    )
-  }
-  className="absolute top-6 left-6 z-20 text-4xl text-cyan-400 cursor-pointer"
->
-  ←
-</motion.button>
+
+        <motion.button
+          whileHover={{
+            scale: 1.1,
+          }}
+          whileTap={{
+            scale: 0.95,
+          }}
+          onClick={() =>
+            setScreen(
+              "loginOrSignup"
+            )
+          }
+          className="absolute top-6 left-6 z-20 text-4xl text-cyan-400 cursor-pointer"
+        >
+
+          ←
+
+        </motion.button>
+
       </motion.div>
 
     </div>
+
   );
+
 }

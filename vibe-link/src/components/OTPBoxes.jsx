@@ -32,32 +32,50 @@ export default function OTPBoxes({
     index
   ) => {
 
-    if (
-      !/^[0-9]?$/.test(
-        value
-      )
-    ) {
+    const digit =
+      value.replace(
+        /\D/g,
+        ""
+      );
+
+    if (!digit) {
+
+      const updatedOtp =
+        [...otp];
+
+      updatedOtp[index] =
+        "";
+
+      setOtp(updatedOtp);
+
       return;
+
     }
 
     const updatedOtp =
       [...otp];
 
     updatedOtp[index] =
-      value;
+      digit[0];
 
     setOtp(updatedOtp);
 
     if (
-      value &&
       index < 3
     ) {
 
-      inputsRef.current[
-        index + 1
-      ].focus();
+      requestAnimationFrame(
+        () => {
+
+          inputsRef.current[
+            index + 1
+          ]?.focus();
+
+        }
+      );
 
     }
+
   };
 
   const handleKeyDown = (
@@ -67,16 +85,41 @@ export default function OTPBoxes({
 
     if (
       e.key ===
-        "Backspace" &&
-      !otp[index] &&
-      index > 0
+        "Backspace"
     ) {
 
-      inputsRef.current[
-        index - 1
-      ].focus();
+      if (
+        otp[index]
+      ) {
+
+        const updatedOtp =
+          [...otp];
+
+        updatedOtp[index] =
+          "";
+
+        setOtp(
+          updatedOtp
+        );
+
+      } else if (
+        index > 0
+      ) {
+
+        requestAnimationFrame(
+          () => {
+
+            inputsRef.current[
+              index - 1
+            ]?.focus();
+
+          }
+        );
+
+      }
 
     }
+
   };
 
   const handlePaste = (
@@ -85,30 +128,30 @@ export default function OTPBoxes({
 
     e.preventDefault();
 
-    const pastedData =
+    const pasted =
       e.clipboardData
         .getData("text")
-        .slice(0, 4)
-        .split("");
+        .replace(
+          /\D/g,
+          ""
+        )
+        .slice(0, 4);
 
-    if (
-      pastedData.every(
-        (digit) =>
-          /^[0-9]$/.test(
-            digit
-          )
-      )
-    ) {
+    if (!pasted) {
+      return;
+    }
 
-      const updatedOtp =
-        [
-          "",
-          "",
-          "",
-          "",
-        ];
+    const updatedOtp =
+      [
+        "",
+        "",
+        "",
+        "",
+      ];
 
-      pastedData.forEach(
+    pasted
+      .split("")
+      .forEach(
         (
           digit,
           index
@@ -121,14 +164,12 @@ export default function OTPBoxes({
         }
       );
 
-      setOtp(updatedOtp);
+    setOtp(updatedOtp);
 
-      inputsRef.current[3]
-        .focus();
-    }
   };
 
   return (
+
     <div className="flex justify-center gap-4">
 
       {otp.map(
@@ -139,6 +180,7 @@ export default function OTPBoxes({
 
           <input
             key={index}
+
             ref={(el) =>
               (
                 inputsRef.current[
@@ -146,24 +188,39 @@ export default function OTPBoxes({
                 ] = el
               )
             }
-            type="text"
+
+            type="tel"
+
+            inputMode="numeric"
+
+            autoComplete={
+              index === 0
+                ? "one-time-code"
+                : "off"
+            }
+
+            pattern="[0-9]*"
+
             value={digit}
-            maxLength={1}
+
             onChange={(e) =>
               handleChange(
                 e.target.value,
                 index
               )
             }
+
             onKeyDown={(e) =>
               handleKeyDown(
                 e,
                 index
               )
             }
+
             onPaste={
               handlePaste
             }
+
             className={`w-16 h-20 text-center text-3xl font-bold rounded-3xl outline-none border-2 transition-all duration-300 bg-white/10 backdrop-blur-xl shadow-lg ${
               digit
                 ? "border-purple-400 shadow-[0_0_30px_rgba(168,85,247,0.6)] text-white scale-105"
@@ -175,5 +232,7 @@ export default function OTPBoxes({
       )}
 
     </div>
+
   );
+
 }

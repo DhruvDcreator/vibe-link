@@ -65,6 +65,11 @@ export default function ChatRoom({
   ] = useState({});
 
   const [
+    chatMeta,
+    setChatMeta,
+  ] = useState({});
+
+  const [
     now,
     setNow,
   ] = useState(
@@ -80,7 +85,9 @@ export default function ChatRoom({
       <div className="fixed inset-0 bg-black flex items-center justify-center text-white z-[9999]">
 
         <h1 className="text-2xl font-bold">
+
           Loading chat...
+
         </h1>
 
       </div>
@@ -176,6 +183,36 @@ export default function ChatRoom({
 
   useEffect(() => {
 
+    const unsubscribe =
+      onSnapshot(
+        doc(
+          db,
+          "chatMeta",
+          chatId
+        ),
+
+        (snapshot) => {
+
+          if (
+            snapshot.exists()
+          ) {
+
+            setChatMeta(
+              snapshot.data()
+            );
+
+          }
+
+        }
+      );
+
+    return () =>
+      unsubscribe();
+
+  }, [chatId, messages]);
+
+  useEffect(() => {
+
     const q = query(
       collection(
         db,
@@ -266,6 +303,49 @@ export default function ChatRoom({
 
   }, [messages]);
 
+  useEffect(() => {
+
+    const markAsSeen =
+      async () => {
+
+        try {
+
+          await setDoc(
+            doc(
+              db,
+              "chatMeta",
+              chatId
+            ),
+
+            {
+              unreadCounts: {
+
+                [auth.currentUser.uid]:
+                  0,
+
+              },
+
+            },
+
+            {
+              merge: true,
+            }
+          );
+
+        } catch (error) {
+
+          console.log(
+            error
+          );
+
+        }
+
+      };
+
+    markAsSeen();
+
+  }, [chatId]);
+
   const clearChat =
     async () => {
 
@@ -329,12 +409,19 @@ export default function ChatRoom({
           }
         );
 
+        const currentUnread =
+          chatMeta
+            ?.unreadCounts?.[
+            selectedUser.id
+          ] || 0;
+
         await setDoc(
           doc(
             db,
             "chatMeta",
             chatId
           ),
+
           {
             users: [
               auth.currentUser.uid,
@@ -346,6 +433,21 @@ export default function ChatRoom({
 
             updatedAt:
               serverTimestamp(),
+
+            unreadCounts: {
+
+              [selectedUser.id]:
+                currentUnread + 1,
+
+              [auth.currentUser.uid]:
+                0,
+
+            },
+
+          },
+
+          {
+            merge: true,
           }
         );
 
@@ -362,6 +464,7 @@ export default function ChatRoom({
     };
 
   return (
+
     <div className="fixed inset-0 z-[9999] bg-black text-white flex flex-col">
 
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
@@ -410,9 +513,11 @@ export default function ChatRoom({
           <div>
 
             <h1 className="text-xl font-black text-white">
+
               {
                 selectedUser.username
               }
+
             </h1>
 
             <p className="text-cyan-300 text-sm">
@@ -487,18 +592,9 @@ export default function ChatRoom({
                     }
                     className="w-full text-left px-5 py-4 hover:bg-white/10 transition-all"
                   >
-                    Clear Chat
-                  </button>
 
-                  <button
-                    onClick={() =>
-                      setShowMenu(
-                        false
-                      )
-                    }
-                    className="w-full text-left px-5 py-4 text-red-400 hover:bg-red-500/10 transition-all"
-                  >
-                    Delete Chat
+                    Clear Chat
+
                   </button>
 
                 </motion.div>
@@ -555,7 +651,9 @@ export default function ChatRoom({
                 >
 
                   <p className="text-[15px] leading-relaxed break-words">
+
                     {msg.text}
+
                   </p>
 
                 </motion.div>

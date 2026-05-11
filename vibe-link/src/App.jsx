@@ -35,6 +35,8 @@ import Discover from "./pages/Discover";
 
 import Home from "./pages/Home";
 
+import ForgotPassword from "./pages/ForgotPassword";
+
 export default function App() {
 
   const [screen, setScreen] =
@@ -97,7 +99,15 @@ export default function App() {
 
         (user) => {
 
-          if (user) {
+          const pendingSignup =
+            localStorage.getItem(
+              "pendingSignup"
+            );
+
+          if (
+            user &&
+            !pendingSignup
+          ) {
 
             setScreen(
               "home"
@@ -122,6 +132,43 @@ export default function App() {
       unsubscribe();
 
   }, []);
+
+  useEffect(() => {
+
+    const savedScreen =
+      localStorage.getItem(
+        "vibeLinkScreen"
+      );
+
+    if (
+      savedScreen &&
+      savedScreen !==
+        "loading"
+    ) {
+
+      setScreen(
+        savedScreen
+      );
+
+    }
+
+  }, []);
+
+  useEffect(() => {
+
+    if (
+      screen !==
+      "loading"
+    ) {
+
+      localStorage.setItem(
+        "vibeLinkScreen",
+        screen
+      );
+
+    }
+
+  }, [screen]);
 
   if (
     !authChecked
@@ -212,6 +259,23 @@ export default function App() {
 
   if (
     screen ===
+    "forgotPassword"
+  ) {
+
+    return (
+
+      <ForgotPassword
+        setScreen={
+          setScreen
+        }
+      />
+
+    );
+
+  }
+
+  if (
+    screen ===
     "signup"
   ) {
 
@@ -276,10 +340,6 @@ export default function App() {
 
         setBio={
           setBio
-        }
-
-        generatedOtp={
-          generatedOtp
         }
 
         setGeneratedOtp={

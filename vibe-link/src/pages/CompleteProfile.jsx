@@ -8,6 +8,11 @@ import {
 } from "../firebase/firebase";
 
 import {
+  EmailAuthProvider,
+  linkWithCredential,
+} from "firebase/auth";
+
+import {
   doc,
   updateDoc,
 } from "firebase/firestore";
@@ -67,6 +72,18 @@ export default function CompleteProfile({
 
         }
 
+        if (
+          !/^\d{10}$/.test(phone)
+        ) {
+
+          alert(
+            "Enter valid phone number"
+          );
+
+          return;
+
+        }
+
         const validPassword =
           password.length >= 8 &&
           password.length <= 13 &&
@@ -86,16 +103,58 @@ export default function CompleteProfile({
 
         }
 
-        const user =
-          auth.currentUser;
+        const storedGoogleData =
+  JSON.parse(
+    localStorage.getItem(
+      "googleSignupData"
+    )
+  );
 
-        if (!user) {
+const user =
+  auth.currentUser;
+
+        if (
+  !user &&
+  !storedGoogleData
+) {
 
           alert(
             "No user found"
           );
 
           return;
+
+        }
+
+        if (
+          isGoogleSignup
+        ) {
+
+          const credential =
+            EmailAuthProvider.credential(
+              email,
+              password
+            );
+
+          try {
+
+            await linkWithCredential(
+              user,
+              credential
+            );
+
+          } catch (error) {
+
+            if (
+              error.code !==
+              "auth/provider-already-linked"
+            ) {
+
+              throw error;
+
+            }
+
+          }
 
         }
 
@@ -148,6 +207,19 @@ export default function CompleteProfile({
           error
         );
 
+        if (
+          error.code ===
+          "auth/credential-already-in-use"
+        ) {
+
+          alert(
+            "This password/account combination already exists."
+          );
+
+          return;
+
+        }
+
         alert(
           "Failed to save profile"
         );
@@ -157,6 +229,7 @@ export default function CompleteProfile({
     };
 
   return (
+
     <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden">
 
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
@@ -181,20 +254,30 @@ export default function CompleteProfile({
       >
 
         <h1 className="text-5xl font-black text-center bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
+
           COMPLETE PROFILE
+
         </h1>
 
         <p className="text-center text-zinc-400">
+
           Just a few more details
+
         </p>
 
         <input
-          type="text"
+          type="tel"
+          inputMode="numeric"
           placeholder="Phone Number"
           value={phone}
           onChange={(e) =>
             setPhone(
               e.target.value
+                .replace(
+                  /\D/g,
+                  ""
+                )
+                .slice(0, 10)
             )
           }
           className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-cyan-400"
@@ -228,9 +311,11 @@ export default function CompleteProfile({
             }
             className="absolute right-5 top-5"
           >
+
             {showPassword
               ? "🙈"
               : "👁️"}
+
           </button>
 
         </div>
@@ -242,6 +327,7 @@ export default function CompleteProfile({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {password.length >= 8
                 ? "✔"
@@ -249,6 +335,7 @@ export default function CompleteProfile({
             </span>
 
             Minimum 8 characters
+
           </div>
 
           <div className={`flex items-center gap-2 ${
@@ -256,6 +343,7 @@ export default function CompleteProfile({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {/[A-Z]/.test(password)
                 ? "✔"
@@ -263,6 +351,7 @@ export default function CompleteProfile({
             </span>
 
             One capital letter
+
           </div>
 
           <div className={`flex items-center gap-2 ${
@@ -270,6 +359,7 @@ export default function CompleteProfile({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {/[a-z]/.test(password)
                 ? "✔"
@@ -277,6 +367,7 @@ export default function CompleteProfile({
             </span>
 
             One small letter
+
           </div>
 
           <div className={`flex items-center gap-2 ${
@@ -284,6 +375,7 @@ export default function CompleteProfile({
               ? "text-green-400"
               : "text-red-400"
           }`}>
+
             <span>
               {/[0-9]/.test(password)
                 ? "✔"
@@ -291,6 +383,7 @@ export default function CompleteProfile({
             </span>
 
             One number
+
           </div>
 
         </div>
@@ -304,6 +397,7 @@ export default function CompleteProfile({
           }
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         >
+
           <option value="">
             Select Age
           </option>
@@ -315,12 +409,16 @@ export default function CompleteProfile({
             (_, i) =>
               i + 13
           ).map((num) => (
+
             <option
               key={num}
               value={num}
             >
+
               {num}
+
             </option>
+
           ))}
 
         </select>
@@ -334,6 +432,7 @@ export default function CompleteProfile({
           }
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         >
+
           <option value="">
             Select Gender
           </option>
@@ -349,6 +448,7 @@ export default function CompleteProfile({
           <option>
             Other
           </option>
+
         </select>
 
         <select
@@ -360,6 +460,7 @@ export default function CompleteProfile({
           }
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         >
+
           <option value="">
             Select Country
           </option>
@@ -379,6 +480,7 @@ export default function CompleteProfile({
           <option>
             Canada
           </option>
+
         </select>
 
         <textarea
@@ -398,11 +500,15 @@ export default function CompleteProfile({
           }
           className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300"
         >
+
           CONTINUE
+
         </button>
 
       </motion.div>
 
     </div>
+
   );
+
 }

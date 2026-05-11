@@ -18,8 +18,11 @@ import {
 } from "firebase/auth";
 
 import {
+  collection,
   doc,
   getDoc,
+  onSnapshot,
+  query,
   setDoc,
 } from "firebase/firestore";
 
@@ -61,6 +64,11 @@ export default function Home() {
     loading,
     setLoading,
   ] = useState(true);
+
+  const [
+    hasUnread,
+    setHasUnread,
+  ] = useState(false);
 
   useEffect(() => {
 
@@ -143,6 +151,52 @@ export default function Home() {
                   2000
                 );
 
+              const q =
+                query(
+                  collection(
+                    db,
+                    "chatMeta"
+                  )
+                );
+
+              onSnapshot(
+                q,
+
+                (snapshot) => {
+
+                  let unread =
+                    false;
+
+                  snapshot.forEach(
+                    (
+                      docItem
+                    ) => {
+
+                      const data =
+                        docItem.data();
+
+                      if (
+                        data
+                          ?.unreadCounts?.[
+                          user.uid
+                        ] > 0
+                      ) {
+
+                        unread =
+                          true;
+
+                      }
+
+                    }
+                  );
+
+                  setHasUnread(
+                    unread
+                  );
+
+                }
+              );
+
             }
 
           } catch (error) {
@@ -189,7 +243,9 @@ export default function Home() {
       <div className="min-h-screen bg-black flex items-center justify-center text-white">
 
         <h1 className="text-3xl font-bold animate-pulse">
+
           Loading...
+
         </h1>
 
       </div>
@@ -198,6 +254,7 @@ export default function Home() {
   }
 
   return (
+
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
 
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
@@ -218,11 +275,15 @@ export default function Home() {
               <div>
 
                 <p className="text-zinc-400 text-sm">
+
                   Your vibe.
+
                 </p>
 
                 <h1 className="text-4xl font-black mt-1">
+
                   Your tribe.
+
                 </h1>
 
               </div>
@@ -340,7 +401,9 @@ export default function Home() {
                   : "text-zinc-500"
               }`}
             >
+
               <Compass size={30} />
+
             </button>
 
             <button
@@ -349,14 +412,22 @@ export default function Home() {
                   "chats"
                 )
               }
-              className={`transition-all duration-300 ${
+              className={`relative transition-all duration-300 ${
                 currentTab ===
                 "chats"
                   ? "text-cyan-400 scale-110"
                   : "text-zinc-500"
               }`}
             >
+
               <MessageCircle size={30} />
+
+              {hasUnread && (
+
+                <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.9)]"></div>
+
+              )}
+
             </button>
 
             <button
@@ -372,7 +443,9 @@ export default function Home() {
                   : "text-zinc-500"
               }`}
             >
+
               <User size={30} />
+
             </button>
 
           </div>
@@ -397,6 +470,7 @@ export default function Home() {
       )}
 
     </div>
+
   );
 
 }

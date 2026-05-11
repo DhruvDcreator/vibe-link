@@ -70,6 +70,15 @@ export default function OTP({
 
   useEffect(() => {
 
+    localStorage.setItem(
+      "pendingSignup",
+      "true"
+    );
+
+  }, []);
+
+  useEffect(() => {
+
     if (timer <= 0) {
       return;
     }
@@ -93,6 +102,10 @@ export default function OTP({
 
   const startOver =
     () => {
+
+      localStorage.removeItem(
+        "pendingSignup"
+      );
 
       alert(
         "Too many wrong attempts. Start over."
@@ -172,6 +185,20 @@ export default function OTP({
           const user =
             auth.currentUser;
 
+          if (!user) {
+
+            alert(
+              "Google sign in expired. Please try again."
+            );
+
+            setScreen(
+              "signup"
+            );
+
+            return;
+
+          }
+
           await setDoc(
             doc(
               db,
@@ -186,10 +213,28 @@ export default function OTP({
               gender,
               country,
               bio,
+              verified:
+                true,
             },
             {
               merge: true,
             }
+          );
+
+          await setDoc(
+            doc(
+              db,
+              "usernames",
+              username
+            ),
+            {
+              uid:
+                user.uid,
+            }
+          );
+
+          localStorage.removeItem(
+            "pendingSignup"
           );
 
           setTimeout(() => {
@@ -254,6 +299,8 @@ export default function OTP({
             gender,
             country,
             bio,
+            verified:
+              true,
           }
         );
 
@@ -269,6 +316,10 @@ export default function OTP({
           }
         );
 
+        localStorage.removeItem(
+          "pendingSignup"
+        );
+
         setTimeout(() => {
 
           setScreen(
@@ -279,36 +330,36 @@ export default function OTP({
 
       } catch (error) {
 
-  console.log(
-    error
-  );
+        console.log(
+          error
+        );
 
-  if (
-    error.code ===
-    "auth/email-already-in-use"
-  ) {
+        if (
+          error.code ===
+          "auth/email-already-in-use"
+        ) {
 
-    alert(
-      "Account on this email already exists. Log in or use a different email to create a new account."
-    );
+          alert(
+            "Account on this email already exists."
+          );
 
-    setScreen(
-      "signup"
-    );
+          setScreen(
+            "login"
+          );
 
-    return;
+          return;
 
-  }
+        }
 
-  alert(
-    error.message
-  );
+        alert(
+          error.message
+        );
 
-} finally {
+      } finally {
 
-  setLoading(false);
+        setLoading(false);
 
-}
+      }
 
     };
 
@@ -383,6 +434,7 @@ export default function OTP({
     };
 
   return (
+
     <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden">
 
       <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-black to-cyan-500/10"></div>
@@ -407,16 +459,23 @@ export default function OTP({
       >
 
         <h1 className="text-5xl font-black bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text">
+
           VERIFY OTP
+
         </h1>
 
         <p className="text-zinc-400 leading-relaxed">
+
           Enter the OTP sent to
+
           <br />
 
           <span className="text-green-400 font-bold">
+
             {email}
+
           </span>
+
         </p>
 
         <OTPBoxes
@@ -430,11 +489,15 @@ export default function OTP({
         {timer > 0 ? (
 
           <p className="text-zinc-400">
+
             OTP expires in{" "}
 
             <span className="text-cyan-400 font-bold">
+
               {timer}s
+
             </span>
+
           </p>
 
         ) : (
@@ -445,7 +508,9 @@ export default function OTP({
             }
             className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 transition-all duration-300"
           >
+
             RESEND OTP
+
           </button>
 
         )}
@@ -453,5 +518,7 @@ export default function OTP({
       </motion.div>
 
     </div>
+
   );
+
 }

@@ -399,26 +399,53 @@ export default function Chats({
 
                     <div className="flex-1 text-left overflow-hidden">
 
-                      <h2 className="font-bold text-lg truncate">
-                        {
-                          user.username
-                        }
-                      </h2>
+  <div className="flex items-center justify-between gap-3">
 
-                      <p className="text-zinc-400 text-sm truncate">
+    <h2 className="font-bold text-lg truncate">
 
-                        {
-                          chatMeta[
-                            chatId
-                          ]
-                            ?.lastMessage ||
+      {
+        user.username
+      }
 
-                          "Start chatting now"
-                        }
+    </h2>
 
-                      </p>
+    {(
+      chatMeta[
+        chatId
+      ]?.unreadCounts?.[
+        auth.currentUser.uid
+      ] || 0
+    ) > 0 && (
 
-                    </div>
+      <div className="min-w-[24px] h-6 px-2 rounded-full bg-purple-500 flex items-center justify-center text-xs font-black text-white shadow-[0_0_20px_rgba(168,85,247,0.8)]">
+
+        {
+          chatMeta[
+            chatId
+          ]?.unreadCounts?.[
+            auth.currentUser.uid
+          ]
+        }
+
+      </div>
+
+    )}
+
+  </div>
+
+  <p className="text-zinc-400 text-sm truncate">
+
+    {
+      chatMeta[
+        chatId
+      ]?.lastMessage ||
+
+      "Start chatting now"
+    }
+
+  </p>
+
+</div>
 
                   </motion.button>
 
