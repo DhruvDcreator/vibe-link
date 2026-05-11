@@ -1,28 +1,19 @@
-import {
-  useEffect,
-} from "react";
-
 import { motion } from "framer-motion";
 
 import emailjs from "@emailjs/browser";
 
 import {
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   fetchSignInMethodsForEmail,
 } from "firebase/auth";
 
 import {
   doc,
   getDoc,
-  setDoc,
 } from "firebase/firestore";
 
 import {
   auth,
   db,
-  googleProvider,
 } from "../firebase/firebase";
 
 export default function Signup({
@@ -56,8 +47,6 @@ export default function Signup({
 
   showPassword,
   setShowPassword,
-
-  setIsGoogleSignup,
 }) {
 
   const bioWordCount =
@@ -65,160 +54,6 @@ export default function Signup({
       .trim()
       .split(/\s+/)
       .filter(Boolean).length;
-
-  useEffect(() => {
-
-  const handleRedirect =
-    async () => {
-
-      try {
-
-        const result =
-          await getRedirectResult(
-            auth
-          );
-
-        if (
-          !result
-        ) {
-          return;
-        }
-
-        const user =
-          result.user;
-
-        await auth.signOut();
-        localStorage.setItem(
-  "googleSignupData",
-  JSON.stringify({
-    email: user.email,
-    username:
-      (
-        user.displayName ||
-        ""
-      )
-        .replace(/\s+/g, "")
-        .slice(0, 10),
-  })
-);
-
-        setEmail(
-          user.email
-        );
-
-        setUsername(
-          (
-            user.displayName ||
-            ""
-          )
-            .replace(/\s+/g, "")
-            .slice(0, 10)
-        );
-
-        setIsGoogleSignup(
-          true
-        );
-
-        localStorage.removeItem(
-          "googleSignupFlow"
-        );
-
-        setScreen(
-          "completeProfile"
-        );
-
-      } catch (error) {
-
-        console.log(
-          error
-        );
-
-      }
-
-    };
-
-  handleRedirect();
-
-}, []);
-
-  const googleSignup =
-  async () => {
-
-    try {
-
-      const isMobile =
-        /Android|iPhone|iPad|iPod/i.test(
-          navigator.userAgent
-        );
-
-      if (
-        isMobile
-      ) {
-
-        localStorage.setItem(
-          "googleSignupFlow",
-          "true"
-        );
-
-        await signInWithRedirect(
-          auth,
-          googleProvider
-        );
-
-        return;
-
-      }
-
-      const result =
-        await signInWithPopup(
-          auth,
-          googleProvider
-        );
-
-      const user =
-        result.user;
-
-      await auth.signOut();
-
-      setEmail(
-        user.email
-      );
-
-      setUsername(
-        (
-          user.displayName ||
-          ""
-        )
-          .replace(/\s+/g, "")
-          .slice(0, 10)
-      );
-
-      setIsGoogleSignup(
-        true
-      );
-
-      setScreen(
-        "completeProfile"
-      );
-
-    } catch (error) {
-
-      if (
-        error.code ===
-        "auth/popup-closed-by-user"
-      ) {
-
-        return;
-
-      }
-
-      alert(
-        error.message
-      );
-
-    }
-
-  };
 
   const sendOtp =
     async () => {
@@ -328,6 +163,11 @@ export default function Signup({
           otp
         );
 
+        localStorage.setItem(
+          "pendingSignup",
+          "true"
+        );
+
         await emailjs.send(
           "service_otz8q9a",
           "template_y8t4pe2",
@@ -389,17 +229,6 @@ export default function Signup({
           CREATE ACCOUNT
 
         </h1>
-
-        <button
-          onClick={
-            googleSignup
-          }
-          className="w-full bg-white text-black py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300"
-        >
-
-          Continue with Google
-
-        </button>
 
         <input
           type="text"
