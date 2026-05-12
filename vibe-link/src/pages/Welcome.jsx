@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import logo from "../assets/logo.png";
+import welcomeLogo from "../assets/logo.png";
 
 export default function Welcome({
   setScreen,
@@ -37,23 +37,19 @@ export default function Welcome({
 
         <div className="w-full flex justify-center items-center">
 
-  <div className="w-full flex justify-center items-center">
+          <img
+            src={welcomeLogo}
+            alt="Vibe Link"
+            className="
+              w-[340px]
+              md:w-[420px]
+              object-contain
+              drop-shadow-[0_0_60px_rgba(168,85,247,0.35)]
+              select-none
+            "
+          />
 
-  <img
-    src={welcomeLogo}
-    alt="Vibe Link"
-    className="
-      w-[340px]
-      md:w-[420px]
-      object-contain
-      drop-shadow-[0_0_60px_rgba(168,85,247,0.35)]
-      select-none
-    "
-  />
-
-</div>
-
-</div>
+        </div>
 
         <h1 className="text-6xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text mb-4">
           VIBE LINK
