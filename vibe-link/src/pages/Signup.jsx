@@ -196,45 +196,65 @@ export default function Signup({
       }
 
       if (
-        enteredAge !==
-        calculatedAge
-      ) {
+  enteredAge !==
+  calculatedAge
+) {
 
-        alert(
-          "The age entered does not match your date of birth.\n\nPlease try again later."
-        );
+  if (
+    calculatedAge < 13
+  ) {
 
-        resetAllFields();
+    const reopenDate =
+      new Date(dob);
 
-        setOtpLoading(false);
+    reopenDate.setFullYear(
+      reopenDate.getFullYear() +
+      13
+    );
 
-        setScreen(
-          "welcome"
-        );
+    const formattedDate =
+      reopenDate.toLocaleDateString(
+        "en-IN",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }
+      );
 
-        return;
+    localStorage.setItem(
+      "disabledEmail",
+      email
+    );
 
-      }
+    localStorage.setItem(
+      "reopenDate",
+      formattedDate
+    );
 
-      if (
-        calculatedAge < 13
-      ) {
+    alert(
+      `Your Vibe Link account has been disabled.\n\nYour account will automatically become available on:\n${formattedDate}`
+    );
 
-        alert(
-          "The age entered does not match your date of birth.\n\nPlease try again later."
-        );
+  } else {
 
-        resetAllFields();
+    alert(
+      "The age entered does not match your date of birth.\n\nPlease try again later."
+    );
 
-        setOtpLoading(false);
+  }
 
-        setScreen(
-          "welcome"
-        );
+  resetAllFields();
 
-        return;
+  setOtpLoading(false);
 
-      }
+  setScreen(
+    "welcome"
+  );
+
+  return;
+
+}
 
       if (
         !agreedAge
