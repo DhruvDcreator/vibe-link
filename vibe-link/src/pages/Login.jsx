@@ -102,27 +102,15 @@ export default function Login({
 
     <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden">
 
+      {/* background */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
 
-      <motion.button
-        whileHover={{
-          scale: 1.1,
-        }}
-        whileTap={{
-          scale: 0.95,
-        }}
-        onClick={() =>
-          setScreen(
-            "loginOrSignup"
-          )
-        }
-        className="absolute top-6 left-6 z-20 text-4xl text-cyan-400 cursor-pointer"
-      >
+      {/* glowing blobs */}
+      <div className="absolute w-[400px] h-[400px] bg-cyan-500/20 rounded-full blur-[120px] top-[-120px] left-[-120px]"></div>
 
-        ←
+      <div className="absolute w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-[120px] bottom-[-120px] right-[-120px]"></div>
 
-      </motion.button>
-
+      {/* main card */}
       <motion.div
         initial={{
           opacity: 0,
@@ -138,12 +126,34 @@ export default function Login({
         className="relative z-10 w-full max-w-md backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[40px] p-8 space-y-5 shadow-[0_0_60px_rgba(0,255,255,0.12)]"
       >
 
+        {/* back button */}
+        <motion.button
+          whileHover={{
+            scale: 1.1,
+          }}
+          whileTap={{
+            scale: 0.95,
+          }}
+          onClick={() =>
+            setScreen(
+              "loginOrSignup"
+            )
+          }
+          className="absolute top-6 left-6 text-4xl text-cyan-400 cursor-pointer"
+        >
+
+          ←
+
+        </motion.button>
+
+        {/* title */}
         <h1 className="text-5xl font-black text-center bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
 
           LOGIN
 
         </h1>
 
+        {/* username */}
         <input
           type="text"
           placeholder="Username"
@@ -156,6 +166,7 @@ export default function Login({
           className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-cyan-400"
         />
 
+        {/* password */}
         <div className="relative">
 
           <input
@@ -181,7 +192,7 @@ export default function Login({
                 !showPassword
               )
             }
-            className="absolute right-5 top-5"
+            className="absolute right-5 top-5 cursor-pointer"
           >
 
             {showPassword
@@ -192,6 +203,7 @@ export default function Login({
 
         </div>
 
+        {/* forgot password */}
         <button
           type="button"
           onClick={() =>
@@ -199,21 +211,29 @@ export default function Login({
               "forgotPassword"
             )
           }
-          className="text-sm text-cyan-400 hover:text-cyan-300 transition-all text-right w-full"
+          className="text-sm text-cyan-400 hover:text-cyan-300 transition-all text-right w-full cursor-pointer"
         >
 
           Forgot Password?
 
         </button>
 
+        {/* login button */}
         <button
           onClick={loginUser}
-          className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)]"
+          className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)] cursor-pointer"
         >
 
           LOGIN
 
         </button>
+
+        {/* copyright */}
+        <p className="pt-3 text-sm text-zinc-400 text-center tracking-wide leading-relaxed">
+
+          © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+
+        </p>
 
       </motion.div>
 

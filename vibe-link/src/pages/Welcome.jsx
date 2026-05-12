@@ -5,7 +5,9 @@ import welcomeLogo from "../assets/logo.png";
 export default function Welcome({
   setScreen,
 }) {
+
   return (
+
     <div
       className="min-h-screen flex items-center justify-center text-white p-6 relative overflow-hidden"
       style={{
@@ -17,7 +19,7 @@ export default function Welcome({
       {/* dark overlay */}
       <div className="absolute inset-0 bg-black/50"></div>
 
-      {/* glowing background blobs */}
+      {/* glowing blobs */}
       <div className="absolute w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[140px] top-[-150px] left-[-100px] animate-pulse"></div>
 
       <div className="absolute w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[140px] bottom-[-150px] right-[-100px] animate-pulse"></div>
@@ -55,8 +57,8 @@ export default function Welcome({
             duration: 1,
           }}
           className="
-            w-[340px]
-            md:w-[430px]
+            w-[300px]
+            md:w-[400px]
             object-contain
             drop-shadow-[0_0_60px_rgba(168,85,247,0.35)]
             select-none
@@ -100,15 +102,22 @@ export default function Welcome({
             hover:shadow-[0_0_70px_rgba(168,85,247,0.5)]
           "
         >
+
           CONTINUE
+
         </motion.button>
-          <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-zinc-600 tracking-wide text-center z-20">
 
-  © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+        {/* copyright */}
+        <p className="mt-10 text-sm text-zinc-400 text-center tracking-wide leading-relaxed px-4">
 
-</p>
+          © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+
+        </p>
+
       </motion.div>
 
     </div>
+
   );
+
 }
