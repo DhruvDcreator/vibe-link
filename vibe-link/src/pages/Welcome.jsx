@@ -35,17 +35,24 @@ export default function Welcome({
         className="relative z-10 text-center"
       >
 
-        <img
-  src={logo}
-  alt="Vibe Link"
-  className="
-    w-44
-    h-44
-    object-contain
-    drop-shadow-[0_0_40px_rgba(255,0,255,0.35)]
-    select-none
-  "
-/>
+        <div className="w-full flex justify-center items-center">
+
+  <img
+    src={logo}
+    alt="Vibe Link"
+    className="
+      w-52
+      h-52
+      object-contain
+      drop-shadow-[0_0_60px_rgba(168,85,247,0.45)]
+      hover:scale-105
+      transition-all
+      duration-500
+      select-none
+    "
+  />
+
+</div>
 
         <h1 className="text-6xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text mb-4">
           VIBE LINK
