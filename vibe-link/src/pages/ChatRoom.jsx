@@ -29,6 +29,7 @@ import {
   query,
   serverTimestamp,
   setDoc,
+updateDoc,
 } from "firebase/firestore";
 
 export default function ChatRoom({
@@ -63,6 +64,11 @@ export default function ChatRoom({
     clearedChats,
     setClearedChats,
   ] = useState({});
+
+  const [
+  typingStatus,
+  setTypingStatus,
+] = useState(false);
 
   const [
     chatMeta,
@@ -183,6 +189,40 @@ export default function ChatRoom({
 
   useEffect(() => {
 
+  const unsubscribe =
+    onSnapshot(
+      doc(
+        db,
+        "users",
+        selectedUser.id
+      ),
+
+      (snapshot) => {
+
+        if (
+          snapshot.exists()
+        ) {
+
+          const data =
+            snapshot.data();
+
+          setTypingStatus(
+            data.isTyping ||
+            false
+          );
+
+        }
+
+      }
+    );
+
+  return () =>
+    unsubscribe();
+
+}, [selectedUser.id]);
+
+  useEffect(() => {
+
     const unsubscribe =
       onSnapshot(
         doc(
@@ -190,6 +230,8 @@ export default function ChatRoom({
           "chatMeta",
           chatId
         ),
+
+        
 
         (snapshot) => {
 
@@ -451,6 +493,17 @@ export default function ChatRoom({
           }
         );
 
+        await updateDoc(
+  doc(
+    db,
+    "users",
+    auth.currentUser.uid
+  ),
+  {
+    isTyping: false,
+  }
+);
+
         setMessage("");
 
       } catch (error) {
@@ -522,13 +575,15 @@ export default function ChatRoom({
 
             <p className="text-cyan-300 text-sm">
 
-              {
-                onlineStatus
-                  ? "Online ✨"
-                  : "Offline"
-              }
+  {
+    typingStatus
+      ? "Typing..."
+      : onlineStatus
+      ? "Online ✨"
+      : "Offline"
+  }
 
-            </p>
+</p>
 
           </div>
 
@@ -676,11 +731,47 @@ export default function ChatRoom({
           <input
             type="text"
             value={message}
-            onChange={(e) =>
-              setMessage(
-                e.target.value
-              )
-            }
+            onChange={async (e) => {
+
+  setMessage(
+    e.target.value
+  );
+
+  await updateDoc(
+    doc(
+      db,
+      "users",
+      auth.currentUser.uid
+    ),
+    {
+      isTyping: true,
+    }
+  );
+
+  clearTimeout(
+    window.typingTimeout
+  );
+
+  window.typingTimeout =
+    setTimeout(
+      async () => {
+
+        await updateDoc(
+          doc(
+            db,
+            "users",
+            auth.currentUser.uid
+          ),
+          {
+            isTyping: false,
+          }
+        );
+
+      },
+      1500
+    );
+
+}}
             onKeyDown={(e) => {
 
               if (
