@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 
-import welcomeLogo from "../assets/logo.png";
-
+import welcomeLogo from "../assets/vibelogo.png";
 export default function Welcome({
   setScreen,
 }) {
