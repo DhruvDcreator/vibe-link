@@ -37,20 +37,21 @@ export default function Welcome({
 
         <div className="w-full flex justify-center items-center">
 
+  <div className="w-full flex justify-center items-center">
+
   <img
-    src={logo}
+    src={welcomeLogo}
     alt="Vibe Link"
     className="
-      w-52
-      h-52
+      w-[340px]
+      md:w-[420px]
       object-contain
-      drop-shadow-[0_0_60px_rgba(168,85,247,0.45)]
-      hover:scale-105
-      transition-all
-      duration-500
+      drop-shadow-[0_0_60px_rgba(168,85,247,0.35)]
       select-none
     "
   />
+
+</div>
 
 </div>
 
