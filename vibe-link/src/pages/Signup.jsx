@@ -3,12 +3,18 @@ import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
 
 import {
+  useState,
+  useEffect,
+} from "react";
+
+import {
   fetchSignInMethodsForEmail,
 } from "firebase/auth";
 
 import {
   doc,
   getDoc,
+  setDoc,
 } from "firebase/firestore";
 
 import {
@@ -49,6 +55,118 @@ export default function Signup({
   setShowPassword,
 }) {
 
+  const [
+    dob,
+    setDob,
+  ] = useState("");
+
+  const [
+    calculatedAge,
+    setCalculatedAge,
+  ] = useState(null);
+
+  const [
+    reopenDate,
+    setReopenDate,
+  ] = useState("");
+
+  const [
+    agreedAge,
+    setAgreedAge,
+  ] = useState(false);
+
+  const [
+    agreedTerms,
+    setAgreedTerms,
+  ] = useState(false);
+
+  const [
+    otpLoading,
+    setOtpLoading,
+  ] = useState(false);
+
+  const calculateAge =
+    (birthDate) => {
+
+      const today =
+        new Date();
+
+      const birth =
+        new Date(
+          birthDate
+        );
+
+      let age =
+        today.getFullYear() -
+        birth.getFullYear();
+
+      const monthDiff =
+        today.getMonth() -
+        birth.getMonth();
+
+      if (
+        monthDiff < 0 ||
+        (
+          monthDiff === 0 &&
+          today.getDate() <
+          birth.getDate()
+        )
+      ) {
+
+        age--;
+
+      }
+
+      return age;
+
+    };
+
+  useEffect(() => {
+
+    if (!dob) {
+
+      setCalculatedAge(
+        null
+      );
+
+      return;
+
+    }
+
+    const ageNow =
+      calculateAge(dob);
+
+    setCalculatedAge(
+      ageNow
+    );
+
+    setAge(ageNow);
+
+    if (ageNow < 13) {
+
+      const birth =
+        new Date(dob);
+
+      birth.setFullYear(
+        birth.getFullYear() +
+        13
+      );
+
+      setReopenDate(
+        birth.toLocaleDateString(
+          "en-IN",
+          {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }
+        )
+      );
+
+    }
+
+  }, [dob]);
+
   const bioWordCount =
     bio
       .trim()
@@ -57,6 +175,18 @@ export default function Signup({
 
   const sendOtp =
     async () => {
+
+      if (
+        otpLoading
+      ) {
+
+        return;
+
+      }
+
+      setOtpLoading(
+        true
+      );
 
       const validPassword =
         password.length >= 8 &&
@@ -69,7 +199,7 @@ export default function Signup({
         !username ||
         !email ||
         !phone ||
-        !age ||
+        !dob ||
         !gender ||
         !country ||
         !bio
@@ -78,6 +208,65 @@ export default function Signup({
         alert(
           "Please fill all fields"
         );
+
+        setOtpLoading(false);
+
+        return;
+
+      }
+
+      if (
+        calculatedAge < 13
+      ) {
+
+        await setDoc(
+          doc(
+            db,
+            "disabledAccounts",
+            email
+          ),
+          {
+            email,
+            dob,
+            reopenDate,
+            reason:
+              "underage",
+          }
+        );
+
+        alert(
+          `Your account has been disabled for being under 13 years old.\n\nYour Vibe Link account will automatically become available on ${reopenDate}.`
+        );
+
+        setOtpLoading(false);
+
+        return;
+
+      }
+
+      if (
+        !agreedAge
+      ) {
+
+        alert(
+          "Please confirm your age."
+        );
+
+        setOtpLoading(false);
+
+        return;
+
+      }
+
+      if (
+        !agreedTerms
+      ) {
+
+        alert(
+          "Please accept the Terms & Conditions and Privacy Policy."
+        );
+
+        setOtpLoading(false);
 
         return;
 
@@ -91,6 +280,8 @@ export default function Signup({
           "Enter a valid phone number"
         );
 
+        setOtpLoading(false);
+
         return;
 
       }
@@ -103,11 +294,42 @@ export default function Signup({
           "Password requirements not met"
         );
 
+        setOtpLoading(false);
+
         return;
 
       }
 
       try {
+
+        const disabledRef =
+          doc(
+            db,
+            "disabledAccounts",
+            email
+          );
+
+        const disabledSnap =
+          await getDoc(
+            disabledRef
+          );
+
+        if (
+          disabledSnap.exists()
+        ) {
+
+          const disabledData =
+            disabledSnap.data();
+
+          alert(
+            `This account has been disabled for being under age.\n\nYour Vibe Link account will open on ${disabledData.reopenDate}.`
+          );
+
+          setOtpLoading(false);
+
+          return;
+
+        }
 
         const usernameRef =
           doc(
@@ -129,6 +351,8 @@ export default function Signup({
             "Username already taken"
           );
 
+          setOtpLoading(false);
+
           return;
 
         }
@@ -147,6 +371,8 @@ export default function Signup({
           alert(
             "Account on this email already exists. Log in or use another email."
           );
+
+          setOtpLoading(false);
 
           return;
 
@@ -181,6 +407,8 @@ export default function Signup({
           "uYochmrCEWfNwQTMA"
         );
 
+        setOtpLoading(false);
+
         setScreen(
           "otp"
         );
@@ -194,6 +422,8 @@ export default function Signup({
         alert(
           error.message
         );
+
+        setOtpLoading(false);
 
       }
 
@@ -243,22 +473,27 @@ export default function Signup({
           className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-cyan-400"
         />
 
-        <p className="text-right text-sm text-zinc-400">
-
-          {username.length}/10
-
-        </p>
-
         <input
           type="email"
-          placeholder="Email"
+          placeholder={
+            calculatedAge < 13
+              ? "Unavailable for under 13"
+              : "Email"
+          }
+          disabled={
+            calculatedAge < 13
+          }
           value={email}
           onChange={(e) =>
             setEmail(
               e.target.value
             )
           }
-          className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-cyan-400"
+          className={`w-full rounded-2xl px-5 py-4 outline-none border ${
+            calculatedAge < 13
+              ? "bg-zinc-800 text-zinc-500 border-red-500/40 cursor-not-allowed"
+              : "bg-white/5 border-white/10 focus:border-cyan-400"
+          }`}
         />
 
         <input
@@ -316,108 +551,61 @@ export default function Signup({
 
         </div>
 
-        <div className="bg-white/5 border border-white/10 rounded-2xl p-4 space-y-2 text-sm">
+        <div className="space-y-2">
 
-          <div className={`flex items-center gap-2 ${
-            password.length >= 8
-              ? "text-green-400"
-              : "text-red-400"
-          }`}>
+          <label className="text-sm text-zinc-400">
 
-            <span>
-              {password.length >= 8
-                ? "✔"
-                : "✖"}
-            </span>
+            Date of Birth
 
-            Minimum 8 characters
+          </label>
 
-          </div>
-
-          <div className={`flex items-center gap-2 ${
-            /[A-Z]/.test(password)
-              ? "text-green-400"
-              : "text-red-400"
-          }`}>
-
-            <span>
-              {/[A-Z]/.test(password)
-                ? "✔"
-                : "✖"}
-            </span>
-
-            One capital letter
-
-          </div>
-
-          <div className={`flex items-center gap-2 ${
-            /[a-z]/.test(password)
-              ? "text-green-400"
-              : "text-red-400"
-          }`}>
-
-            <span>
-              {/[a-z]/.test(password)
-                ? "✔"
-                : "✖"}
-            </span>
-
-            One small letter
-
-          </div>
-
-          <div className={`flex items-center gap-2 ${
-            /[0-9]/.test(password)
-              ? "text-green-400"
-              : "text-red-400"
-          }`}>
-
-            <span>
-              {/[0-9]/.test(password)
-                ? "✔"
-                : "✖"}
-            </span>
-
-            One number
-
-          </div>
+          <input
+            type="date"
+            value={dob}
+            onChange={(e) =>
+              setDob(
+                e.target.value
+              )
+            }
+            className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
+          />
 
         </div>
 
-        <select
-          value={age}
-          onChange={(e) =>
-            setAge(
-              e.target.value
-            )
-          }
-          className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
-        >
+        {dob && (
 
-          <option value="">
-            Select Age
-          </option>
+          <div className="space-y-2">
 
-          {Array.from(
-            {
-              length: 13,
-            },
-            (_, i) =>
-              i + 13
-          ).map((num) => (
+            <p className="text-cyan-400 text-sm">
 
-            <option
-              key={num}
-              value={num}
-            >
+              Age: {calculatedAge}
 
-              {num}
+            </p>
 
-            </option>
+            {calculatedAge < 13 && (
 
-          ))}
+              <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 text-red-300 text-sm leading-relaxed">
 
-        </select>
+                Your account is currently disabled because Vibe Link is only available for users aged 13 and above.
+
+                <br />
+                <br />
+
+                Your account will automatically become available on:
+
+                <br />
+
+                <span className="font-bold text-white">
+                  {reopenDate}
+                </span>
+
+              </div>
+
+            )}
+
+          </div>
+
+        )}
 
         <select
           value={gender}
@@ -504,20 +692,87 @@ export default function Signup({
           className="w-full h-28 bg-white/5 border border-white/10 rounded-2xl px-5 py-4 resize-none outline-none focus:border-cyan-400"
         />
 
-        <p className="text-right text-sm text-zinc-400">
+        <div className="space-y-3 text-sm">
 
-          {bioWordCount}/50 words
+          <label className="flex items-start gap-3">
 
-        </p>
+            <input
+              type="checkbox"
+              checked={agreedAge}
+              onChange={() =>
+                setAgreedAge(
+                  !agreedAge
+                )
+              }
+              className="mt-1"
+            />
+
+            <span className="text-zinc-300">
+
+              I confirm that I am at least 13 years old.
+
+            </span>
+
+          </label>
+
+          <label className="flex items-start gap-3">
+
+            <input
+              type="checkbox"
+              checked={agreedTerms}
+              onChange={() =>
+                setAgreedTerms(
+                  !agreedTerms
+                )
+              }
+              className="mt-1"
+            />
+
+            <span className="text-zinc-300">
+
+              I agree to the Terms & Conditions and Privacy Policy.
+
+            </span>
+
+          </label>
+
+        </div>
 
         <button
           onClick={sendOtp}
-          className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300"
+          disabled={
+            otpLoading ||
+            calculatedAge < 13
+          }
+          className={`w-full py-4 rounded-2xl font-bold transition-all duration-300 ${
+            otpLoading ||
+            calculatedAge < 13
+              ? "bg-zinc-700 cursor-not-allowed opacity-70"
+              : "bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105"
+          }`}
         >
 
-          SEND OTP
+          {
+            otpLoading
+              ? "SENDING..."
+              : calculatedAge < 13
+              ? "ACCOUNT DISABLED"
+              : "SEND OTP"
+          }
 
         </button>
+
+        <div className="text-center text-xs text-zinc-500 pt-2 leading-relaxed">
+
+          By creating an account, you agree to Vibe Link's Terms & Conditions and Privacy Policy.
+
+        </div>
+
+        <p className="text-xs text-zinc-600 text-center pt-2">
+
+          © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+
+        </p>
 
         <motion.button
           whileHover={{
