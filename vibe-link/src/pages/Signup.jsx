@@ -14,6 +14,8 @@ import {
 import {
   doc,
   getDoc,
+  setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 import {
@@ -89,14 +91,14 @@ export default function Signup({
         today.getFullYear() -
         birth.getFullYear();
 
-      const monthDiff =
+      const monthDifference =
         today.getMonth() -
         birth.getMonth();
 
       if (
-        monthDiff < 0 ||
+        monthDifference < 0 ||
         (
-          monthDiff === 0 &&
+          monthDifference === 0 &&
           today.getDate() <
           birth.getDate()
         )
@@ -158,26 +160,11 @@ export default function Signup({
         true
       );
 
-      const calculatedAge =
-        calculateAge(
-          dob
-        );
-
-      const enteredAge =
-        parseInt(age);
-
-      const validPassword =
-        password.length >= 8 &&
-        password.length <= 13 &&
-        /[A-Z]/.test(password) &&
-        /[a-z]/.test(password) &&
-        /[0-9]/.test(password) &&
-        /[^A-Za-z0-9]/.test(password);
-
       if (
         !username ||
         !email ||
         !phone ||
+        !password ||
         !dob ||
         !age ||
         !gender ||
@@ -195,66 +182,144 @@ export default function Signup({
 
       }
 
+      const calculatedAge =
+        Number(
+          calculateAge(
+            dob
+          )
+        );
+
+      const enteredAge =
+        Number(age);
+
+      const validPassword =
+        password.length >= 8 &&
+        password.length <= 13 &&
+        /[A-Z]/.test(password) &&
+        /[a-z]/.test(password) &&
+        /[0-9]/.test(password) &&
+        /[^A-Za-z0-9]/.test(password);
+
       if (
-  enteredAge !==
-  calculatedAge
-) {
+        enteredAge !==
+        calculatedAge
+      ) {
 
-  if (
-    calculatedAge < 13
-  ) {
+        if (
+          calculatedAge < 13
+        ) {
 
-    const reopenDate =
-      new Date(dob);
+          const reopenDate =
+            new Date(dob);
 
-    reopenDate.setFullYear(
-      reopenDate.getFullYear() +
-      13
-    );
+          reopenDate.setFullYear(
+            reopenDate.getFullYear() +
+            13
+          );
 
-    const formattedDate =
-      reopenDate.toLocaleDateString(
-        "en-IN",
-        {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
+          const formattedDate =
+            reopenDate.toLocaleDateString(
+              "en-IN",
+              {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }
+            );
+
+          await setDoc(
+            doc(
+              db,
+              "disabledAccounts",
+              email
+            ),
+            {
+              email,
+              dob,
+              reopenDate:
+                reopenDate.toISOString(),
+              formattedDate,
+              disabled: true,
+            }
+          );
+
+          alert(
+            `Your Vibe Link account has been disabled.\n\nYour account will automatically become available on:\n${formattedDate}`
+          );
+
+        } else {
+
+          alert(
+            "The age entered does not match your date of birth.\n\nPlease try again later."
+          );
+
         }
-      );
 
-    localStorage.setItem(
-      "disabledEmail",
-      email
-    );
+        resetAllFields();
 
-    localStorage.setItem(
-      "reopenDate",
-      formattedDate
-    );
+        setOtpLoading(false);
 
-    alert(
-      `Your Vibe Link account has been disabled.\n\nYour account will automatically become available on:\n${formattedDate}`
-    );
+        setScreen(
+          "welcome"
+        );
 
-  } else {
+        return;
 
-    alert(
-      "The age entered does not match your date of birth.\n\nPlease try again later."
-    );
+      }
 
-  }
+      if (
+        calculatedAge < 13
+      ) {
 
-  resetAllFields();
+        const reopenDate =
+          new Date(dob);
 
-  setOtpLoading(false);
+        reopenDate.setFullYear(
+          reopenDate.getFullYear() +
+          13
+        );
 
-  setScreen(
-    "welcome"
-  );
+        const formattedDate =
+          reopenDate.toLocaleDateString(
+            "en-IN",
+            {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }
+          );
 
-  return;
+        await setDoc(
+          doc(
+            db,
+            "disabledAccounts",
+            email
+          ),
+          {
+            email,
+            dob,
+            reopenDate:
+              reopenDate.toISOString(),
+            formattedDate,
+            disabled: true,
+          }
+        );
 
-}
+        alert(
+          `Your Vibe Link account has been disabled.\n\nYour account will automatically become available on:\n${formattedDate}`
+        );
+
+        resetAllFields();
+
+        setOtpLoading(false);
+
+        setScreen(
+          "welcome"
+        );
+
+        return;
+
+      }
 
       if (
         !agreedAge
@@ -285,7 +350,7 @@ export default function Signup({
       }
 
       if (
-        !/^\d{10}$/.test(phone)
+        !/^\\d{10}$/.test(phone)
       ) {
 
         alert(
@@ -313,6 +378,61 @@ export default function Signup({
       }
 
       try {
+
+        const disabledRef =
+          doc(
+            db,
+            "disabledAccounts",
+            email
+          );
+
+        const disabledSnap =
+          await getDoc(
+            disabledRef
+          );
+
+        if (
+          disabledSnap.exists()
+        ) {
+
+          const data =
+            disabledSnap.data();
+
+          const reopen =
+            new Date(
+              data.reopenDate
+            );
+
+          const now =
+            new Date();
+
+          if (
+            now < reopen
+          ) {
+
+            alert(
+              `This account is currently disabled.\n\nYour Vibe Link account will automatically become available on:\n${data.formattedDate}`
+            );
+
+            resetAllFields();
+
+            setOtpLoading(false);
+
+            setScreen(
+              "welcome"
+            );
+
+            return;
+
+          } else {
+
+            await deleteDoc(
+              disabledRef
+            );
+
+          }
+
+        }
 
         const usernameRef =
           doc(
@@ -384,8 +504,7 @@ export default function Signup({
             to_email:
               email,
 
-            otp:
-              otp,
+            otp,
           },
           "uYochmrCEWfNwQTMA"
         );
@@ -483,7 +602,7 @@ export default function Signup({
             setPhone(
               e.target.value
                 .replace(
-                  /\D/g,
+                  /\\D/g,
                   ""
                 )
                 .slice(0, 10)
@@ -625,216 +744,16 @@ export default function Signup({
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         />
 
-        <div className="space-y-2">
-
-          <label className="text-sm text-zinc-400">
-
-            Date of Birth
-
-          </label>
-
-          <input
-            type="date"
-            value={dob}
-            onChange={(e) =>
-              setDob(
-                e.target.value
-              )
-            }
-            className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
-          />
-
-        </div>
-
-        <select
-          value={gender}
+        <input
+          type="date"
+          value={dob}
           onChange={(e) =>
-            setGender(
+            setDob(
               e.target.value
             )
           }
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
-        >
-
-          <option value="">
-            Select Gender
-          </option>
-
-          <option>
-            Male
-          </option>
-
-          <option>
-            Female
-          </option>
-
-          <option>
-            Other
-          </option>
-
-        </select>
-
-        <select
-          value={country}
-          onChange={(e) =>
-            setCountry(
-              e.target.value
-            )
-          }
-          className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
-        >
-
-          <option value="">
-            Select Country
-          </option>
-
-          <option>
-            India
-          </option>
-
-          <option>
-            USA
-          </option>
-
-          <option>
-            UK
-          </option>
-
-          <option>
-            Canada
-          </option>
-
-        </select>
-
-        <textarea
-          placeholder="Describe yourself..."
-          value={bio}
-          onChange={(e) => {
-
-            const words =
-              e.target.value
-                .trim()
-                .split(/\s+/)
-                .filter(Boolean);
-
-            if (
-              words.length <= 50
-            ) {
-
-              setBio(
-                e.target.value
-              );
-
-            }
-
-          }}
-          className="w-full h-28 bg-white/5 border border-white/10 rounded-2xl px-5 py-4 resize-none outline-none focus:border-cyan-400"
         />
-
-        <p className="text-right text-sm text-zinc-400">
-
-          {bioWordCount}/50 words
-
-        </p>
-
-        <div className="space-y-3 text-sm">
-
-          <label className="flex items-start gap-3">
-
-            <input
-              type="checkbox"
-              checked={agreedAge}
-              onChange={() =>
-                setAgreedAge(
-                  !agreedAge
-                )
-              }
-              className="mt-1"
-            />
-
-            <span className="text-zinc-300">
-
-              I confirm that I am at least 13 years old.
-
-            </span>
-
-          </label>
-
-          <label className="flex items-start gap-3">
-
-            <input
-              type="checkbox"
-              checked={agreedTerms}
-              onChange={() =>
-                setAgreedTerms(
-                  !agreedTerms
-                )
-              }
-              className="mt-1"
-            />
-
-            <span className="text-zinc-300">
-
-              I agree to the Terms & Conditions and Privacy Policy.
-
-            </span>
-
-          </label>
-
-        </div>
-
-        <button
-          onClick={sendOtp}
-          disabled={otpLoading}
-          className={`w-full py-4 rounded-2xl font-bold transition-all duration-300 ${
-            otpLoading
-              ? "bg-zinc-700 cursor-not-allowed opacity-70"
-              : "bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105"
-          }`}
-        >
-
-          {
-            otpLoading
-              ? "SENDING..."
-              : "SEND OTP"
-          }
-
-        </button>
-
-        <div className="text-center text-xs text-zinc-500 pt-2 leading-relaxed">
-
-          By creating an account, you agree to Vibe Link's Terms & Conditions and Privacy Policy.
-
-        </div>
-
-        <p className="text-xs text-zinc-600 text-center pt-2">
-
-          © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
-
-        </p>
-
-        <motion.button
-          whileHover={{
-            scale: 1.1,
-          }}
-          whileTap={{
-            scale: 0.95,
-          }}
-          onClick={() => {
-
-            resetAllFields();
-
-            setScreen(
-              "loginOrSignup"
-            );
-
-          }}
-          className="absolute top-6 left-6 z-20 text-4xl text-cyan-400 cursor-pointer"
-        >
-
-          ←
-
-        </motion.button>
 
       </motion.div>
 
