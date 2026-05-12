@@ -102,7 +102,11 @@ export default function Welcome({
         >
           CONTINUE
         </motion.button>
+          <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-xs text-zinc-600 tracking-wide text-center z-20">
 
+  © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+
+</p>
       </motion.div>
 
     </div>

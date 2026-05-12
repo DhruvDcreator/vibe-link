@@ -611,20 +611,38 @@ export default function App() {
 
   }
 
-  {
-  screen === "terms" && (
+  if (
+  screen ===
+  "terms"
+) {
+
+  return (
+
     <Terms
-      setScreen={setScreen}
+      setScreen={
+        setScreen
+      }
     />
-  )
+
+  );
+
 }
 
-{
-  screen === "privacy" && (
+if (
+  screen ===
+  "privacy"
+) {
+
+  return (
+
     <Privacy
-      setScreen={setScreen}
+      setScreen={
+        setScreen
+      }
     />
-  )
+
+  );
+
 }
 
   return null;
