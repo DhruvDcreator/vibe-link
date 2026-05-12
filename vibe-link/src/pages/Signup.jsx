@@ -129,16 +129,6 @@ export default function Signup({
 
     };
 
-  useEffect(() => {
-
-    return () => {
-
-      resetAllFields();
-
-    };
-
-  }, []);
-
   const bioWordCount =
     bio
       .trim()
@@ -884,9 +874,39 @@ export default function Signup({
 
             <span className="text-zinc-300">
 
-              I agree to the Terms & Conditions and Privacy Policy.
+  I agree to the{" "}
 
-            </span>
+  <span
+    onClick={() =>
+      setScreen(
+        "terms"
+      )
+    }
+    className="text-cyan-400 cursor-pointer hover:underline"
+  >
+
+    Terms & Conditions
+
+  </span>
+
+  {" "}and{" "}
+
+  <span
+    onClick={() =>
+      setScreen(
+        "privacy"
+      )
+    }
+    className="text-cyan-400 cursor-pointer hover:underline"
+  >
+
+    Privacy Policy
+
+  </span>
+
+  .
+
+</span>
 
           </label>
 

@@ -221,7 +221,21 @@ export default function OTP({
             }
           );
 
+          if (!username) {
+
+  alert(
+    "Session expired. Please sign up again."
+  );
+
+  setScreen(
+    "signup"
+  );
+
+  return;
+
+}
           await setDoc(
+          
             doc(
               db,
               "usernames",
