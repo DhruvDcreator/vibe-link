@@ -37,6 +37,10 @@ import Home from "./pages/Home";
 
 import ForgotPassword from "./pages/ForgotPassword";
 
+import Terms from "./pages/Terms";
+
+import Privacy from "./pages/Privacy";
+
 export default function App() {
 
   const [screen, setScreen] =
@@ -606,6 +610,22 @@ export default function App() {
     );
 
   }
+
+  {
+  screen === "terms" && (
+    <Terms
+      setScreen={setScreen}
+    />
+  )
+}
+
+{
+  screen === "privacy" && (
+    <Privacy
+      setScreen={setScreen}
+    />
+  )
+}
 
   return null;
 

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function Terms({
+export default function Privacy({
   setScreen,
 }) {
 
@@ -35,46 +35,42 @@ export default function Terms({
 
         <h1 className="text-5xl font-black mb-10 bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
 
-          TERMS & CONDITIONS
+          PRIVACY POLICY
 
         </h1>
 
         <div className="space-y-6 text-zinc-300 leading-relaxed">
 
           <p>
-            By using Vibe Link™, you agree to comply with all platform rules and applicable laws.
+            Vibe Link™ values your privacy and aims to protect your personal information.
           </p>
 
           <p>
-            Users must be at least 13 years old to create and use an account.
+            We may collect information such as username, email, profile information, and usage activity to provide and improve the platform.
           </p>
 
           <p>
-            You are responsible for all activity conducted through your account.
+            Your information is stored securely using trusted third-party services such as Firebase.
           </p>
 
           <p>
-            Harassment, bullying, impersonation, hate speech, illegal content, spam, or abusive behavior is strictly prohibited.
+            We do not sell your personal information to third parties.
           </p>
 
           <p>
-            Vibe Link reserves the right to suspend or terminate accounts violating platform policies.
+            Users are responsible for the information they choose to publicly share on the platform.
           </p>
 
           <p>
-            Users may not attempt unauthorized access, exploit bugs, or interfere with platform security.
+            We may use analytics, security systems, and moderation tools to maintain platform safety.
           </p>
 
           <p>
-            Features, policies, and services may change over time without prior notice.
+            Accounts violating platform policies may be restricted or removed.
           </p>
 
           <p>
-            Vibe Link™ is provided “as is” without warranties of uninterrupted availability.
-          </p>
-
-          <p>
-            By continuing to use Vibe Link™, you consent to these Terms & Conditions.
+            By using Vibe Link™, you consent to this Privacy Policy.
           </p>
 
         </div>
