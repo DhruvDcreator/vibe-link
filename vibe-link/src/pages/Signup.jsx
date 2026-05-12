@@ -350,7 +350,7 @@ export default function Signup({
       }
 
       if (
-        !/^\\d{10}$/.test(phone)
+        !/^\d{10}$/.test(phone)
       ) {
 
         alert(
@@ -602,7 +602,7 @@ export default function Signup({
             setPhone(
               e.target.value
                 .replace(
-                  /\\D/g,
+                  /\D/g,
                   ""
                 )
                 .slice(0, 10)
@@ -754,6 +754,196 @@ export default function Signup({
           }
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         />
+
+        <select
+          value={gender}
+          onChange={(e) =>
+            setGender(
+              e.target.value
+            )
+          }
+          className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
+        >
+
+          <option value="">
+            Select Gender
+          </option>
+
+          <option>
+            Male
+          </option>
+
+          <option>
+            Female
+          </option>
+
+          <option>
+            Other
+          </option>
+
+        </select>
+
+        <select
+          value={country}
+          onChange={(e) =>
+            setCountry(
+              e.target.value
+            )
+          }
+          className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
+        >
+
+          <option value="">
+            Select Country
+          </option>
+
+          <option>
+            India
+          </option>
+
+          <option>
+            USA
+          </option>
+
+          <option>
+            UK
+          </option>
+
+          <option>
+            Canada
+          </option>
+
+        </select>
+
+        <textarea
+          placeholder="Describe yourself..."
+          value={bio}
+          onChange={(e) => {
+
+            const words =
+              e.target.value
+                .trim()
+                .split(/\s+/)
+                .filter(Boolean);
+
+            if (
+              words.length <= 50
+            ) {
+
+              setBio(
+                e.target.value
+              );
+
+            }
+
+          }}
+          className="w-full h-28 bg-white/5 border border-white/10 rounded-2xl px-5 py-4 resize-none outline-none focus:border-cyan-400"
+        />
+
+        <p className="text-right text-sm text-zinc-400">
+
+          {bioWordCount}/50 words
+
+        </p>
+
+        <div className="space-y-3 text-sm">
+
+          <label className="flex items-start gap-3">
+
+            <input
+              type="checkbox"
+              checked={agreedAge}
+              onChange={() =>
+                setAgreedAge(
+                  !agreedAge
+                )
+              }
+              className="mt-1"
+            />
+
+            <span className="text-zinc-300">
+
+              I confirm that I am at least 13 years old.
+
+            </span>
+
+          </label>
+
+          <label className="flex items-start gap-3">
+
+            <input
+              type="checkbox"
+              checked={agreedTerms}
+              onChange={() =>
+                setAgreedTerms(
+                  !agreedTerms
+                )
+              }
+              className="mt-1"
+            />
+
+            <span className="text-zinc-300">
+
+              I agree to the Terms & Conditions and Privacy Policy.
+
+            </span>
+
+          </label>
+
+        </div>
+
+        <button
+          onClick={sendOtp}
+          disabled={otpLoading}
+          className={`w-full py-4 rounded-2xl font-bold transition-all duration-300 ${
+            otpLoading
+              ? "bg-zinc-700 cursor-not-allowed opacity-70"
+              : "bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105"
+          }`}
+        >
+
+          {
+            otpLoading
+              ? "SENDING..."
+              : "SEND OTP"
+          }
+
+        </button>
+
+        <div className="text-center text-xs text-zinc-500 pt-2 leading-relaxed">
+
+          By creating an account, you agree to Vibe Link's Terms & Conditions and Privacy Policy.
+
+        </div>
+
+        <p className="text-xs text-zinc-600 text-center pt-2">
+
+          © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+
+        </p>
+
+        <motion.button
+          whileHover={{
+            scale: 1.1,
+          }}
+          whileTap={{
+            scale: 0.95,
+          }}
+          onClick={() => {
+
+            resetAllFields();
+
+            setScreen(
+              "loginOrSignup"
+            );
+
+          }}
+          className="absolute top-6 left-6 z-20 text-4xl text-cyan-400 cursor-pointer"
+        >
+
+          ←
+
+        </motion.button>
 
       </motion.div>
 
