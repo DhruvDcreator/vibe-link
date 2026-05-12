@@ -912,23 +912,52 @@ export default function Signup({
 
         </div>
 
-        <button
-          onClick={sendOtp}
-          disabled={otpLoading}
-          className={`w-full py-4 rounded-2xl font-bold transition-all duration-300 ${
-            otpLoading
-              ? "bg-zinc-700 cursor-not-allowed opacity-70"
-              : "bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105"
-          }`}
-        >
+        <motion.button
+  whileHover={{
+    scale: otpLoading
+      ? 1
+      : 1.05,
+  }}
+  whileTap={{
+    scale: otpLoading
+      ? 1
+      : 0.97,
+  }}
+  transition={{
+    type: "spring",
+    stiffness: 300,
+  }}
+  onClick={sendOtp}
+  disabled={otpLoading}
+  className={`
 
-          {
-            otpLoading
-              ? "SENDING..."
-              : "SEND OTP"
-          }
+    w-full
+    py-4
+    rounded-2xl
+    font-bold
+    cursor-pointer
+    transition-all
+    duration-300
 
-        </button>
+    ${
+      otpLoading
+
+        ? "bg-zinc-700 opacity-70 cursor-not-allowed"
+
+        : "bg-gradient-to-r from-cyan-500 to-purple-600 shadow-[0_0_40px_rgba(0,255,255,0.25)] hover:shadow-[0_0_70px_rgba(168,85,247,0.45)]"
+
+    }
+
+  `}
+>
+
+  {
+    otpLoading
+      ? "SENDING..."
+      : "SEND OTP"
+  }
+
+</motion.button>
 
         <div className="text-center text-xs text-zinc-500 pt-2 leading-relaxed">
 

@@ -65,7 +65,7 @@ export default function Welcome({
           "
         />
 
-        {/* button */}
+        {/* continue button */}
         <motion.button
           initial={{
             opacity: 0,
@@ -74,6 +74,12 @@ export default function Welcome({
           animate={{
             opacity: 1,
             y: 0,
+          }}
+          whileHover={{
+            scale: 1.08,
+          }}
+          whileTap={{
+            scale: 0.96,
           }}
           transition={{
             delay: 0.5,
@@ -95,7 +101,6 @@ export default function Welcome({
             text-2xl
             font-bold
             cursor-pointer
-            hover:scale-105
             transition-all
             duration-300
             shadow-[0_0_40px_rgba(0,255,255,0.35)]

@@ -67,32 +67,44 @@ export default function LoginOrSignup({
         </p>
 
         {/* login button */}
-        <button
+        <motion.button
+          whileHover={{
+            scale: 1.05,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
           onClick={() =>
             setScreen(
               "login"
             )
           }
-          className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 py-5 rounded-3xl text-xl font-bold cursor-pointer hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)]"
+          className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 py-5 rounded-3xl text-xl font-bold cursor-pointer transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)] hover:shadow-[0_0_65px_rgba(0,255,255,0.4)]"
         >
 
           LOGIN
 
-        </button>
+        </motion.button>
 
         {/* signup button */}
-        <button
+        <motion.button
+          whileHover={{
+            scale: 1.05,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
           onClick={() =>
             setScreen(
               "signup"
             )
           }
-          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 py-5 rounded-3xl text-xl font-bold cursor-pointer hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(168,85,247,0.25)]"
+          className="w-full bg-gradient-to-r from-pink-500 to-purple-600 py-5 rounded-3xl text-xl font-bold cursor-pointer transition-all duration-300 shadow-[0_0_40px_rgba(168,85,247,0.25)] hover:shadow-[0_0_65px_rgba(168,85,247,0.45)]"
         >
 
           CREATE ACCOUNT
 
-        </button>
+        </motion.button>
 
         {/* copyright */}
         <p className="pt-4 text-sm text-zinc-400 text-center tracking-wide leading-relaxed">

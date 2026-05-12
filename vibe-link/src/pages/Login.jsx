@@ -219,14 +219,35 @@ export default function Login({
         </button>
 
         {/* login button */}
-        <button
-          onClick={loginUser}
-          className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)] cursor-pointer"
-        >
+        <motion.button
+  whileHover={{
+    scale: 1.05,
+  }}
+  whileTap={{
+    scale: 0.97,
+  }}
+  transition={{
+    type: "spring",
+    stiffness: 300,
+  }}
+  onClick={loginUser}
+  className="
+    w-full
+    bg-gradient-to-r
+    from-cyan-500
+    to-purple-600
+    py-4
+    rounded-2xl
+    font-bold
+    cursor-pointer
+    shadow-[0_0_40px_rgba(0,255,255,0.25)]
+    hover:shadow-[0_0_70px_rgba(168,85,247,0.45)]
+  "
+>
 
-          LOGIN
+  LOGIN
 
-        </button>
+</motion.button>
 
         {/* copyright */}
         <p className="pt-3 text-sm text-zinc-400 text-center tracking-wide leading-relaxed">
