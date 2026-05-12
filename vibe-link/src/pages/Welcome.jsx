@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-import logo from "../assets/logo.jpeg";
+import logo from "../assets/logo.png";
 
 export default function Welcome({
   setScreen,
@@ -36,10 +36,16 @@ export default function Welcome({
       >
 
         <img
-          src={logo}
-          alt="logo"
-          className="w-80 mx-auto mb-8 rounded-[40px] shadow-[0_0_100px_rgba(0,255,255,0.3)]"
-        />
+  src={logo}
+  alt="Vibe Link"
+  className="
+    w-44
+    h-44
+    object-contain
+    drop-shadow-[0_0_40px_rgba(255,0,255,0.35)]
+    select-none
+  "
+/>
 
         <h1 className="text-6xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text mb-4">
           VIBE LINK
