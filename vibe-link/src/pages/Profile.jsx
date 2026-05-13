@@ -527,63 +527,116 @@ const [showCropper,
 
         {showCropper && (
 
-  <div className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-6">
+  <motion.div
+    initial={{
+      opacity: 0,
+    }}
+    animate={{
+      opacity: 1,
+    }}
+    exit={{
+      opacity: 0,
+    }}
+    className="fixed inset-0 z-[999] bg-black/95 backdrop-blur-2xl flex items-center justify-center p-5"
+  >
 
-    <div className="relative w-full max-w-sm h-[400px] bg-black rounded-3xl overflow-hidden border border-white/10">
+    <div className="w-full max-w-md rounded-[40px] border border-white/10 bg-white/5 backdrop-blur-2xl p-5 shadow-[0_0_60px_rgba(0,255,255,0.12)]">
 
-      <Cropper
-        image={selectedImage}
-        crop={crop}
-        zoom={zoom}
-        aspect={1}
-        cropShape="round"
-        showGrid={false}
-        onCropChange={setCrop}
-        onZoomChange={setZoom}
-        onCropComplete={onCropComplete}
-      />
+      <h1 className="text-3xl font-black text-center bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
+
+        CROP PHOTO
+
+      </h1>
+
+      <p className="text-zinc-400 text-center text-sm mt-2 leading-relaxed">
+
+        Adjust your profile picture perfectly 😭🔥
+
+      </p>
+
+      <div className="relative w-full h-[380px] mt-6 rounded-[32px] overflow-hidden bg-black border border-white/10">
+
+        <Cropper
+          image={selectedImage}
+          crop={crop}
+          zoom={zoom}
+          aspect={1}
+          cropShape="round"
+          showGrid={false}
+          onCropChange={setCrop}
+          onZoomChange={setZoom}
+          onCropComplete={onCropComplete}
+        />
+
+      </div>
+
+      <div className="mt-6">
+
+        <p className="text-sm text-zinc-400 mb-3">
+
+          Zoom
+
+        </p>
+
+        <input
+          type="range"
+          min={1}
+          max={3}
+          step={0.1}
+          value={zoom}
+          onChange={(e) =>
+            setZoom(
+              Number(
+                e.target.value
+              )
+            )
+          }
+          className="w-full h-2 rounded-full appearance-none cursor-pointer bg-gradient-to-r from-cyan-500 to-purple-600"
+        />
+
+      </div>
+
+      <div className="flex gap-4 mt-7">
+
+        <motion.button
+          whileHover={{
+            scale: 1.03,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
+          onClick={() =>
+            setShowCropper(
+              false
+            )
+          }
+          className="flex-1 py-4 rounded-2xl bg-white/5 border border-white/10 font-bold cursor-pointer hover:bg-white/10 transition-all duration-300"
+        >
+
+          CANCEL
+
+        </motion.button>
+
+        <motion.button
+          whileHover={{
+            scale: 1.03,
+          }}
+          whileTap={{
+            scale: 0.97,
+          }}
+          onClick={cropImageNow}
+          className="flex-1 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 font-bold cursor-pointer shadow-[0_0_40px_rgba(0,255,255,0.25)] hover:shadow-[0_0_60px_rgba(168,85,247,0.4)] transition-all duration-300"
+        >
+
+          SAVE
+
+        </motion.button>
+
+      </div>
 
     </div>
 
-    <input
-      type="range"
-      min={1}
-      max={3}
-      step={0.1}
-      value={zoom}
-      onChange={(e) =>
-        setZoom(
-          e.target.value
-        )
-      }
-      className="w-full max-w-sm mt-6"
-    />
-
-    <div className="flex gap-4 mt-6 w-full max-w-sm">
-
-      <button
-        onClick={() =>
-          setShowCropper(false)
-        }
-        className="flex-1 py-4 rounded-2xl bg-white/10 border border-white/10 font-bold cursor-pointer"
-      >
-
-        CANCEL
-
-      </button>
-
-      <button
-        onClick={cropImageNow}
-        className="flex-1 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 font-bold cursor-pointer"
-      >
-
-        SAVE
-
-      </button>
-
-    </div>
-
-  </div>
+  </motion.div>
 
 )}
 
