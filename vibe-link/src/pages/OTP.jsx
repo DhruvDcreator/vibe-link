@@ -68,6 +68,11 @@ export default function OTP({
     setLoading,
   ] = useState(false);
 
+  const [
+    verified,
+    setVerified,
+  ] = useState(false);
+
   useEffect(() => {
 
     localStorage.setItem(
@@ -120,7 +125,10 @@ export default function OTP({
   const verifyOtp =
     async () => {
 
-      if (loading) {
+      if (
+        loading ||
+        verified
+      ) {
         return;
       }
 
@@ -138,15 +146,10 @@ export default function OTP({
         otp.join("");
 
       if (
-        enteredOtp.length < 4
+        enteredOtp.length !==
+        4
       ) {
-
-        alert(
-          "Enter full OTP"
-        );
-
         return;
-
       }
 
       if (
@@ -189,6 +192,10 @@ export default function OTP({
       try {
 
         setLoading(true);
+
+        setVerified(
+          true
+        );
 
         if (
           isGoogleSignup
@@ -263,9 +270,13 @@ export default function OTP({
             "pendingSignup"
           );
 
-          setScreen(
-            "signupSuccess"
-          );
+          setTimeout(() => {
+
+            setScreen(
+              "signupSuccess"
+            );
+
+          }, 400);
 
           return;
 
@@ -342,9 +353,13 @@ export default function OTP({
           "pendingSignup"
         );
 
-        setScreen(
-          "signupSuccess"
-        );
+        setTimeout(() => {
+
+          setScreen(
+            "signupSuccess"
+          );
+
+        }, 400);
 
       } catch (error) {
 
@@ -381,10 +396,39 @@ export default function OTP({
 
     };
 
+  useEffect(() => {
+
+    const enteredOtp =
+      otp.join("");
+
+    if (
+      enteredOtp.length ===
+      4
+    ) {
+
+      const timeout =
+        setTimeout(() => {
+
+          verifyOtp();
+
+        }, 450);
+
+      return () =>
+        clearTimeout(
+          timeout
+        );
+
+    }
+
+  }, [otp]);
+
   const resendOtp =
     async () => {
 
-      if (loading) {
+      if (
+        loading ||
+        verified
+      ) {
         return;
       }
 
@@ -509,19 +553,21 @@ export default function OTP({
         <OTPBoxes
           otp={otp}
           setOtp={setOtp}
+          disabled={
+            loading ||
+            verified
+          }
         />
 
-        <button
-          onClick={verifyOtp}
-          disabled={loading}
-          className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-green-500 to-cyan-500 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
+        {loading ? (
 
-          {loading
-            ? "VERIFYING..."
-            : "VERIFY OTP"}
+          <div className="text-cyan-400 font-bold text-lg animate-pulse">
 
-        </button>
+            VERIFYING...
+
+          </div>
+
+        ) : null}
 
         {timer > 0 ? (
 
@@ -543,7 +589,10 @@ export default function OTP({
             onClick={
               resendOtp
             }
-            disabled={loading}
+            disabled={
+              loading ||
+              verified
+            }
             className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
 
