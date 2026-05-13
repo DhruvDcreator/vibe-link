@@ -55,10 +55,31 @@ export default function ForgotPassword({
 
       } catch (error) {
 
-        alert(
-          error.message
-        );
+        if (
+  error.code ===
+  "auth/user-not-found"
+) {
 
+  alert(
+    "No account found with this email."
+  );
+
+} else if (
+  error.code ===
+  "auth/invalid-email"
+) {
+
+  alert(
+    "Invalid email address."
+  );
+
+} else {
+
+  alert(
+    "Something went wrong. Please try again."
+  );
+
+}
       } finally {
 
         setLoading(false);
@@ -134,7 +155,7 @@ export default function ForgotPassword({
         <button
           onClick={sendResetLink}
           disabled={loading}
-          className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)]"
+          className="w-full cursor-pointer bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)]"
         >
 
           {loading
@@ -142,6 +163,12 @@ export default function ForgotPassword({
             : "Send Reset Link"}
 
         </button>
+
+        <p className="pt-4 text-sm text-zinc-400 text-center tracking-wide leading-relaxed">
+
+  © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+
+</p>
 
       </motion.div>
 
