@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -68,10 +69,8 @@ export default function OTP({
     setLoading,
   ] = useState(false);
 
-  const [
-    verified,
-    setVerified,
-  ] = useState(false);
+  const verificationTriggered =
+    useRef(false);
 
   useEffect(() => {
 
@@ -108,6 +107,9 @@ export default function OTP({
   const startOver =
     () => {
 
+      verificationTriggered.current =
+        false;
+
       localStorage.removeItem(
         "pendingSignup"
       );
@@ -127,19 +129,9 @@ export default function OTP({
 
       if (
         loading ||
-        verified
+        verificationTriggered.current
       ) {
         return;
-      }
-
-      if (timer <= 0) {
-
-        alert(
-          "OTP expired"
-        );
-
-        return;
-
       }
 
       const enteredOtp =
@@ -152,10 +144,16 @@ export default function OTP({
         return;
       }
 
+      verificationTriggered.current =
+        true;
+
       if (
         enteredOtp !==
         generatedOtp
       ) {
+
+        verificationTriggered.current =
+          false;
 
         const attempts =
           wrongAttempts + 1;
@@ -193,10 +191,6 @@ export default function OTP({
 
         setLoading(true);
 
-        setVerified(
-          true
-        );
-
         if (
           isGoogleSignup
         ) {
@@ -207,7 +201,7 @@ export default function OTP({
           if (!user) {
 
             alert(
-              "Google sign in expired. Please try again."
+              "Google session expired"
             );
 
             setScreen(
@@ -240,20 +234,6 @@ export default function OTP({
             }
           );
 
-          if (!username) {
-
-            alert(
-              "Session expired. Please sign up again."
-            );
-
-            setScreen(
-              "signup"
-            );
-
-            return;
-
-          }
-
           await setDoc(
             doc(
               db,
@@ -276,7 +256,7 @@ export default function OTP({
               "signupSuccess"
             );
 
-          }, 400);
+          }, 500);
 
           return;
 
@@ -297,6 +277,9 @@ export default function OTP({
         if (
           usernameSnap.exists()
         ) {
+
+          verificationTriggered.current =
+            false;
 
           alert(
             "Username already taken"
@@ -359,7 +342,7 @@ export default function OTP({
             "signupSuccess"
           );
 
-        }, 400);
+        }, 500);
 
       } catch (error) {
 
@@ -367,13 +350,16 @@ export default function OTP({
           error
         );
 
+        verificationTriggered.current =
+          false;
+
         if (
           error.code ===
           "auth/email-already-in-use"
         ) {
 
           alert(
-            "Account on this email already exists."
+            "Email already exists"
           );
 
           setScreen(
@@ -411,7 +397,7 @@ export default function OTP({
 
           verifyOtp();
 
-        }, 450);
+        }, 600);
 
       return () =>
         clearTimeout(
@@ -425,10 +411,7 @@ export default function OTP({
   const resendOtp =
     async () => {
 
-      if (
-        loading ||
-        verified
-      ) {
+      if (loading) {
         return;
       }
 
@@ -445,6 +428,9 @@ export default function OTP({
       try {
 
         setLoading(true);
+
+        verificationTriggered.current =
+          false;
 
         const newOtp =
           Math.floor(
@@ -553,15 +539,11 @@ export default function OTP({
         <OTPBoxes
           otp={otp}
           setOtp={setOtp}
-          disabled={
-            loading ||
-            verified
-          }
         />
 
         {loading ? (
 
-          <div className="text-cyan-400 font-bold text-lg animate-pulse">
+          <div className="text-cyan-400 font-bold animate-pulse">
 
             VERIFYING...
 
@@ -589,10 +571,7 @@ export default function OTP({
             onClick={
               resendOtp
             }
-            disabled={
-              loading ||
-              verified
-            }
+            disabled={loading}
             className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
 
