@@ -14,18 +14,25 @@ export default function OTPBoxes({
 
   useEffect(() => {
 
+  if (
+    otp.every(
+      (digit) =>
+        digit !== ""
+    )
+  ) {
+
     if (
-      otp.every(
-        (digit) =>
-          digit !== ""
-      )
+      typeof onComplete ===
+      "function"
     ) {
 
       onComplete();
 
     }
 
-  }, [otp]);
+  }
+
+}, [otp, onComplete]);
 
   const handleChange = (
     value,
