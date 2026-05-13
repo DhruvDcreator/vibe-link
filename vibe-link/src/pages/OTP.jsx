@@ -138,6 +138,18 @@ export default function OTP({
         otp.join("");
 
       if (
+        enteredOtp.length < 4
+      ) {
+
+        alert(
+          "Enter full OTP"
+        );
+
+        return;
+
+      }
+
+      if (
         enteredOtp !==
         generatedOtp
       ) {
@@ -223,19 +235,19 @@ export default function OTP({
 
           if (!username) {
 
-  alert(
-    "Session expired. Please sign up again."
-  );
+            alert(
+              "Session expired. Please sign up again."
+            );
 
-  setScreen(
-    "signup"
-  );
+            setScreen(
+              "signup"
+            );
 
-  return;
+            return;
 
-}
+          }
+
           await setDoc(
-          
             doc(
               db,
               "usernames",
@@ -251,13 +263,9 @@ export default function OTP({
             "pendingSignup"
           );
 
-          setTimeout(() => {
-
-            setScreen(
-              "signupSuccess"
-            );
-
-          }, 700);
+          setScreen(
+            "signupSuccess"
+          );
 
           return;
 
@@ -334,13 +342,9 @@ export default function OTP({
           "pendingSignup"
         );
 
-        setTimeout(() => {
-
-          setScreen(
-            "signupSuccess"
-          );
-
-        }, 700);
+        setScreen(
+          "signupSuccess"
+        );
 
       } catch (error) {
 
@@ -380,6 +384,10 @@ export default function OTP({
   const resendOtp =
     async () => {
 
+      if (loading) {
+        return;
+      }
+
       if (
         resendCount >= 1
       ) {
@@ -391,6 +399,8 @@ export default function OTP({
       }
 
       try {
+
+        setLoading(true);
 
         const newOtp =
           Math.floor(
@@ -442,6 +452,10 @@ export default function OTP({
         alert(
           "Failed to resend OTP"
         );
+
+      } finally {
+
+        setLoading(false);
 
       }
 
@@ -495,10 +509,19 @@ export default function OTP({
         <OTPBoxes
           otp={otp}
           setOtp={setOtp}
-          onComplete={
-            verifyOtp
-          }
         />
+
+        <button
+          onClick={verifyOtp}
+          disabled={loading}
+          className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-green-500 to-cyan-500 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+
+          {loading
+            ? "VERIFYING..."
+            : "VERIFY OTP"}
+
+        </button>
 
         {timer > 0 ? (
 
@@ -520,7 +543,8 @@ export default function OTP({
             onClick={
               resendOtp
             }
-            className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 transition-all duration-300"
+            disabled={loading}
+            className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           >
 
             RESEND OTP

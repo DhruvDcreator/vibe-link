@@ -6,7 +6,7 @@ export default function Privacy({
 
   return (
 
-    <div className="min-h-screen bg-black text-white p-6 overflow-y-auto relative overflow-hidden">
+    <div className="min-h-screen h-screen bg-black text-white p-6 overflow-y-auto relative overflow-hidden">
 
       {/* background */}
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
@@ -65,206 +65,374 @@ export default function Privacy({
         <div className="space-y-10 text-zinc-300 leading-relaxed">
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
+
               Effective Date
+
             </h2>
 
             <p>
-              Effective Date: January 1, 2026
+              Effective Date: May 13, 2026
             </p>
 
             <p>
-              Last Updated: January 1, 2026
+              Last Updated: May 13, 2026
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
+
               Introduction
+
             </h2>
 
             <p>
+
               Welcome to Vibe Link™.
+
             </p>
 
             <p>
-              Your privacy matters to us. This Privacy Policy explains how Vibe Link™ collects, uses, stores, protects, and shares information when you use our platform, website, applications, and related services.
+
+              At Vibe Link™, we value user privacy, safety, transparency, and trust. This Privacy Policy explains how we collect, use, store, process, protect, and share information when you use the Vibe Link™ platform, website, mobile applications, anonymous chat systems, and related services.
+
             </p>
 
             <p>
-              By using Vibe Link™, you agree to the practices described in this Privacy Policy.
+
+              By creating an account or using Vibe Link™, you agree to the practices described in this Privacy Policy.
+
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
+
               1. Information We Collect
+
             </h2>
+
+            <p className="mb-4">
+
+              The information we collect depends on how you use Vibe Link™ and which features you interact with.
+
+            </p>
 
             <ul className="list-disc pl-6 space-y-2">
+
               <li>Username</li>
               <li>Email address</li>
-              <li>Phone number</li>
               <li>Password</li>
               <li>Date of birth</li>
-              <li>Gender</li>
+              <li>Age confirmation</li>
               <li>Country or region</li>
+              <li>Gender (optional)</li>
               <li>Profile photo</li>
-              <li>Bio/about information</li>
-              <li>Messages and uploaded content</li>
-              <li>Reports or support requests</li>
-              <li>Device information and browser data</li>
-              <li>IP address and session activity</li>
+              <li>Biography/about information</li>
+              <li>Messages, chats, reactions, and shared content</li>
+              <li>Reports, feedback, and support requests</li>
+              <li>Vibe selections and room participation</li>
+              <li>Friend requests and connection activity</li>
+              <li>Device type and operating system</li>
+              <li>Browser information</li>
+              <li>IP address</li>
+              <li>Session activity</li>
+              <li>Device identifiers</li>
+              <li>Login timestamps</li>
               <li>Crash logs and diagnostics</li>
+
             </ul>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              2. How We Use Information
+
+              2. How We Use Your Information
+
             </h2>
 
             <ul className="list-disc pl-6 space-y-2">
-              <li>Create and manage accounts</li>
-              <li>Provide platform functionality</li>
-              <li>Improve performance and stability</li>
-              <li>Personalize user experience</li>
-              <li>Maintain platform safety</li>
-              <li>Prevent fraud, spam, abuse, and illegal activity</li>
-              <li>Respond to support requests</li>
-              <li>Enforce Terms & Conditions</li>
-              <li>Send important service notifications</li>
+
+              <li>Create and maintain accounts</li>
+              <li>Provide anonymous matching and chat systems</li>
+              <li>Personalize user experiences</li>
+              <li>Improve discoverability and matching quality</li>
+              <li>Maintain streaks, games, points, and rewards</li>
+              <li>Prevent fraud, abuse, spam, scams, and harmful activity</li>
+              <li>Improve platform stability and reliability</li>
+              <li>Provide customer support</li>
+              <li>Send service-related notifications</li>
+              <li>Enforce our Terms & Conditions</li>
+              <li>Develop future platform features</li>
+
             </ul>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              3. Age Restrictions
+
+              3. Anonymous Conversations
+
             </h2>
 
             <p>
-              Vibe Link™ is intended only for users aged 13 years and older.
+
+              Vibe Link™ may include anonymous conversation systems where users interact without immediately revealing identities.
+
             </p>
 
             <p>
-              Accounts violating age requirements may be restricted, suspended, or disabled.
+
+              While chats may appear anonymous to users, platform systems may still retain moderation-related and technical information for safety, legal, and operational purposes.
+
             </p>
 
             <p>
-              We may use automated or manual verification systems to maintain platform safety.
+
+              Users remain responsible for their conduct while using anonymous features.
+
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              4. Account Security
+
+              4. Age Restrictions
+
             </h2>
 
             <p>
-              Users are responsible for maintaining the confidentiality of their login credentials.
+
+              Vibe Link™ is intended only for users aged 13 years or older.
+
+            </p>
+
+            <p>
+
+              We may use automated systems, date-of-birth verification, and manual review processes to help maintain platform safety and enforce eligibility requirements.
+
+            </p>
+
+            <p>
+
+              Accounts violating age requirements may be restricted, suspended, disabled, or temporarily locked.
+
+            </p>
+
+          </section>
+
+          <section>
+
+            <h2 className="text-2xl font-bold text-cyan-400 mb-3">
+
+              5. Safety, Moderation & Integrity
+
+            </h2>
+
+            <p>
+
+              To maintain platform safety, Vibe Link™ may investigate reports, detect suspicious behavior, restrict harmful activity, remove abusive content, and enforce platform policies using automated systems and, in certain situations, limited human review.
+
+            </p>
+
+          </section>
+
+          <section>
+
+            <h2 className="text-2xl font-bold text-cyan-400 mb-3">
+
+              6. Sharing of Information
+
+            </h2>
+
+            <p>
+
+              We do not sell users’ personal information.
+
+            </p>
+
+            <p>
+
+              However, Vibe Link™ may share limited information when reasonably necessary to:
+
             </p>
 
             <ul className="list-disc pl-6 space-y-2">
-              <li>Do not share passwords</li>
-              <li>Do not attempt unauthorized access</li>
-              <li>Do not exploit bugs or vulnerabilities</li>
-              <li>Do not interfere with platform security</li>
-            </ul>
-          </section>
 
-          <section>
-            <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              5. Sharing of Information
-            </h2>
+              <li>Comply with applicable laws or legal obligations</li>
+              <li>Respond to valid legal requests</li>
+              <li>Cooperate with law enforcement agencies, cybercrime units, courts, or government authorities</li>
+              <li>Investigate fraud, abuse, scams, or illegal activities</li>
+              <li>Protect the safety, users, employees, or platform integrity of Vibe Link™</li>
+              <li>Prevent harm or security threats</li>
+              <li>Work with trusted service providers, hosting providers, analytics providers, payment systems, or moderation tools</li>
 
-            <p>
-              We do not sell personal information to third parties.
-            </p>
-
-            <p>
-              However, Vibe Link™ may disclose or share user information when reasonably necessary to:
-            </p>
-
-            <ul className="list-disc pl-6 space-y-2">
-              <li>Comply with applicable laws, regulations, legal processes, or governmental requests</li>
-              <li>Cooperate with law enforcement agencies, cybercrime investigations, or public authorities</li>
-              <li>Detect, investigate, or prevent fraud, illegal activity, security threats, or violations of our Terms & Conditions</li>
-              <li>Protect the rights, safety, property, users, staff, or platform integrity of Vibe Link™</li>
-              <li>Respond to emergency situations involving potential harm or threats</li>
-              <li>Work with trusted third-party service providers required to operate the platform</li>
             </ul>
 
             <p>
+
               Information shared will be limited to what is reasonably necessary under the circumstances.
+
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              6. Third-Party Services
+
+              7. Third-Party Services
+
             </h2>
 
             <p>
-              Vibe Link™ may use trusted third-party services including Firebase, analytics providers, cloud hosting providers, email services, and authentication systems.
+
+              Vibe Link™ may use trusted third-party services including Firebase, Google services, analytics providers, cloud hosting providers, payment processors, authentication systems, moderation tools, and related technologies necessary for platform functionality.
+
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              7. Data Retention
+
+              8. Cookies & Similar Technologies
+
             </h2>
 
             <p>
-              We retain information only as long as reasonably necessary for operational, legal, security, and platform integrity purposes.
+
+              Vibe Link™ may use cookies and similar technologies to maintain sessions, remember preferences, improve security, analyze traffic, and personalize experiences.
+
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              8. Safety & Moderation
+
+              9. Data Retention
+
             </h2>
 
             <p>
-              To maintain a safe environment, Vibe Link™ may review reports, investigate suspicious activity, remove harmful content, and restrict accounts violating platform policies.
+
+              We retain information only as long as reasonably necessary for operational, legal, moderation, safety, and platform integrity purposes.
+
             </p>
+
+            <p>
+
+              Deleted accounts or content may remain temporarily in backups or security systems for operational reasons.
+
+            </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              9. Policy Changes
+
+              10. International Processing
+
             </h2>
 
             <p>
-              We may update this Privacy Policy periodically.
+
+              Your information may be stored or processed in countries outside your jurisdiction where our infrastructure, providers, or partners operate.
+
+            </p>
+
+          </section>
+
+          <section>
+
+            <h2 className="text-2xl font-bold text-cyan-400 mb-3">
+
+              11. Your Rights & Choices
+
+            </h2>
+
+            <p>
+
+              Depending on your location and applicable laws, you may have rights to access, update, manage, export, or request deletion of certain information associated with your account.
+
+            </p>
+
+          </section>
+
+          <section>
+
+            <h2 className="text-2xl font-bold text-cyan-400 mb-3">
+
+              12. Policy Updates
+
+            </h2>
+
+            <p>
+
+              We may update this Privacy Policy periodically to reflect platform improvements, legal requirements, safety updates, or operational changes.
+
             </p>
 
             <p>
+
               Continued use of Vibe Link™ after updates means you accept the revised policy.
+
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              10. Contact Information
+
+              13. Contact Information
+
             </h2>
 
             <p>
-              For support or privacy-related concerns:
+
+              For support, privacy concerns, or legal inquiries:
+
             </p>
 
             <p className="text-cyan-300 font-semibold">
+
               teamvibelink@gmail.com
+
             </p>
+
           </section>
 
           <section>
+
             <h2 className="text-2xl font-bold text-cyan-400 mb-3">
-              11. Consent
+
+              14. Consent
+
             </h2>
 
             <p>
-              By creating an account or using Vibe Link™, you acknowledge that you have read, understood, and agreed to this Privacy Policy.
+
+              By using Vibe Link™, creating an account, or accessing its services, you acknowledge that you have read, understood, and agreed to this Privacy Policy.
+
             </p>
+
           </section>
 
         </div>
