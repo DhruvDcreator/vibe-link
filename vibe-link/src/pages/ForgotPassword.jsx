@@ -47,8 +47,7 @@ export default function ForgotPassword({
         );
 
         alert(
-          "Password reset email sent 😭🔥"
-        );
+          "Password reset email sent. If you don’t receive it, check your spam folder or make sure you entered your registered email address correctly."        );
 
         setScreen(
           "login"

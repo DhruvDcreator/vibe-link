@@ -159,7 +159,7 @@ export default function Discover({
           calculateCompatibility(
             user.vibes
           ) >= 20 &&
-          ageDifference <= 3
+          ageDifference <= 12
         );
 
       }
