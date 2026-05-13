@@ -734,35 +734,41 @@ export default function Signup({
           className="w-full bg-zinc-900 text-white border border-zinc-700 rounded-2xl px-5 py-4"
         />
 
-        <input
-  type="date"
-  value={dob}
-  onChange={(e) =>
-    setDob(
-      e.target.value
-    )
-  }
-  className="
-    w-full
-    bg-white/5
-    border
-    border-white/10
-    rounded-2xl
-    px-4
-    py-3
-    md:py-4
-    text-sm
-    md:text-base
-    outline-none
-    focus:border-cyan-400
-    text-white
-    appearance-none
-    min-h-[52px]
-  "
-  style={{
-    colorScheme: "dark",
-  }}
-/>
+        
+        <div className="space-y-2">
+
+  <p className="text-sm text-zinc-400">
+
+    Date of Birth (DD/MM/YYYY)
+
+  </p>
+
+  <input
+    type="date"
+    value={dob}
+    onChange={(e) =>
+      setDob(
+        e.target.value
+      )
+    }
+    className="
+      w-full
+      bg-white/5
+      border
+      border-white/10
+      rounded-2xl
+      px-4
+      py-4
+      outline-none
+      focus:border-cyan-400
+      text-white
+    "
+    style={{
+      colorScheme: "dark",
+    }}
+  />
+
+</div>
 
         <select
           value={gender}
