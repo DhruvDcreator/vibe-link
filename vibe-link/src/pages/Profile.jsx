@@ -21,6 +21,10 @@ import {
   db,
 } from "../firebase/firebase";
 
+import Cropper from "react-easy-crop";
+
+import getCroppedImg from "../utils/cropImage";
+
 export default function Profile({
 
   userData,
@@ -78,6 +82,29 @@ export default function Profile({
       const monthDiff =
         today.getMonth() -
         birthDate.getMonth();
+
+        const [selectedImage,
+  setSelectedImage] =
+  useState(null);
+
+const [crop,
+  setCrop] =
+  useState({
+    x: 0,
+    y: 0,
+  });
+
+const [zoom,
+  setZoom] =
+  useState(1);
+
+const [croppedAreaPixels,
+  setCroppedAreaPixels] =
+  useState(null);
+
+const [showCropper,
+  setShowCropper] =
+  useState(false);
 
       if (
         monthDiff < 0 ||
@@ -146,32 +173,77 @@ export default function Profile({
     };
 
   const handleImageChange =
-    (e) => {
+  (e) => {
 
-      const file =
-        e.target.files[0];
+    const file =
+      e.target.files[0];
 
-      if (!file) {
-        return;
-      }
+    if (!file) {
+      return;
+    }
 
-      const reader =
-        new FileReader();
+    const reader =
+      new FileReader();
 
-      reader.onloadend =
-        () => {
+    reader.onload =
+      () => {
 
-          setProfilePic(
-            reader.result
-          );
+        setSelectedImage(
+          reader.result
+        );
 
-        };
+        setShowCropper(
+          true
+        );
 
-      reader.readAsDataURL(
-        file
+      };
+
+    reader.readAsDataURL(
+      file
+    );
+
+  };
+
+  const onCropComplete =
+  (
+    croppedArea,
+    croppedAreaPixels
+  ) => {
+
+    setCroppedAreaPixels(
+      croppedAreaPixels
+    );
+
+  };
+
+  const cropImageNow =
+  async () => {
+
+    try {
+
+      const croppedImage =
+        await getCroppedImg(
+          selectedImage,
+          croppedAreaPixels
+        );
+
+      setProfilePic(
+        croppedImage
       );
 
-    };
+      setShowCropper(
+        false
+      );
+
+    } catch (error) {
+
+      console.log(
+        error
+      );
+
+    }
+
+  };
 
   const logout =
     async () => {
@@ -452,6 +524,68 @@ export default function Profile({
           LOGOUT
 
         </motion.button>
+
+        {showCropper && (
+
+  <div className="fixed inset-0 z-50 bg-black/90 flex flex-col items-center justify-center p-6">
+
+    <div className="relative w-full max-w-sm h-[400px] bg-black rounded-3xl overflow-hidden border border-white/10">
+
+      <Cropper
+        image={selectedImage}
+        crop={crop}
+        zoom={zoom}
+        aspect={1}
+        cropShape="round"
+        showGrid={false}
+        onCropChange={setCrop}
+        onZoomChange={setZoom}
+        onCropComplete={onCropComplete}
+      />
+
+    </div>
+
+    <input
+      type="range"
+      min={1}
+      max={3}
+      step={0.1}
+      value={zoom}
+      onChange={(e) =>
+        setZoom(
+          e.target.value
+        )
+      }
+      className="w-full max-w-sm mt-6"
+    />
+
+    <div className="flex gap-4 mt-6 w-full max-w-sm">
+
+      <button
+        onClick={() =>
+          setShowCropper(false)
+        }
+        className="flex-1 py-4 rounded-2xl bg-white/10 border border-white/10 font-bold cursor-pointer"
+      >
+
+        CANCEL
+
+      </button>
+
+      <button
+        onClick={cropImageNow}
+        className="flex-1 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 font-bold cursor-pointer"
+      >
+
+        SAVE
+
+      </button>
+
+    </div>
+
+  </div>
+
+)}
 
         {/* copyright */}
         <p className="pt-6 text-sm text-zinc-400 text-center tracking-wide leading-relaxed">
