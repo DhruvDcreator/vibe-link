@@ -62,28 +62,7 @@ export default function Profile({
     setLoading] =
     useState(false);
 
-  const calculateAge =
-    (dob) => {
-
-      if (!dob) {
-        return userData?.age;
-      }
-
-      const birthDate =
-        new Date(dob);
-
-      const today =
-        new Date();
-
-      let age =
-        today.getFullYear() -
-        birthDate.getFullYear();
-
-      const monthDiff =
-        today.getMonth() -
-        birthDate.getMonth();
-
-        const [selectedImage,
+  const [selectedImage,
   setSelectedImage] =
   useState(null);
 
@@ -105,6 +84,27 @@ const [croppedAreaPixels,
 const [showCropper,
   setShowCropper] =
   useState(false);
+
+  const calculateAge =
+    (dob) => {
+
+      if (!dob) {
+        return userData?.age;
+      }
+
+      const birthDate =
+        new Date(dob);
+
+      const today =
+        new Date();
+
+      let age =
+        today.getFullYear() -
+        birthDate.getFullYear();
+
+      const monthDiff =
+        today.getMonth() -
+        birthDate.getMonth();
 
       if (
         monthDiff < 0 ||
