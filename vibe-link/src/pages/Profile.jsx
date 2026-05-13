@@ -231,6 +231,18 @@ const [showCropper,
         croppedImage
       );
 
+      await updateDoc(
+        doc(
+          db,
+          "users",
+          auth.currentUser.uid
+        ),
+        {
+          profilePic:
+            croppedImage,
+        }
+      );
+
       setShowCropper(
         false
       );
@@ -550,23 +562,26 @@ const [showCropper,
 
       <p className="text-zinc-400 text-center text-sm mt-2 leading-relaxed">
 
-        Adjust your profile picture perfectly 😭🔥
+        Adjust your profile picture
 
       </p>
 
       <div className="relative w-full h-[380px] mt-6 rounded-[32px] overflow-hidden bg-black border border-white/10">
 
         <Cropper
-          image={selectedImage}
-          crop={crop}
-          zoom={zoom}
-          aspect={1}
-          cropShape="round"
-          showGrid={false}
-          onCropChange={setCrop}
-          onZoomChange={setZoom}
-          onCropComplete={onCropComplete}
-        />
+  image={selectedImage}
+  crop={crop}
+  zoom={zoom}
+  aspect={1}
+  cropShape="round"
+  showGrid={false}
+  restrictPosition={true}
+  zoomSpeed={0.15}
+  objectFit="horizontal-cover"
+  onCropChange={setCrop}
+  onZoomChange={setZoom}
+  onCropComplete={onCropComplete}
+/>
 
       </div>
 
