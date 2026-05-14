@@ -51,6 +51,11 @@ export default function App() {
     setAuthChecked,
   ] = useState(false);
 
+  const [
+  appReady,
+  setAppReady,
+] = useState(false);
+
   const [username, setUsername] =
     useState("");
 
@@ -115,31 +120,49 @@ export default function App() {
 
   requestAnimationFrame(() => {
 
-    setScreen(
-      "home"
+  setScreen(
+    "home"
+  );
+
+  setTimeout(() => {
+
+    setAuthChecked(
+      true
     );
 
-  });
+    setAppReady(
+      true
+    );
+
+  }, 0);
+
+});
 
 } else {
 
   requestAnimationFrame(() => {
 
-    setScreen(
-      "welcome"
+  setScreen(
+    "welcome"
+  );
+
+  setTimeout(() => {
+
+    setAuthChecked(
+      true
     );
 
-  });
+    setAppReady(
+      true
+    );
+
+  }, 0);
+
+});
 
 }
 
-          requestAnimationFrame(() => {
-
-  setAuthChecked(
-    true
-  );
-
-});
+          
 
         }
       );
@@ -173,7 +196,8 @@ export default function App() {
 
   if (
   !authChecked ||
-  !screen
+  !screen ||
+  !appReady
 ) {
 
     return (
