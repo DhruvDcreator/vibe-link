@@ -44,7 +44,7 @@ import Privacy from "./pages/Privacy";
 export default function App() {
 
   const [screen, setScreen] =
-    useState("loading");
+  useState(null);
 
   const [
     authChecked,
@@ -172,8 +172,9 @@ export default function App() {
   }, [screen]);
 
   if (
-    !authChecked
-  ) {
+  !authChecked ||
+  !screen
+) {
 
     return (
 
