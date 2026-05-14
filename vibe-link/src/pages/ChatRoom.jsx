@@ -24,12 +24,12 @@ import {
   addDoc,
   collection,
   doc,
+  limit,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
   setDoc,
-updateDoc,
 } from "firebase/firestore";
 
 export default function ChatRoom({
@@ -66,9 +66,9 @@ export default function ChatRoom({
   ] = useState({});
 
   const [
-  typingStatus,
-  setTypingStatus,
-] = useState(false);
+    typingStatus,
+    setTypingStatus,
+  ] = useState(false);
 
   const [
     chatMeta,
@@ -189,40 +189,6 @@ export default function ChatRoom({
 
   useEffect(() => {
 
-  const unsubscribe =
-    onSnapshot(
-      doc(
-        db,
-        "users",
-        selectedUser.id
-      ),
-
-      (snapshot) => {
-
-        if (
-          snapshot.exists()
-        ) {
-
-          const data =
-            snapshot.data();
-
-          setTypingStatus(
-            data.isTyping ||
-            false
-          );
-
-        }
-
-      }
-    );
-
-  return () =>
-    unsubscribe();
-
-}, [selectedUser.id]);
-
-  useEffect(() => {
-
     const unsubscribe =
       onSnapshot(
         doc(
@@ -231,16 +197,23 @@ export default function ChatRoom({
           chatId
         ),
 
-        
-
         (snapshot) => {
 
           if (
             snapshot.exists()
           ) {
 
+            const data =
+              snapshot.data();
+
             setChatMeta(
-              snapshot.data()
+              data
+            );
+
+            setTypingStatus(
+              data?.typingUsers?.[
+                selectedUser.id
+              ] || false
             );
 
           }
@@ -251,22 +224,25 @@ export default function ChatRoom({
     return () =>
       unsubscribe();
 
-  }, [chatId, messages]);
+  }, [chatId]);
 
   useEffect(() => {
 
     const q = query(
-      collection(
-        db,
-        "chats",
-        chatId,
-        "messages"
-      ),
+  collection(
+    db,
+    "chats",
+    chatId,
+    "messages"
+  ),
 
-      orderBy(
-        "createdAt"
-      )
-    );
+  orderBy(
+    "createdAt",
+    "desc"
+  ),
+
+  limit(40)
+);
 
     const unsubscribe =
       onSnapshot(
@@ -275,14 +251,16 @@ export default function ChatRoom({
         (snapshot) => {
 
           const loaded =
-            snapshot.docs.map(
-              (docItem) => ({
-                id:
-                  docItem.id,
+  snapshot.docs
+    .map(
+      (docItem) => ({
+        id:
+          docItem.id,
 
-                ...docItem.data(),
-              })
-            );
+        ...docItem.data(),
+      })
+    )
+    .reverse();
 
           const clearedAt =
             clearedChats[
@@ -486,23 +464,19 @@ export default function ChatRoom({
 
             },
 
+            typingUsers: {
+
+              [auth.currentUser.uid]:
+                false,
+
+            },
+
           },
 
           {
             merge: true,
           }
         );
-
-        await updateDoc(
-  doc(
-    db,
-    "users",
-    auth.currentUser.uid
-  ),
-  {
-    isTyping: false,
-  }
-);
 
         setMessage("");
 
@@ -575,15 +549,15 @@ export default function ChatRoom({
 
             <p className="text-cyan-300 text-sm">
 
-  {
-    typingStatus
-      ? "Typing..."
-      : onlineStatus
-      ? "Online ✨"
-      : "Offline"
-  }
+              {
+                typingStatus
+                  ? "Typing..."
+                  : onlineStatus
+                  ? "Online ✨"
+                  : "Offline"
+              }
 
-</p>
+            </p>
 
           </div>
 
@@ -730,48 +704,67 @@ export default function ChatRoom({
 
           <input
             type="text"
+
             value={message}
+
             onChange={async (e) => {
 
-  setMessage(
-    e.target.value
-  );
+              setMessage(
+                e.target.value
+              );
 
-  await updateDoc(
-    doc(
-      db,
-      "users",
-      auth.currentUser.uid
-    ),
-    {
-      isTyping: true,
-    }
-  );
+              await setDoc(
+                doc(
+                  db,
+                  "chatMeta",
+                  chatId
+                ),
+                {
+                  typingUsers: {
 
-  clearTimeout(
-    window.typingTimeout
-  );
+                    [auth.currentUser.uid]:
+                      true,
 
-  window.typingTimeout =
-    setTimeout(
-      async () => {
+                  },
+                },
+                {
+                  merge: true,
+                }
+              );
 
-        await updateDoc(
-          doc(
-            db,
-            "users",
-            auth.currentUser.uid
-          ),
-          {
-            isTyping: false,
-          }
-        );
+              clearTimeout(
+                window.typingTimeout
+              );
 
-      },
-      1500
-    );
+              window.typingTimeout =
+                setTimeout(
+                  async () => {
 
-}}
+                    await setDoc(
+                      doc(
+                        db,
+                        "chatMeta",
+                        chatId
+                      ),
+                      {
+                        typingUsers: {
+
+                          [auth.currentUser.uid]:
+                            false,
+
+                        },
+                      },
+                      {
+                        merge: true,
+                      }
+                    );
+
+                  },
+                  1500
+                );
+
+            }}
+
             onKeyDown={(e) => {
 
               if (
@@ -784,7 +777,9 @@ export default function ChatRoom({
               }
 
             }}
+
             placeholder="Type your vibe..."
+
             className="flex-1 bg-transparent px-3 text-white outline-none placeholder:text-zinc-500"
           />
 

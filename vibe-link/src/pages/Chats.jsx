@@ -18,6 +18,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  where,
 } from "firebase/firestore";
 
 export default function Chats({
@@ -162,17 +163,23 @@ export default function Chats({
             matchedUsers
           );
 
-          const q = query(
-            collection(
-              db,
-              "chatMeta"
-            ),
+         const q = query(
+  collection(
+    db,
+    "chatMeta"
+  ),
 
-            orderBy(
-              "updatedAt",
-              "desc"
-            )
-          );
+  where(
+    "users",
+    "array-contains",
+    auth.currentUser.uid
+  ),
+
+  orderBy(
+    "updatedAt",
+    "desc"
+  )
+);
 
           onSnapshot(
             q,

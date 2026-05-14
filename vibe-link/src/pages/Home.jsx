@@ -24,6 +24,7 @@ import {
   onSnapshot,
   query,
   setDoc,
+  where,
 } from "firebase/firestore";
 
 import {
@@ -162,12 +163,18 @@ export default function Home() {
                 );
 
               const q =
-                query(
-                  collection(
-                    db,
-                    "chatMeta"
-                  )
-                );
+  query(
+    collection(
+      db,
+      "chatMeta"
+    ),
+
+    where(
+      "users",
+      "array-contains",
+      user.uid
+    )
+  );
 
               onSnapshot(
                 q,

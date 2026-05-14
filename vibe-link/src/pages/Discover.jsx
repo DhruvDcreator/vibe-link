@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -13,9 +14,10 @@ import {
 } from "../firebase/firebase";
 
 import {
+  addDoc,
   collection,
   getDocs,
-  addDoc,
+  query,
   serverTimestamp,
 } from "firebase/firestore";
 
@@ -44,12 +46,66 @@ export default function Discover({
     setLoading,
   ] = useState(true);
 
+  const [
+    connectedIds,
+    setConnectedIds,
+  ] = useState([]);
+
   useEffect(() => {
 
     const fetchUsers =
       async () => {
 
         try {
+
+          const connectionSnapshot =
+            await getDocs(
+              collection(
+                db,
+                "connections"
+              )
+            );
+
+          const existingConnections =
+            [];
+
+          connectionSnapshot.forEach(
+            (docItem) => {
+
+              const data =
+                docItem.data();
+
+              if (
+                data.users.includes(
+                  auth.currentUser.uid
+                )
+              ) {
+
+                const otherUser =
+                  data.users.find(
+                    (id) =>
+                      id !==
+                      auth.currentUser.uid
+                  );
+
+                if (
+                  otherUser
+                ) {
+
+                  existingConnections.push(
+                    otherUser
+                  );
+
+                }
+
+              }
+
+            }
+          );
+
+          setConnectedIds(
+            existingConnections
+          );
 
           const snapshot =
             await getDocs(
@@ -67,7 +123,11 @@ export default function Discover({
 
               if (
                 docItem.id !==
-                auth.currentUser.uid
+                  auth.currentUser.uid &&
+
+                !existingConnections.includes(
+                  docItem.id
+                )
               ) {
 
                 allUsers.push({
@@ -82,8 +142,15 @@ export default function Discover({
             }
           );
 
+          const shuffledUsers =
+            allUsers.sort(
+              () =>
+                Math.random() -
+                0.5
+            );
+
           setUsers(
-            allUsers
+            shuffledUsers
           );
 
         } catch (error) {
@@ -94,7 +161,9 @@ export default function Discover({
 
         } finally {
 
-          setLoading(false);
+          setLoading(
+            false
+          );
 
         }
 
@@ -109,7 +178,8 @@ export default function Discover({
 
       if (
         !userData.vibes ||
-        userData.vibes.length === 0
+        userData.vibes.length ===
+          0
       ) {
 
         return 0;
@@ -134,36 +204,52 @@ export default function Discover({
     };
 
   const matchedUsers =
-    users.filter(
-      (user) => {
+    useMemo(() => {
 
-        if (
-          !user.vibes
-        ) {
+      return users
+        .filter(
+          (user) => {
 
-          return false;
+            if (
+              !user.vibes
+            ) {
 
-        }
+              return false;
 
-        const ageDifference =
-          Math.abs(
-            Number(
-              user.age
+            }
+
+            const ageDifference =
+              Math.abs(
+                Number(
+                  user.age
+                ) -
+                Number(
+                  userData.age
+                )
+              );
+
+            return (
+              calculateCompatibility(
+                user.vibes
+              ) >= 20 &&
+              ageDifference <=
+                12
+            );
+
+          }
+        )
+
+        .sort(
+          (a, b) =>
+            calculateCompatibility(
+              b.vibes
             ) -
-            Number(
-              userData.age
+            calculateCompatibility(
+              a.vibes
             )
-          );
-
-        return (
-          calculateCompatibility(
-            user.vibes
-          ) >= 20 &&
-          ageDifference <= 12
         );
 
-      }
-    );
+    }, [users]);
 
   const currentUser =
     matchedUsers[
@@ -175,6 +261,59 @@ export default function Discover({
     async () => {
 
       try {
+
+        const connectionSnapshot =
+          await getDocs(
+            collection(
+              db,
+              "connections"
+            )
+          );
+
+        let alreadyConnected =
+          false;
+
+        connectionSnapshot.forEach(
+          (docItem) => {
+
+            const data =
+              docItem.data();
+
+            if (
+
+              data.users.includes(
+                auth.currentUser.uid
+              ) &&
+
+              data.users.includes(
+                currentUser.id
+              )
+
+            ) {
+
+              alreadyConnected =
+                true;
+
+            }
+
+          }
+        );
+
+        if (
+          alreadyConnected
+        ) {
+
+          setSelectedChatUser(
+            currentUser
+          );
+
+          setCurrentTab(
+            "chatRoom"
+          );
+
+          return;
+
+        }
 
         await addDoc(
           collection(
@@ -193,6 +332,22 @@ export default function Discover({
             createdAt:
               serverTimestamp(),
           }
+        );
+
+        setConnectedIds(
+          (prev) => [
+            ...prev,
+            currentUser.id,
+          ]
+        );
+
+        setUsers(
+          (prev) =>
+            prev.filter(
+              (user) =>
+                user.id !==
+                currentUser.id
+            )
         );
 
         setSelectedChatUser(
@@ -215,6 +370,15 @@ export default function Discover({
 
   const nextUser =
     () => {
+
+      if (
+        matchedUsers.length <=
+        1
+      ) {
+
+        return;
+
+      }
 
       setCurrentIndex(
         (prev) =>
@@ -245,24 +409,31 @@ export default function Discover({
   }
 
   if (
-    matchedUsers.length === 0
+    matchedUsers.length ===
+    0
   ) {
 
     return (
 
       <div className="flex items-center justify-center text-white pt-40 p-6">
 
-        <div className="text-center space-y-6">
+        <div className="text-center space-y-6 max-w-sm">
 
-          <h1 className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
+          <div className="relative">
 
-            NO VIBES FOUND
+            <div className="absolute inset-0 bg-cyan-500/20 blur-[80px] rounded-full"></div>
 
-          </h1>
+            <h1 className="relative text-5xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
 
-          <p className="text-zinc-400 max-w-sm mx-auto leading-relaxed">
+              YOUR VIBE TRIBE IS COMING
 
-            Try selecting more vibes to discover your people.
+            </h1>
+
+          </div>
+
+          <p className="text-zinc-400 leading-relaxed text-[15px]">
+
+            More people are joining every day. Try exploring again later or add more vibes to expand your tribe.
 
           </p>
 
@@ -318,16 +489,26 @@ export default function Discover({
         transition={{
           duration: 0.45,
         }}
-        className="relative z-10 w-full max-w-sm bg-white/10 backdrop-blur-3xl border border-white/15 rounded-[38px] p-6 shadow-[0_0_50px_rgba(0,255,255,0.10)] overflow-hidden"
+        className="relative z-10 w-full max-w-sm bg-white/10 backdrop-blur-3xl border border-white/15 rounded-[38px] p-6 shadow-[0_0_60px_rgba(0,255,255,0.12)] overflow-hidden"
       >
 
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5"></div>
+
+        <div className="absolute top-5 right-5 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-xl text-xs font-bold text-cyan-300">
+
+          {
+            currentIndex + 1
+          } / {
+            matchedUsers.length
+          }
+
+        </div>
 
         <div className="relative flex flex-col items-center text-center">
 
           <div className="relative">
 
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 blur-xl opacity-40 scale-110"></div>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500 blur-2xl opacity-40 scale-125"></div>
 
             <img
               src={
@@ -335,7 +516,7 @@ export default function Discover({
                 "https://i.pravatar.cc/300"
               }
               alt="profile"
-              className="relative w-28 h-28 rounded-full object-cover border-4 border-white/20 shadow-[0_0_30px_rgba(0,255,255,0.25)]"
+              className="relative w-28 h-28 rounded-full object-cover border-4 border-white/20 shadow-[0_0_35px_rgba(0,255,255,0.25)]"
             />
 
             <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-cyan-500 to-purple-600 px-4 py-1.5 rounded-full text-sm font-black shadow-[0_0_25px_rgba(168,85,247,0.45)]">
@@ -407,7 +588,8 @@ export default function Discover({
 
           </div>
 
-          {otherVibes.length > 0 && (
+          {otherVibes.length >
+            0 && (
 
             <div>
 
