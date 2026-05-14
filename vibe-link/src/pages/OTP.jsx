@@ -69,6 +69,11 @@ export default function OTP({
     setLoading,
   ] = useState(false);
 
+  const [
+  otpLocked,
+  setOtpLocked,
+] = useState(false);
+
   const verificationTriggered =
     useRef(false);
 
@@ -143,6 +148,8 @@ export default function OTP({
       ) {
         return;
       }
+      setOtpLocked(true);
+
 
       verificationTriggered.current =
         true;
@@ -168,6 +175,7 @@ export default function OTP({
           "",
           "",
         ]);
+        setOtpLocked(false);
 
         if (
           attempts >= 2
@@ -281,6 +289,8 @@ export default function OTP({
           verificationTriggered.current =
             false;
 
+            setOtpLocked(false);
+
           alert(
             "Username already taken"
           );
@@ -352,6 +362,7 @@ export default function OTP({
 
         verificationTriggered.current =
           false;
+          setOtpLocked(false);
 
         if (
           error.code ===
@@ -468,6 +479,7 @@ export default function OTP({
           "",
           "",
         ]);
+        setOtpLocked(false);
 
         alert(
           "New OTP sent"
@@ -539,6 +551,7 @@ export default function OTP({
         <OTPBoxes
           otp={otp}
           setOtp={setOtp}
+          otpLocked={otpLocked}
         />
 
         {loading ? (

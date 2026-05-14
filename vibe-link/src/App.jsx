@@ -97,10 +97,6 @@ export default function App() {
 
   useEffect(() => {
 
-    localStorage.removeItem(
-      "vibeLinkScreen"
-    );
-
     const unsubscribe =
       onAuthStateChanged(
         auth,
@@ -113,25 +109,37 @@ export default function App() {
             );
 
           if (
-            user &&
-            !pendingSignup
-          ) {
+  user &&
+  !pendingSignup
+) {
 
-            setScreen(
-              "home"
-            );
+  requestAnimationFrame(() => {
 
-          } else {
+    setScreen(
+      "home"
+    );
 
-            setScreen(
-              "welcome"
-            );
+  });
 
-          }
+} else {
 
-          setAuthChecked(
-            true
-          );
+  requestAnimationFrame(() => {
+
+    setScreen(
+      "welcome"
+    );
+
+  });
+
+}
+
+          requestAnimationFrame(() => {
+
+  setAuthChecked(
+    true
+  );
+
+});
 
         }
       );

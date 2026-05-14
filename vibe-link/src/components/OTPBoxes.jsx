@@ -7,6 +7,7 @@ export default function OTPBoxes({
   otp,
   setOtp,
   onComplete,
+  otpLocked,
 }) {
 
   const inputsRef =
@@ -14,30 +15,34 @@ export default function OTPBoxes({
 
   useEffect(() => {
 
-  if (
-    otp.every(
-      (digit) =>
-        digit !== ""
-    )
-  ) {
-
     if (
-      typeof onComplete ===
-      "function"
+      otp.every(
+        (digit) =>
+          digit !== ""
+      )
     ) {
 
-      onComplete();
+      if (
+        typeof onComplete ===
+        "function"
+      ) {
+
+        onComplete();
+
+      }
 
     }
 
-  }
-
-}, [otp, onComplete]);
+  }, [otp, onComplete]);
 
   const handleChange = (
     value,
     index
   ) => {
+
+    if (otpLocked) {
+      return;
+    }
 
     const digit =
       value.replace(
@@ -90,9 +95,13 @@ export default function OTPBoxes({
     index
   ) => {
 
+    if (otpLocked) {
+      return;
+    }
+
     if (
       e.key ===
-        "Backspace"
+      "Backspace"
     ) {
 
       if (
@@ -132,6 +141,10 @@ export default function OTPBoxes({
   const handlePaste = (
     e
   ) => {
+
+    if (otpLocked) {
+      return;
+    }
 
     e.preventDefault();
 
@@ -186,6 +199,8 @@ export default function OTPBoxes({
         ) => (
 
           <input
+            disabled={otpLocked}
+
             key={index}
 
             ref={(el) =>
@@ -229,6 +244,10 @@ export default function OTPBoxes({
             }
 
             className={`w-16 h-20 text-center text-3xl font-bold rounded-3xl outline-none border-2 transition-all duration-300 bg-white/10 backdrop-blur-xl shadow-lg ${
+              otpLocked
+                ? "opacity-80"
+                : ""
+            } ${
               digit
                 ? "border-purple-400 shadow-[0_0_30px_rgba(168,85,247,0.6)] text-white scale-105"
                 : "border-cyan-400 focus:border-cyan-300 focus:shadow-[0_0_30px_rgba(0,255,255,0.6)] text-white"
