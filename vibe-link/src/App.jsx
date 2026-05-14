@@ -143,33 +143,6 @@ export default function App() {
 
   useEffect(() => {
 
-    const savedScreen =
-      localStorage.getItem(
-        "vibeLinkScreen"
-      );
-
-    if (
-      savedScreen &&
-      savedScreen !==
-        "loading" &&
-      savedScreen !==
-        "signup" &&
-      savedScreen !==
-        "otp" &&
-      savedScreen !==
-        "completeProfile"
-    ) {
-
-      setScreen(
-        savedScreen
-      );
-
-    }
-
-  }, []);
-
-  useEffect(() => {
-
     if (
       screen !==
         "loading" &&
