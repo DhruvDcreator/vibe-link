@@ -23,7 +23,9 @@ import {
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
@@ -81,6 +83,11 @@ export default function ChatRoom({
   ] = useState(
     Date.now()
   );
+
+  const [
+    lastSeen,
+    setLastSeen,
+  ] = useState("");
 
   const bottomRef =
     useRef(null);
@@ -174,6 +181,50 @@ export default function ChatRoom({
               isOnline
             );
 
+            if (
+              !isOnline &&
+              data.lastActive
+            ) {
+
+              const diff =
+                Math.floor(
+                  (
+                    now -
+                    data.lastActive
+                  ) / 60000
+                );
+
+              if (
+                diff < 1
+              ) {
+
+                setLastSeen(
+                  "Last seen just now"
+                );
+
+              } else if (
+                diff < 60
+              ) {
+
+                setLastSeen(
+                  `Last seen ${diff}m ago`
+                );
+
+              } else {
+
+                const hours =
+                  Math.floor(
+                    diff / 60
+                  );
+
+                setLastSeen(
+                  `Last seen ${hours}h ago`
+                );
+
+              }
+
+            }
+
           }
 
         }
@@ -229,20 +280,20 @@ export default function ChatRoom({
   useEffect(() => {
 
     const q = query(
-  collection(
-    db,
-    "chats",
-    chatId,
-    "messages"
-  ),
+      collection(
+        db,
+        "chats",
+        chatId,
+        "messages"
+      ),
 
-  orderBy(
-    "createdAt",
-    "desc"
-  ),
+      orderBy(
+        "createdAt",
+        "desc"
+      ),
 
-  limit(40)
-);
+      limit(40)
+    );
 
     const unsubscribe =
       onSnapshot(
@@ -251,16 +302,16 @@ export default function ChatRoom({
         (snapshot) => {
 
           const loaded =
-  snapshot.docs
-    .map(
-      (docItem) => ({
-        id:
-          docItem.id,
+            snapshot.docs
+              .map(
+                (docItem) => ({
+                  id:
+                    docItem.id,
 
-        ...docItem.data(),
-      })
-    )
-    .reverse();
+                  ...docItem.data(),
+                })
+              )
+              .reverse();
 
           const clearedAt =
             clearedChats[
@@ -345,6 +396,13 @@ export default function ChatRoom({
 
               },
 
+              seenBy: {
+
+                [auth.currentUser.uid]:
+                  true,
+
+              },
+
             },
 
             {
@@ -369,31 +427,157 @@ export default function ChatRoom({
   const clearChat =
     async () => {
 
-      const updated =
-        {
-          ...clearedChats,
+      try {
 
-          [chatId]:
-            Date.now(),
-        };
+        const connectionSnapshot =
+          await getDocs(
+            collection(
+              db,
+              "connections"
+            )
+          );
 
-      localStorage.setItem(
-        "clearedChats",
+        for (
+          const docItem of
+          connectionSnapshot.docs
+        ) {
 
-        JSON.stringify(
+          const data =
+            docItem.data();
+
+          if (
+
+            data.users.includes(
+              auth.currentUser.uid
+            ) &&
+
+            data.users.includes(
+              selectedUser.id
+            )
+
+          ) {
+
+            await deleteDoc(
+              doc(
+                db,
+                "connections",
+                docItem.id
+              )
+            );
+
+          }
+
+        }
+
+        const updated =
+          {
+            ...clearedChats,
+
+            [chatId]:
+              Date.now(),
+          };
+
+        localStorage.setItem(
+          "clearedChats",
+
+          JSON.stringify(
+            updated
+          )
+        );
+
+        setClearedChats(
           updated
-        )
-      );
+        );
 
-      setClearedChats(
-        updated
-      );
+        setMessages([]);
 
-      setMessages([]);
+        setShowMenu(
+          false
+        );
 
-      setShowMenu(
-        false
-      );
+        setCurrentTab(
+          "discover"
+        );
+
+      } catch (error) {
+
+        console.log(
+          error
+        );
+
+      }
+
+    };
+
+  const blockUser =
+    async () => {
+
+      try {
+
+        await setDoc(
+          doc(
+            db,
+            "blocks",
+            `${auth.currentUser.uid}_${selectedUser.id}`
+          ),
+          {
+            blockerId:
+              auth.currentUser.uid,
+
+            blockedId:
+              selectedUser.id,
+
+            createdAt:
+              serverTimestamp(),
+          }
+        );
+
+        await clearChat();
+
+      } catch (error) {
+
+        console.log(
+          error
+        );
+
+      }
+
+    };
+
+  const reportAndBlock =
+    async () => {
+
+      try {
+
+        await addDoc(
+          collection(
+            db,
+            "reports"
+          ),
+          {
+            reporterId:
+              auth.currentUser.uid,
+
+            reportedUserId:
+              selectedUser.id,
+
+            reason:
+              "User Reported",
+
+            createdAt:
+              serverTimestamp(),
+          }
+        );
+
+        await blockUser();
+
+      } catch (error) {
+
+        console.log(
+          error
+        );
+
+      }
 
     };
 
@@ -464,6 +648,16 @@ export default function ChatRoom({
 
             },
 
+            seenBy: {
+
+              [auth.currentUser.uid]:
+                true,
+
+              [selectedUser.id]:
+                false,
+
+            },
+
             typingUsers: {
 
               [auth.currentUser.uid]:
@@ -489,6 +683,13 @@ export default function ChatRoom({
       }
 
     };
+
+  const unreadIndex =
+    messages.findIndex(
+      (msg) =>
+        msg.senderId !==
+        auth.currentUser.uid
+    );
 
   return (
 
@@ -554,7 +755,7 @@ export default function ChatRoom({
                   ? "Typing..."
                   : onlineStatus
                   ? "Online ✨"
-                  : "Offline"
+                  : lastSeen
               }
 
             </p>
@@ -612,7 +813,7 @@ export default function ChatRoom({
                   transition={{
                     duration: 0.18,
                   }}
-                  className="absolute top-14 right-0 z-50 w-48 rounded-3xl border border-white/10 bg-black/90 backdrop-blur-2xl overflow-hidden shadow-[0_0_40px_rgba(0,255,255,0.12)]"
+                  className="absolute top-14 right-0 z-50 w-60 rounded-3xl border border-white/10 bg-black/90 backdrop-blur-2xl overflow-hidden shadow-[0_0_40px_rgba(0,255,255,0.12)]"
                 >
 
                   <button
@@ -622,7 +823,29 @@ export default function ChatRoom({
                     className="w-full text-left px-5 py-4 hover:bg-white/10 transition-all"
                   >
 
-                    Clear Chat
+                    Delete Chat
+
+                  </button>
+
+                  <button
+                    onClick={
+                      blockUser
+                    }
+                    className="w-full text-left px-5 py-4 hover:bg-white/10 transition-all"
+                  >
+
+                    Block User
+
+                  </button>
+
+                  <button
+                    onClick={
+                      reportAndBlock
+                    }
+                    className="w-full text-left px-5 py-4 hover:bg-red-500/10 text-red-300 transition-all"
+                  >
+
+                    Report & Block
 
                   </button>
 
@@ -641,7 +864,10 @@ export default function ChatRoom({
       <div className="relative z-10 flex-1 overflow-y-auto px-4 py-5 space-y-4">
 
         {messages.map(
-          (msg) => {
+          (
+            msg,
+            index
+          ) => {
 
             const mine =
               msg.senderId ===
@@ -651,47 +877,97 @@ export default function ChatRoom({
 
               <div
                 key={msg.id}
-                className={`flex ${
-                  mine
-                    ? "justify-end"
-                    : "justify-start"
-                }`}
               >
 
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                    y: 10,
-                    scale: 0.95,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                  }}
-                  transition={{
-                    duration: 0.18,
-                  }}
-                  className={`max-w-[78%] px-5 py-3 rounded-[26px] shadow-xl ${
+                {index === unreadIndex && (
+
+                  <div className="flex items-center gap-3 py-2">
+
+                    <div className="flex-1 h-[1px] bg-white/10"></div>
+
+                    <p className="text-xs text-cyan-300 font-semibold">
+
+                      Unread Messages
+
+                    </p>
+
+                    <div className="flex-1 h-[1px] bg-white/10"></div>
+
+                  </div>
+
+                )}
+
+                <div
+                  className={`flex ${
                     mine
-                      ? "bg-gradient-to-r from-cyan-500 to-purple-600 rounded-br-md"
-                      : "bg-white/10 border border-white/10 rounded-bl-md backdrop-blur-xl"
+                      ? "justify-end"
+                      : "justify-start"
                   }`}
                 >
 
-                  <p className="text-[15px] leading-relaxed break-words">
+                  <motion.div
+                    initial={{
+                      opacity: 0,
+                      y: 10,
+                      scale: 0.95,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                    }}
+                    transition={{
+                      duration: 0.18,
+                    }}
+                    className={`max-w-[78%] px-5 py-3 rounded-[26px] shadow-xl ${
+                      mine
+                        ? "bg-gradient-to-r from-cyan-500 to-purple-600 rounded-br-md"
+                        : "bg-white/10 border border-white/10 rounded-bl-md backdrop-blur-xl"
+                    }`}
+                  >
 
-                    {msg.text}
+                    <p className="text-[15px] leading-relaxed break-words">
 
-                  </p>
+                      {msg.text}
 
-                </motion.div>
+                    </p>
+
+                  </motion.div>
+
+                </div>
 
               </div>
 
             );
 
           }
+        )}
+
+        {messages.length >
+          0 &&
+
+          messages[
+            messages.length - 1
+          ]?.senderId ===
+            auth.currentUser.uid && (
+
+          <div className="flex justify-end pr-2">
+
+            <p className="text-xs text-zinc-500">
+
+              {
+                chatMeta
+                  ?.seenBy?.[
+                  selectedUser.id
+                ]
+                  ? "Seen"
+                  : "Delivered"
+              }
+
+            </p>
+
+          </div>
+
         )}
 
         <div ref={bottomRef}></div>
