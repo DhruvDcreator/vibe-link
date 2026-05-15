@@ -739,39 +739,57 @@ export default function Auth({
 
           {/* DOB */}
           {
-            !isLogin && (
+  !isLogin && (
 
-              <input
-                type="date"
-                value={dob}
-                onChange={(e) =>
-                  setDob(
-                    e.target.value
-                  )
-                }
-                className="
-                  w-full
-                  bg-white/[0.045]
-                  border
-                  border-white/10
-                  rounded-[22px]
-                  px-5
-                  py-4
-                  outline-none
-                  text-zinc-400
-                  backdrop-blur-2xl
-                  transition-all
-                  duration-300
-                  focus:border-cyan-400/60
-                  hover:border-white/20
-                "
-                style={{
-                  colorScheme: "dark",
-                }}
-              />
+    <div>
 
-            )
-          }
+      <p className="
+        mb-2
+        ml-1
+        text-sm
+        text-zinc-400
+        tracking-wide
+      ">
+
+        Date of Birth
+
+      </p>
+
+      <input
+        type="date"
+        value={dob}
+        onChange={(e) =>
+          setDob(
+            e.target.value
+          )
+        }
+        className="
+          w-full
+          h-[58px]
+          bg-white/[0.045]
+          border
+          border-white/10
+          rounded-[22px]
+          px-5
+          outline-none
+          text-zinc-400
+          backdrop-blur-2xl
+          transition-all
+          duration-300
+          focus:border-cyan-400/60
+          focus:bg-white/[0.06]
+          focus:shadow-[0_0_25px_rgba(0,212,255,0.12)]
+          hover:border-white/20
+        "
+        style={{
+          colorScheme: "dark",
+        }}
+      />
+
+    </div>
+
+  )
+}
 
           {/* LOGIN OPTIONS */}
           {

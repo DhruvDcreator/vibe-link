@@ -3,6 +3,8 @@ import {
   useRef,
 } from "react";
 
+import { motion } from "framer-motion";
+
 export default function OTPBoxes({
   otp,
   setOtp,
@@ -190,7 +192,12 @@ export default function OTPBoxes({
 
   return (
 
-    <div className="flex justify-center gap-4">
+    <div className="
+      flex
+      justify-center
+      gap-3
+      sm:gap-4
+    ">
 
       {otp.map(
         (
@@ -198,7 +205,12 @@ export default function OTPBoxes({
           index
         ) => (
 
-          <input
+          <motion.input
+
+            whileFocus={{
+              scale: 1.05,
+            }}
+
             disabled={otpLocked}
 
             key={index}
@@ -243,15 +255,57 @@ export default function OTPBoxes({
               handlePaste
             }
 
-            className={`w-16 h-20 text-center text-3xl font-bold rounded-3xl outline-none border-2 transition-all duration-300 bg-white/10 backdrop-blur-xl shadow-lg ${
-              otpLocked
-                ? "opacity-80"
-                : ""
-            } ${
-              digit
-                ? "border-purple-400 shadow-[0_0_30px_rgba(168,85,247,0.6)] text-white scale-105"
-                : "border-cyan-400 focus:border-cyan-300 focus:shadow-[0_0_30px_rgba(0,255,255,0.6)] text-white"
-            }`}
+            className={`
+              w-[68px]
+              h-[82px]
+
+              sm:w-[74px]
+              sm:h-[88px]
+
+              text-center
+              text-3xl
+              font-semibold
+
+              rounded-[26px]
+
+              outline-none
+
+              border
+
+              backdrop-blur-3xl
+
+              transition-all
+              duration-300
+
+              bg-white/[0.045]
+
+              ${
+                otpLocked
+                  ? "opacity-70"
+
+                  : ""
+              }
+
+              ${
+                digit
+
+                  ? `
+                    border-cyan-400/60
+                    text-white
+                    bg-white/[0.08]
+                    shadow-[0_0_35px_rgba(0,212,255,0.18)]
+                  `
+
+                  : `
+                    border-white/10
+                    text-white
+                    focus:border-cyan-400/60
+                    hover:border-white/20
+                    focus:bg-white/[0.06]
+                    focus:shadow-[0_0_30px_rgba(0,212,255,0.14)]
+                  `
+              }
+            `}
           />
 
         )

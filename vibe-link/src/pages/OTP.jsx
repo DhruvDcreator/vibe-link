@@ -505,99 +505,291 @@ export default function OTP({
 
   return (
 
-    <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden">
+  <div className="relative min-h-screen overflow-hidden bg-[#03040A] flex items-center justify-center text-white px-6">
 
-      <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 via-black to-cyan-500/10"></div>
+    {/* BACKGROUND */}
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.05),transparent_45%)]"></div>
 
-      <div className="absolute w-[450px] h-[450px] bg-green-500/20 rounded-full blur-[140px] top-[-150px] left-[-120px]"></div>
+    {/* PLANET RINGS */}
+    <div className="absolute top-[-240px] left-[-240px] w-[520px] h-[520px] rounded-full border border-cyan-400/10"></div>
 
-      <div className="absolute w-[450px] h-[450px] bg-cyan-500/20 rounded-full blur-[140px] bottom-[-150px] right-[-120px]"></div>
+    <div className="absolute bottom-[-260px] right-[-260px] w-[560px] h-[560px] rounded-full border border-purple-400/10"></div>
 
-      <motion.div
-        initial={{
-          opacity: 0,
-          scale: 0.85,
-        }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-        }}
-        transition={{
-          duration: 0.7,
-        }}
-        className="relative z-10 w-full max-w-md backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[40px] p-8 text-center space-y-8"
+    {/* GLOWS */}
+    <div className="absolute top-[10%] left-[5%] w-[320px] h-[320px] bg-cyan-500/10 rounded-full blur-[120px]"></div>
+
+    <div className="absolute bottom-[10%] right-[5%] w-[320px] h-[320px] bg-purple-500/10 rounded-full blur-[120px]"></div>
+
+    {/* STARS */}
+    <div className="absolute inset-0 opacity-70 pointer-events-none">
+
+      <div className="absolute top-[12%] left-[22%] w-[2px] h-[2px] bg-white rounded-full animate-pulse"></div>
+
+      <div className="absolute top-[28%] right-[18%] w-[3px] h-[3px] bg-cyan-300 rounded-full animate-pulse"></div>
+
+      <div className="absolute bottom-[22%] left-[16%] w-[2px] h-[2px] bg-purple-300 rounded-full animate-pulse"></div>
+
+    </div>
+
+    {/* MAIN */}
+    <motion.div
+
+      initial={{
+        opacity: 0,
+        y: 30,
+        scale: 0.98,
+      }}
+
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      }}
+
+      transition={{
+        duration: 0.8,
+      }}
+
+      className="
+        relative
+        z-10
+        w-full
+        max-w-[430px]
+        pt-10
+        pb-8
+      "
+    >
+
+      {/* BACK */}
+      <button
+        onClick={() =>
+          setScreen("authSignup")
+        }
+        className="
+          absolute
+          top-2
+          left-0
+          text-3xl
+          text-cyan-300
+          hover:scale-110
+          transition-all
+          cursor-pointer
+        "
       >
 
-        <h1 className="text-5xl font-black bg-gradient-to-r from-green-400 to-cyan-400 text-transparent bg-clip-text">
+        ←
 
-          VERIFY OTP
+      </button>
 
-        </h1>
+      {/* LOGO */}
+      <div className="flex justify-center mb-7">
 
-        <p className="text-zinc-400 leading-relaxed">
-
-          Enter the OTP sent to
-
-          <br />
-
-          <span className="text-green-400 font-bold">
-
-            {email}
-
-          </span>
-
-        </p>
-
-        <OTPBoxes
-          otp={otp}
-          setOtp={setOtp}
-          otpLocked={otpLocked}
+        <img
+          src="/src/assets/vllogo.png"
+          alt="VibeLink"
+          className="
+            w-[135px]
+            object-contain
+            select-none
+            drop-shadow-[0_0_70px_rgba(168,85,247,0.16)]
+          "
         />
 
-        {loading ? (
+      </div>
 
-          <div className="text-cyan-400 font-bold animate-pulse">
+      {/* CARD */}
+      <div className="
+        bg-white/[0.035]
+        border
+        border-white/10
+        rounded-[34px]
+        p-7
+        backdrop-blur-3xl
+        shadow-[0_0_80px_rgba(0,212,255,0.06)]
+      ">
 
-            VERIFYING...
+        {/* ICON */}
+        <div className="flex justify-center mb-7">
+
+          <div className="
+            w-[95px]
+            h-[95px]
+            rounded-full
+            flex
+            items-center
+            justify-center
+            bg-gradient-to-br
+            from-cyan-500/20
+            to-purple-500/20
+            border
+            border-white/10
+            shadow-[0_0_40px_rgba(168,85,247,0.14)]
+            text-5xl
+          ">
+
+            ✉️
 
           </div>
 
-        ) : null}
+        </div>
 
-        {timer > 0 ? (
+        {/* TITLE */}
+        <div className="text-center">
 
-          <p className="text-zinc-400">
+          <h1 className="
+            text-4xl
+            font-bold
+            text-white
+          ">
 
-            OTP expires in{" "}
+            Verify OTP
 
-            <span className="text-cyan-400 font-bold">
+          </h1>
 
-              {timer}s
+          <p className="
+            mt-4
+            text-zinc-400
+            leading-relaxed
+          ">
+
+            We've sent a verification code to
+
+            <br />
+
+            <span className="
+              text-cyan-300
+              font-medium
+            ">
+
+              {email}
 
             </span>
 
           </p>
 
-        ) : (
+        </div>
 
-          <button
-            onClick={
-              resendOtp
-            }
-            disabled={loading}
-            className="w-full py-4 rounded-2xl font-bold bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+        {/* OTP BOXES */}
+        <div className="mt-10">
 
-            RESEND OTP
+          <OTPBoxes
+            otp={otp}
+            setOtp={setOtp}
+            otpLocked={otpLocked}
+          />
 
-          </button>
+        </div>
 
-        )}
+        {/* VERIFYING */}
+        {
+          loading && (
 
-      </motion.div>
+            <div className="
+              mt-7
+              text-center
+              text-cyan-300
+              font-medium
+              animate-pulse
+              tracking-wide
+            ">
 
-    </div>
+              VERIFYING...
 
-  );
+            </div>
+
+          )
+        }
+
+        {/* TIMER */}
+        <div className="mt-8 text-center">
+
+          {
+            timer > 0 ? (
+
+              <p className="
+                text-zinc-400
+                text-sm
+              ">
+
+                Resend available in{" "}
+
+                <span className="
+                  text-cyan-300
+                  font-semibold
+                ">
+
+                  {timer}s
+
+                </span>
+
+              </p>
+
+            ) : (
+
+              <button
+                onClick={
+                  resendOtp
+                }
+                disabled={loading}
+                className="
+                  w-full
+                  py-5
+                  rounded-[24px]
+                  text-sm
+                  tracking-[0.3em]
+                  font-semibold
+                  transition-all
+                  duration-300
+                  cursor-pointer
+
+                  bg-gradient-to-r
+                  from-cyan-400
+                  via-purple-500
+                  to-pink-400
+
+                  text-white
+
+                  shadow-[0_0_60px_rgba(168,85,247,0.35)]
+
+                  hover:shadow-[0_0_90px_rgba(168,85,247,0.5)]
+
+                  disabled:opacity-50
+                "
+              >
+
+                RESEND OTP
+
+              </button>
+
+            )
+          }
+
+        </div>
+
+      </div>
+
+      {/* COPYRIGHT */}
+      <p className="
+        mt-8
+        text-xs
+        text-zinc-500
+        text-center
+        tracking-wide
+        leading-relaxed
+      ">
+
+        © 2026 VibeLink™ — Dhruv Dhanuka.
+
+        <br />
+
+        All rights reserved.
+
+      </p>
+
+    </motion.div>
+
+  </div>
+
+);
 
 }
