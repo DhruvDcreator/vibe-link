@@ -345,33 +345,34 @@ export default function App() {
       otp
     );
 
-    await emailjs.send(
+    console.log(
+      "SENDING OTP..."
+    );
 
-      "service_otz8q9a",
+    const response =
+      await emailjs.send(
 
-      "template_y8t4pe2",
+        "service_otz8q9a",
 
-      {
+        "template_y8t4pe2",
 
-        to_email:
-          email,
+        {
 
-        otp:
-          otp,
+          to_email:
+            email,
 
-      },
+          otp:
+            otp,
 
-      "uYochmrCEWfNwQTMA"
+        },
 
-      .then((response) => {
+        "uYochmrCEWfNwQTMA"
 
-  console.log(
-    "SUCCESS",
-    response
-  );
+      );
 
-})
-
+    console.log(
+      "OTP SENT",
+      response
     );
 
     setScreen(
@@ -380,16 +381,16 @@ export default function App() {
 
   } catch (error) {
 
-  console.log(
-    "EMAILJS ERROR:",
-    error
-  );
+    console.log(
+      "EMAILJS ERROR:",
+      error
+    );
 
-  alert(
-    JSON.stringify(error)
-  );
+    alert(
+      "Failed to send OTP"
+    );
 
-}
+  }
 
 }}
 
@@ -486,11 +487,67 @@ if (
 
       sendOtp={async () => {
 
-        setScreen(
-          "otp"
-        );
+  try {
 
-      }}
+    const otp =
+      Math.floor(
+        1000 +
+        Math.random() *
+        9000
+      ).toString();
+
+    setGeneratedOtp(
+      otp
+    );
+
+    console.log(
+      "SENDING OTP..."
+    );
+
+    const response =
+      await emailjs.send(
+
+        "service_otz8q9a",
+
+        "template_y8t4pe2",
+
+        {
+
+          to_email:
+            email,
+
+          otp:
+            otp,
+
+        },
+
+        "uYochmrCEWfNwQTMA"
+
+      );
+
+    console.log(
+      "OTP SENT",
+      response
+    );
+
+    setScreen(
+      "otp"
+    );
+
+  } catch (error) {
+
+    console.log(
+      "EMAILJS ERROR:",
+      error
+    );
+
+    alert(
+      "Failed to send OTP"
+    );
+
+  }
+
+}}
 
     />
 
