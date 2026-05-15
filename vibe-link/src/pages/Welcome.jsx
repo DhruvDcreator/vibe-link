@@ -14,7 +14,7 @@ export default function Welcome({ setScreen }) {
 
     setTimeout(() => {
 
-      setScreen("loginOrSignup");
+      setScreen("auth");
 
     }, 300);
 

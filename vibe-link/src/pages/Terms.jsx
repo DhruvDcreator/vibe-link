@@ -50,7 +50,7 @@ export default function Terms({
               }}
               onClick={() =>
                 setScreen(
-                  "signup"
+                  "authSignup"
                 )
               }
               className="sticky top-2 z-20 text-4xl text-cyan-400 cursor-pointer select-none mb-6"

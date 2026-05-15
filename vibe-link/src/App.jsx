@@ -13,11 +13,7 @@ import {
 
 import Welcome from "./pages/Welcome";
 
-import LoginOrSignup from "./pages/LoginOrSignup";
-
-import Login from "./pages/Login";
-
-import Signup from "./pages/Signup";
+import Auth from "./pages/Auth";
 
 import OTP from "./pages/OTP";
 
@@ -227,62 +223,7 @@ export default function App() {
 
   }
 
-  if (
-    screen ===
-    "loginOrSignup"
-  ) {
-
-    return (
-      <LoginOrSignup
-        setScreen={
-          setScreen
-        }
-      />
-    );
-
-  }
-
-  if (
-    screen ===
-    "login"
-  ) {
-
-    return (
-
-      <Login
-        setScreen={
-          setScreen
-        }
-
-        username={
-          username
-        }
-
-        setUsername={
-          setUsername
-        }
-
-        password={
-          password
-        }
-
-        setPassword={
-          setPassword
-        }
-
-        showPassword={
-          showPassword
-        }
-
-        setShowPassword={
-          setShowPassword
-        }
-      />
-
-    );
-
-  }
-
+  
   if (
     screen ===
     "forgotPassword"
@@ -301,93 +242,204 @@ export default function App() {
   }
 
   if (
-    screen ===
-    "signup"
-  ) {
+  screen ===
+  "auth"
+) {
 
-    return (
+  return (
 
-      <Signup
-        setScreen={
-          setScreen
+    <Auth
+
+      setScreen={
+        setScreen
+      }
+
+      isLogin={
+        screen === "auth"
+      }
+
+      setIsLogin={(value) => {
+
+        if (value) {
+
+          setScreen("auth");
+
+        } else {
+
+          setScreen("authSignup");
+
         }
 
-        username={
-          username
+      }}
+
+      username={
+        username
+      }
+
+      setUsername={
+        setUsername
+      }
+
+      email={
+        email
+      }
+
+      setEmail={
+        setEmail
+      }
+
+      password={
+        password
+      }
+
+      setPassword={
+        setPassword
+      }
+
+      age={
+        age
+      }
+
+      setAge={
+        setAge
+      }
+
+      phone={
+        phone
+      }
+
+      setPhone={
+        setPhone
+      }
+
+      showPassword={
+        showPassword
+      }
+
+      setShowPassword={
+        setShowPassword
+      }
+
+      loginUser={async () => {
+
+        setScreen(
+          "loginSuccess"
+        );
+
+      }}
+
+      sendOtp={async () => {
+
+        setScreen(
+          "otp"
+        );
+
+      }}
+
+    />
+
+  );
+
+}
+
+if (
+  screen ===
+  "authSignup"
+) {
+
+  return (
+
+    <Auth
+
+      setScreen={
+        setScreen
+      }
+
+      isLogin={false}
+
+      setIsLogin={(value) => {
+
+        if (value) {
+
+          setScreen("auth");
+
+        } else {
+
+          setScreen("authSignup");
+
         }
 
-        setUsername={
-          setUsername
-        }
+      }}
 
-        email={email}
+      username={
+        username
+      }
 
-        setEmail={
-          setEmail
-        }
+      setUsername={
+        setUsername
+      }
 
-        password={
-          password
-        }
+      email={
+        email
+      }
 
-        setPassword={
-          setPassword
-        }
+      setEmail={
+        setEmail
+      }
 
-        phone={phone}
+      password={
+        password
+      }
 
-        setPhone={
-          setPhone
-        }
+      setPassword={
+        setPassword
+      }
 
-        age={age}
+      age={
+        age
+      }
 
-        setAge={
-          setAge
-        }
+      setAge={
+        setAge
+      }
 
-        gender={
-          gender
-        }
+      phone={
+        phone
+      }
 
-        setGender={
-          setGender
-        }
+      setPhone={
+        setPhone
+      }
 
-        country={
-          country
-        }
+      showPassword={
+        showPassword
+      }
 
-        setCountry={
-          setCountry
-        }
+      setShowPassword={
+        setShowPassword
+      }
 
-        bio={bio}
+      loginUser={async () => {
 
-        setBio={
-          setBio
-        }
+        setScreen(
+          "loginSuccess"
+        );
 
-        setGeneratedOtp={
-          setGeneratedOtp
-        }
+      }}
 
-        showPassword={
-          showPassword
-        }
+      sendOtp={async () => {
 
-        setShowPassword={
-          setShowPassword
-        }
+        setScreen(
+          "otp"
+        );
 
-        setIsGoogleSignup={
-          setIsGoogleSignup
-        }
-      />
+      }}
 
-    );
+    />
 
-  }
+  );
+
+}
 
   if (
     screen ===
