@@ -363,6 +363,15 @@ export default function App() {
 
       "uYochmrCEWfNwQTMA"
 
+      .then((response) => {
+
+  console.log(
+    "SUCCESS",
+    response
+  );
+
+})
+
     );
 
     setScreen(
