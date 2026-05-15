@@ -39,6 +39,8 @@ import Privacy from "./pages/Privacy";
 
 import emailjs from "@emailjs/browser";
 
+import welcomeLogo from "./assets/vllogo.png";
+
 export default function App() {
 
   const [screen, setScreen] =
@@ -198,15 +200,48 @@ export default function App() {
   !appReady
 ) {
 
-    return (
+    <div className="
+  w-screen
+  h-screen
+  bg-[#03040A]
+  flex
+  items-center
+  justify-center
+  overflow-hidden
+  relative
+">
 
-      <div className="w-screen h-screen bg-black flex items-center justify-center text-white text-2xl font-black">
+  {/* glow */}
+  <div className="
+    absolute
+    w-[300px]
+    h-[300px]
+    bg-cyan-500/10
+    rounded-full
+    blur-[120px]
+  "></div>
 
-        Vibe Link...
+  <div className="
+    absolute
+    w-[300px]
+    h-[300px]
+    bg-purple-500/10
+    rounded-full
+    blur-[120px]
+  "></div>
 
-      </div>
+  {/* logo */}
+  <img
+    src={welcomeLogo}
+    alt="VibeLink"
+    className="
+      w-[120px]
+      animate-pulse
+      opacity-90
+    "
+  />
 
-    );
+</div>
 
   }
 
