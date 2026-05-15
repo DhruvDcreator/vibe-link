@@ -37,6 +37,8 @@ import Terms from "./pages/Terms";
 
 import Privacy from "./pages/Privacy";
 
+import emailjs from "@emailjs/browser";
+
 export default function App() {
 
   const [screen, setScreen] =
@@ -330,11 +332,54 @@ export default function App() {
 
       sendOtp={async () => {
 
-        setScreen(
-          "otp"
-        );
+  try {
 
-      }}
+    const otp =
+      Math.floor(
+        1000 +
+        Math.random() *
+        9000
+      ).toString();
+
+    setGeneratedOtp(
+      otp
+    );
+
+    await emailjs.send(
+
+      "service_otz8q9a",
+
+      "template_y8t4pe2",
+
+      {
+
+        to_email:
+          email,
+
+        otp:
+          otp,
+
+      },
+
+      "uYochmrCEWfNwQTMA"
+
+    );
+
+    setScreen(
+      "otp"
+    );
+
+  } catch (error) {
+
+    console.log(error);
+
+    alert(
+      "Failed to send OTP"
+    );
+
+  }
+
+}}
 
     />
 
