@@ -43,6 +43,9 @@ import welcomeLogo from "./assets/vllogo.png";
 
 export default function App() {
 
+  const [initializing, setInitializing] =
+  useState(true);
+
   const [screen, setScreen] =
   useState(null);
 
@@ -108,6 +111,8 @@ export default function App() {
 
         (user) => {
 
+          setInitializing(false);
+
           const pendingSignup =
             localStorage.getItem(
               "pendingSignup"
@@ -142,9 +147,13 @@ export default function App() {
 
   requestAnimationFrame(() => {
 
+ if (!screen) {
+
   setScreen(
     "welcome"
   );
+
+}
 
   setTimeout(() => {
 
@@ -195,6 +204,7 @@ export default function App() {
   }, [screen]);
 
   if (
+  initializing ||
   !authChecked ||
   !screen ||
   !appReady
