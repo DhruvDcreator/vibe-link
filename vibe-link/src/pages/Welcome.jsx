@@ -1,48 +1,82 @@
 import { motion } from "framer-motion";
-
+import { useState } from "react";
 import welcomeLogo from "../assets/vibelogo.png";
-export default function Welcome({
-  setScreen,
-}) {
+
+export default function Welcome({ setScreen }) {
+
+  const [loading, setLoading] = useState(false);
+
+  const handleContinue = () => {
+
+    if (loading) return;
+
+    setLoading(true);
+
+    setTimeout(() => {
+
+      setScreen("loginOrSignup");
+
+    }, 250);
+
+  };
 
   return (
 
-    <div
-      className="min-h-screen flex items-center justify-center text-white p-6 relative overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(circle at center, rgba(0,255,255,0.15), #050510 60%)",
-      }}
-    >
+    <div className="relative min-h-screen overflow-hidden bg-[#03040A] flex items-center justify-center text-white px-6">
 
-      {/* dark overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
+      {/* MAIN BACKGROUND */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.06),transparent_45%)]"></div>
 
-      {/* glowing blobs */}
-      <div className="absolute w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[140px] top-[-150px] left-[-100px] animate-pulse"></div>
+      {/* EXTRA VENTURE GOLD GLOW */}
+      <div className="absolute top-[35%] left-[50%] -translate-x-1/2 w-[500px] h-[220px] bg-yellow-400/5 blur-[120px] rounded-full"></div>
 
-      <div className="absolute w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[140px] bottom-[-150px] right-[-100px] animate-pulse"></div>
+      {/* PLANET RINGS */}
+      <div className="absolute top-[-240px] left-[-240px] w-[520px] h-[520px] rounded-full border border-cyan-400/10"></div>
 
-      {/* main content */}
+      <div className="absolute bottom-[-260px] right-[-260px] w-[560px] h-[560px] rounded-full border border-purple-400/10"></div>
+
+      {/* AMBIENT BLOBS */}
+      <div className="absolute top-[10%] left-[5%] w-[320px] h-[320px] bg-cyan-500/10 rounded-full blur-[120px]"></div>
+
+      <div className="absolute bottom-[10%] right-[5%] w-[320px] h-[320px] bg-purple-500/10 rounded-full blur-[120px]"></div>
+
+      <div className="absolute top-[40%] left-[35%] w-[250px] h-[250px] bg-pink-500/5 rounded-full blur-[100px]"></div>
+
+      {/* STARS */}
+      <div className="absolute inset-0 opacity-70 pointer-events-none">
+
+        <div className="absolute top-[12%] left-[22%] w-[2px] h-[2px] bg-white rounded-full"></div>
+
+        <div className="absolute top-[28%] right-[18%] w-[3px] h-[3px] bg-cyan-300 rounded-full"></div>
+
+        <div className="absolute bottom-[22%] left-[16%] w-[2px] h-[2px] bg-purple-300 rounded-full"></div>
+
+        <div className="absolute top-[45%] right-[10%] w-[2px] h-[2px] bg-pink-300 rounded-full"></div>
+
+        <div className="absolute top-[62%] left-[30%] w-[2px] h-[2px] bg-yellow-200 rounded-full"></div>
+
+      </div>
+
+      {/* MAIN CONTENT */}
       <motion.div
         initial={{
           opacity: 0,
-          scale: 0.9,
+          scale: 0.96,
         }}
         animate={{
           opacity: 1,
           scale: 1,
         }}
         transition={{
-          duration: 0.9,
+          duration: 1,
         }}
         className="relative z-10 flex flex-col items-center"
       >
 
-        {/* logo */}
+        {/* LOGO */}
         <motion.img
           src={welcomeLogo}
-          alt="Vibe Link"
+          alt="VibeLink"
           initial={{
             opacity: 0,
             y: 30,
@@ -56,15 +90,47 @@ export default function Welcome({
             duration: 1,
           }}
           className="
-            w-[300px]
-            md:w-[400px]
+            w-[320px]
+            md:w-[390px]
             object-contain
-            drop-shadow-[0_0_60px_rgba(168,85,247,0.35)]
             select-none
+            drop-shadow-[0_0_90px_rgba(168,85,247,0.18)]
           "
         />
 
-        {/* continue button */}
+        {/* TAGLINE */}
+        <motion.p
+          initial={{
+            opacity: 0,
+          }}
+          animate={{
+            opacity: 1,
+          }}
+          transition={{
+            delay: 0.45,
+          }}
+          className="
+            mt-5
+            text-sm
+            md:text-base
+            tracking-[0.35em]
+            uppercase
+            font-medium
+            text-transparent
+            bg-clip-text
+            bg-gradient-to-r
+            from-cyan-300
+            via-white
+            to-pink-300
+            opacity-90
+          "
+        >
+
+          YOUR VIBE. YOUR TRIBE.
+
+        </motion.p>
+
+        {/* CONTINUE BUTTON */}
         <motion.button
           initial={{
             opacity: 0,
@@ -75,46 +141,65 @@ export default function Welcome({
             y: 0,
           }}
           whileHover={{
-            scale: 1.08,
+            scale: 1.04,
           }}
           whileTap={{
-            scale: 0.96,
+            scale: 0.97,
           }}
           transition={{
-            delay: 0.5,
+            delay: 0.65,
             duration: 0.8,
           }}
-          onClick={() =>
-            setScreen(
-              "loginOrSignup"
-            )
-          }
-          className="
-            mt-2
-            bg-gradient-to-r
-            from-cyan-500
-            to-purple-600
-            px-12
+          onClick={handleContinue}
+          disabled={loading}
+          className={`
+            mt-8
+            relative
+            overflow-hidden
+            px-14
             py-5
-            rounded-3xl
-            text-2xl
-            font-bold
-            cursor-pointer
+            rounded-[30px]
+            text-lg
+            font-medium
+            tracking-[0.28em]
+            border
+            border-white/10
+            backdrop-blur-2xl
             transition-all
             duration-300
-            shadow-[0_0_40px_rgba(0,255,255,0.35)]
-            hover:shadow-[0_0_70px_rgba(168,85,247,0.5)]
-          "
+            cursor-pointer
+            hover:cursor-pointer
+            shadow-[0_0_40px_rgba(0,212,255,0.08)]
+
+            ${
+              loading
+                ? "bg-white/[0.08] opacity-70"
+                : "bg-white/[0.05] hover:bg-gradient-to-r hover:from-cyan-500/20 hover:via-purple-500/20 hover:to-pink-500/20 hover:shadow-[0_0_70px_rgba(168,85,247,0.20)]"
+            }
+          `}
         >
 
-          CONTINUE
+          {/* GLASS SHINE */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 to-transparent pointer-events-none"></div>
+
+          <span className="relative z-10 flex items-center gap-4">
+
+            {loading ? "LOADING..." : "CONTINUE"}
+
+            <span className="text-yellow-300 text-2xl">
+
+              →
+
+            </span>
+
+          </span>
 
         </motion.button>
 
-        {/* copyright */}
-        <p className="mt-10 text-sm text-zinc-400 text-center tracking-wide leading-relaxed px-4">
+        {/* COPYRIGHT */}
+        <p className="mt-10 text-sm text-zinc-400 text-center tracking-wide whitespace-nowrap">
 
-          © 2026 Vibe Link™ — Dhruv Dhanuka. All rights reserved.
+          © 2026 VibeLink™ — Dhruv Dhanuka. All rights reserved.
 
         </p>
 
