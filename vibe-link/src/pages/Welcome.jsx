@@ -169,6 +169,7 @@ export default function Welcome({ setScreen }) {
             duration-300
             cursor-pointer
             hover:cursor-pointer
+            active:scale-[0.98]
 
             ${
               loading
