@@ -334,11 +334,13 @@ export default function Auth({
       }}
 
       className="
-        relative
-        z-10
-        w-full
-        max-w-[430px]
-      "
+  relative
+  z-10
+  w-full
+  max-w-[430px]
+  pt-10
+  pb-8
+"
     >
 
       {/* BACK */}
@@ -348,7 +350,7 @@ export default function Auth({
         }
         className="
           absolute
-          -top-2
+          top-2
           left-0
           text-3xl
           text-cyan-300

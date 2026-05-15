@@ -198,9 +198,18 @@ export default function Welcome({ setScreen }) {
         </motion.button>
 
         {/* COPYRIGHT */}
-        <p className="mt-10 text-sm text-zinc-400 text-center tracking-wide whitespace-nowrap">
+        <p className="
+  mt-10
+  text-sm
+  text-zinc-400
+  text-center
+  tracking-wide
+  leading-relaxed
+">
 
-          © 2026 VibeLink™ — Dhruv Dhanuka. All rights reserved.
+          © 2026 VibeLink™ — Dhruv Dhanuka.
+<br />
+All rights reserved.
 
         </p>
 
