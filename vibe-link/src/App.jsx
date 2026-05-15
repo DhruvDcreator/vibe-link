@@ -371,13 +371,16 @@ export default function App() {
 
   } catch (error) {
 
-    console.log(error);
+  console.log(
+    "EMAILJS ERROR:",
+    error
+  );
 
-    alert(
-      "Failed to send OTP"
-    );
+  alert(
+    JSON.stringify(error)
+  );
 
-  }
+}
 
 }}
 
