@@ -764,26 +764,40 @@ export default function Auth({
           )
         }
         className="
-          w-full
-          h-[58px]
-          bg-white/[0.045]
-          border
-          border-white/10
-          rounded-[22px]
-          px-5
-          outline-none
-          text-zinc-400
-          backdrop-blur-2xl
-          transition-all
-          duration-300
-          focus:border-cyan-400/60
-          focus:bg-white/[0.06]
-          focus:shadow-[0_0_25px_rgba(0,212,255,0.12)]
-          hover:border-white/20
-        "
+  w-full
+  h-[56px]
+  min-h-[56px]
+  max-h-[56px]
+
+  appearance-none
+
+  bg-white/[0.045]
+  border
+  border-white/10
+  rounded-[22px]
+
+  px-5
+
+  outline-none
+
+  text-sm
+  text-zinc-400
+
+  backdrop-blur-2xl
+
+  transition-all
+  duration-300
+
+  focus:border-cyan-400/60
+  focus:bg-white/[0.06]
+  focus:shadow-[0_0_25px_rgba(0,212,255,0.12)]
+
+  hover:border-white/20
+"
         style={{
-          colorScheme: "dark",
-        }}
+  colorScheme: "dark",
+  WebkitAppearance: "none",
+}}
       />
 
     </div>

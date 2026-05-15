@@ -10,6 +10,8 @@ import OTPBoxes from "../components/OTPBoxes";
 
 import emailjs from "@emailjs/browser";
 
+import welcomeLogo from "../assets/vllogo.png";
+
 import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
@@ -178,7 +180,12 @@ export default function OTP({
         setOtpLocked(false);
 
         if (
-          attempts >= 2
+          attempts >= 2 ||
+
+(
+  resendCount >= 1 &&
+  attempts >= 1
+)
         ) {
 
           startOver();
@@ -560,32 +567,11 @@ export default function OTP({
       "
     >
 
-      {/* BACK */}
-      <button
-        onClick={() =>
-          setScreen("authSignup")
-        }
-        className="
-          absolute
-          top-2
-          left-0
-          text-3xl
-          text-cyan-300
-          hover:scale-110
-          transition-all
-          cursor-pointer
-        "
-      >
-
-        ←
-
-      </button>
-
       {/* LOGO */}
       <div className="flex justify-center mb-7">
 
         <img
-          src="/src/assets/vllogo.png"
+          src={welcomeLogo}
           alt="VibeLink"
           className="
             w-[135px]
