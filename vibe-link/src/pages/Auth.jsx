@@ -169,6 +169,8 @@ export default function Auth({
   const handleAction =
     async () => {
 
+      console.log("HANDLE ACTION RUNNING");
+
       if (loading) return;
 
       setLoading(true);
