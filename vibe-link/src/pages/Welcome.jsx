@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-import welcomeLogo from "../assets/vibelogo.png";
+import welcomeLogo from "../assets/vllogo.png";
 
 export default function Welcome({ setScreen }) {
 
@@ -16,7 +16,7 @@ export default function Welcome({ setScreen }) {
 
       setScreen("loginOrSignup");
 
-    }, 250);
+    }, 300);
 
   };
 
@@ -24,10 +24,10 @@ export default function Welcome({ setScreen }) {
 
     <div className="relative min-h-screen overflow-hidden bg-[#03040A] flex items-center justify-center text-white px-6">
 
-      {/* MAIN BACKGROUND */}
+      {/* BACKGROUND BASE */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.06),transparent_45%)]"></div>
 
-      {/* EXTRA VENTURE GOLD GLOW */}
+      {/* GOLD AMBIENT GLOW */}
       <div className="absolute top-[35%] left-[50%] -translate-x-1/2 w-[500px] h-[220px] bg-yellow-400/5 blur-[120px] rounded-full"></div>
 
       {/* PLANET RINGS */}
@@ -45,15 +45,15 @@ export default function Welcome({ setScreen }) {
       {/* STARS */}
       <div className="absolute inset-0 opacity-70 pointer-events-none">
 
-        <div className="absolute top-[12%] left-[22%] w-[2px] h-[2px] bg-white rounded-full"></div>
+        <div className="absolute top-[12%] left-[22%] w-[2px] h-[2px] bg-white rounded-full animate-pulse"></div>
 
-        <div className="absolute top-[28%] right-[18%] w-[3px] h-[3px] bg-cyan-300 rounded-full"></div>
+        <div className="absolute top-[28%] right-[18%] w-[3px] h-[3px] bg-cyan-300 rounded-full animate-pulse"></div>
 
-        <div className="absolute bottom-[22%] left-[16%] w-[2px] h-[2px] bg-purple-300 rounded-full"></div>
+        <div className="absolute bottom-[22%] left-[16%] w-[2px] h-[2px] bg-purple-300 rounded-full animate-pulse"></div>
 
-        <div className="absolute top-[45%] right-[10%] w-[2px] h-[2px] bg-pink-300 rounded-full"></div>
+        <div className="absolute top-[45%] right-[10%] w-[2px] h-[2px] bg-pink-300 rounded-full animate-pulse"></div>
 
-        <div className="absolute top-[62%] left-[30%] w-[2px] h-[2px] bg-yellow-200 rounded-full"></div>
+        <div className="absolute top-[62%] left-[30%] w-[2px] h-[2px] bg-yellow-200 rounded-full animate-pulse"></div>
 
       </div>
 
@@ -91,7 +91,7 @@ export default function Welcome({ setScreen }) {
           }}
           className="
             w-[320px]
-            md:w-[390px]
+            md:w-[400px]
             object-contain
             select-none
             drop-shadow-[0_0_90px_rgba(168,85,247,0.18)]
@@ -111,9 +111,9 @@ export default function Welcome({ setScreen }) {
           }}
           className="
             mt-5
-            text-sm
-            md:text-base
-            tracking-[0.35em]
+            text-[11px]
+            md:text-sm
+            tracking-[0.42em]
             uppercase
             font-medium
             text-transparent
@@ -169,12 +169,11 @@ export default function Welcome({ setScreen }) {
             duration-300
             cursor-pointer
             hover:cursor-pointer
-            shadow-[0_0_40px_rgba(0,212,255,0.08)]
 
             ${
               loading
                 ? "bg-white/[0.08] opacity-70"
-                : "bg-white/[0.05] hover:bg-gradient-to-r hover:from-cyan-500/20 hover:via-purple-500/20 hover:to-pink-500/20 hover:shadow-[0_0_70px_rgba(168,85,247,0.20)]"
+                : "bg-white/[0.05] hover:bg-gradient-to-r hover:from-cyan-500/20 hover:via-purple-500/20 hover:to-pink-500/20 hover:shadow-[0_0_70px_rgba(168,85,247,0.22)]"
             }
           `}
         >
