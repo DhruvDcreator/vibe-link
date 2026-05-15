@@ -90,11 +90,12 @@ export default function Welcome({ setScreen }) {
             duration: 1,
           }}
           className="
-            w-[320px]
-            md:w-[400px]
+            w-[420px]
+            md:w-[540px]
+            lg:w-[620px]
             object-contain
             select-none
-            drop-shadow-[0_0_90px_rgba(168,85,247,0.18)]
+            drop-shadow-[0_0_90px_rgba(168,85,247,0.16)]
           "
         />
 
