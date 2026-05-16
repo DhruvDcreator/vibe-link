@@ -123,11 +123,13 @@ export default function Auth({
       }
 
       const usernameRef =
-        doc(
-          db,
-          "usernames",
-          username
-        );
+  doc(
+    db,
+    "usernames",
+    username
+      .trim()
+      .toLowerCase()
+  );
 
       const usernameSnap =
         await getDoc(
