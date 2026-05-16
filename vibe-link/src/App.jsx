@@ -4,12 +4,21 @@ import {
 } from "react";
 
 import {
+
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+
 } from "firebase/auth";
 
 import {
   auth,
+  db,
 } from "./firebase/firebase";
+
+import {
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 import Welcome from "./pages/Welcome";
 
@@ -102,6 +111,67 @@ export default function App() {
     selectedVibes,
     setSelectedVibes,
   ] = useState([]);
+
+  const loginUser =
+  async () => {
+
+    try {
+
+      const usernameRef =
+        doc(
+          db,
+          "usernames",
+          username
+        );
+
+      const usernameSnap =
+        await getDoc(
+          usernameRef
+        );
+
+      if (
+        !usernameSnap.exists()
+      ) {
+
+        alert(
+          "Username not found"
+        );
+
+        return;
+
+      }
+
+      const userData =
+        usernameSnap.data();
+
+      const userEmail =
+        userData.email;
+
+      await signInWithEmailAndPassword(
+
+        auth,
+
+        userEmail,
+
+        password
+
+      );
+
+      setScreen(
+        "loginSuccess"
+      );
+
+    } catch (error) {
+
+      console.log(error);
+
+      alert(
+        "Invalid username or password"
+      );
+
+    }
+
+  };
 
   useEffect(() => {
 
@@ -367,13 +437,7 @@ export default function App() {
         setShowPassword
       }
 
-      loginUser={async () => {
-
-        setScreen(
-          "loginSuccess"
-        );
-
-      }}
+      loginUser={loginUser}
 
       sendOtp={async () => {
 
@@ -522,13 +586,7 @@ if (
         setShowPassword
       }
 
-      loginUser={async () => {
-
-        setScreen(
-          "loginSuccess"
-        );
-
-      }}
+      loginUser={loginUser}
 
       sendOtp={async () => {
 

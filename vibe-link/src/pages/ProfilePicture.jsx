@@ -174,165 +174,449 @@ const [
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden">
 
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
+  <div className="
+    relative
+    min-h-screen
+    overflow-hidden
+    bg-[#03040A]
+    flex
+    items-center
+    justify-center
+    text-white
+    px-6
+  ">
 
-      <div className="absolute w-[450px] h-[450px] bg-cyan-500/20 rounded-full blur-[140px] top-[-150px] left-[-120px]"></div>
+    {/* BACKGROUND */}
+    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.05),transparent_45%)]"></div>
 
-      <div className="absolute w-[450px] h-[450px] bg-purple-500/20 rounded-full blur-[140px] bottom-[-150px] right-[-120px]"></div>
+    {/* GLOWS */}
+    <div className="
+      absolute
+      top-[10%]
+      left-[5%]
+      w-[320px]
+      h-[320px]
+      bg-cyan-500/10
+      rounded-full
+      blur-[120px]
+    "></div>
 
-      <motion.div
-        initial={{
-          opacity: 0,
-          scale: 0.9,
-        }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-        }}
-        transition={{
-          duration: 0.7,
-        }}
-        className="relative z-10 w-full max-w-md backdrop-blur-2xl bg-white/5 border border-white/10 rounded-[40px] p-8 text-center space-y-8"
-      >
+    <div className="
+      absolute
+      bottom-[10%]
+      right-[5%]
+      w-[320px]
+      h-[320px]
+      bg-purple-500/10
+      rounded-full
+      blur-[120px]
+    "></div>
 
-        <div>
+    {/* MAIN */}
+    <motion.div
 
-          <h1 className="text-5xl font-black bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
-            PROFILE PHOTO
-          </h1>
+      initial={{
+        opacity: 0,
+        y: 30,
+        scale: 0.98,
+      }}
 
-          <p className="text-zinc-400 mt-3">
-            Add your identity to your vibe
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      }}
+
+      transition={{
+        duration: 0.8,
+      }}
+
+      className="
+        relative
+        z-10
+        w-full
+        max-w-[430px]
+      "
+    >
+
+      {/* CARD */}
+      <div className="
+        bg-white/[0.035]
+        border
+        border-white/10
+        rounded-[36px]
+        p-7
+        backdrop-blur-3xl
+        shadow-[0_0_80px_rgba(0,212,255,0.06)]
+      ">
+
+        {/* TITLE */}
+        <div className="text-center">
+
+          <motion.h1
+
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+
+            className="
+              text-5xl
+              font-black
+              leading-tight
+            "
+          >
+
+            Create Your
+
+            <br />
+
+            <span className="
+              bg-gradient-to-r
+              from-cyan-300
+              via-purple-300
+              to-pink-300
+              text-transparent
+              bg-clip-text
+            ">
+
+              Identity
+
+            </span>
+
+          </motion.h1>
+
+          <p className="
+            mt-4
+            text-zinc-400
+            text-[15px]
+            leading-relaxed
+          ">
+
+            Add a profile picture
+
+            <br />
+
+            to personalize your vibe.
+
           </p>
 
         </div>
 
-        <div className="space-y-6">
+        {/* IMAGE SECTION */}
+        <div className="
+          mt-10
+          flex
+          flex-col
+          items-center
+        ">
 
-  {image ? (
+          {
 
-    <div className="relative w-64 h-64 mx-auto rounded-full overflow-hidden border-4 border-cyan-400/40">
+            image ? (
 
-      <Cropper
-        image={image}
-        crop={crop}
-        zoom={zoom}
-        aspect={1}
-        cropShape="round"
-        showGrid={false}
-        onCropChange={setCrop}
-        onZoomChange={setZoom}
-        onCropComplete={onCropComplete}
-      />
+              <div className="
+                relative
+                w-[250px]
+                h-[250px]
+                rounded-full
+                overflow-hidden
 
-    </div>
+                border-[4px]
+                border-cyan-400/30
 
-  ) : (
+                shadow-[0_0_60px_rgba(0,212,255,0.16)]
+              ">
 
-    <motion.label
-      whileHover={{
-        scale: 1.03,
-      }}
-      className="w-52 h-52 rounded-full border-4 border-cyan-400/40 flex items-center justify-center overflow-hidden mx-auto cursor-pointer bg-white/5 backdrop-blur-xl shadow-[0_0_50px_rgba(0,255,255,0.15)]"
-    >
+                <Cropper
+                  image={image}
+                  crop={crop}
+                  zoom={zoom}
+                  aspect={1}
+                  cropShape="round"
+                  showGrid={false}
+                  onCropChange={setCrop}
+                  onZoomChange={setZoom}
+                  onCropComplete={onCropComplete}
+                />
 
-      <div className="text-center space-y-3">
+              </div>
 
-        <div className="text-7xl">
-          ✨
+            ) : (
+
+              <motion.label
+
+                whileHover={{
+                  scale: 1.03,
+                }}
+
+                whileTap={{
+                  scale: 0.98,
+                }}
+
+                className="
+                  relative
+                  w-[230px]
+                  h-[230px]
+                  rounded-full
+
+                  flex
+                  items-center
+                  justify-center
+
+                  overflow-hidden
+                  cursor-pointer
+
+                  bg-white/[0.04]
+
+                  border-[4px]
+                  border-dashed
+                  border-cyan-400/25
+
+                  backdrop-blur-2xl
+
+                  shadow-[0_0_50px_rgba(0,212,255,0.08)]
+                "
+              >
+
+                {/* inner glow */}
+                <div className="
+                  absolute
+                  inset-0
+                  bg-gradient-to-br
+                  from-cyan-500/10
+                  to-purple-500/10
+                "></div>
+
+                <div className="
+                  relative
+                  z-10
+                  text-center
+                ">
+
+                  <div className="text-7xl">
+
+                    ✨
+
+                  </div>
+
+                  <p className="
+                    mt-3
+                    text-zinc-300
+                    tracking-wide
+                  ">
+
+                    Upload Photo
+
+                  </p>
+
+                </div>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  hidden
+                  onChange={handleImage}
+                />
+
+              </motion.label>
+
+            )
+
+          }
+
+          {/* ZOOM */}
+          {
+
+            image && (
+
+              <>
+
+                <div className="
+                  mt-8
+                  w-full
+                ">
+
+                  <input
+                    type="range"
+                    min={1}
+                    max={3}
+                    step={0.1}
+                    value={zoom}
+                    onChange={(e) =>
+                      setZoom(
+                        e.target.value
+                      )
+                    }
+                    className="
+                      w-full
+                      accent-cyan-400
+                      cursor-pointer
+                    "
+                  />
+
+                </div>
+
+                {/* CHANGE PHOTO */}
+                <label className="
+                  mt-5
+                  w-full
+                  cursor-pointer
+                ">
+
+                  <div className="
+                    py-4
+                    rounded-[22px]
+
+                    bg-white/[0.04]
+
+                    border
+                    border-white/10
+
+                    text-zinc-300
+                    text-center
+
+                    hover:bg-white/[0.06]
+
+                    transition-all
+                    duration-300
+                  ">
+
+                    Change Photo
+
+                  </div>
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    hidden
+                    onChange={handleImage}
+                  />
+
+                </label>
+
+              </>
+
+            )
+
+          }
+
         </div>
 
-        <p className="text-zinc-400 text-sm">
-          Upload Photo
-        </p>
+        {/* BUTTONS */}
+        <div className="
+          mt-10
+          space-y-4
+        ">
 
-      </div>
+          <motion.button
 
-      <input
-        type="file"
-        accept="image/*"
-        hidden
-        onChange={
-          handleImage
-        }
-      />
+            whileHover={{
+              scale: loading
+                ? 1
+                : 1.03,
+            }}
 
-    </motion.label>
+            whileTap={{
+              scale: loading
+                ? 1
+                : 0.97,
+            }}
 
-  )}
+            onClick={saveImage}
 
-  {image && (
-
-  <>
-
-    <input
-      type="range"
-      min={1}
-      max={3}
-      step={0.1}
-      value={zoom}
-      onChange={(e) =>
-        setZoom(
-          e.target.value
-        )
-      }
-      className="w-full"
-    />
-
-    <label className="block">
-
-      <div className="mt-4 w-full py-3 rounded-2xl bg-white/5 border border-white/10 text-zinc-300 cursor-pointer hover:bg-white/10 transition-all duration-300">
-        Change Photo
-      </div>
-
-      <input
-        type="file"
-        accept="image/*"
-        hidden
-        onChange={
-          handleImage
-        }
-      />
-
-    </label>
-
-  </>
-
-)}
-
-</div>
-
-        <div className="space-y-4">
-
-          <button
-            onClick={
-              saveImage
-            }
             disabled={loading}
-            className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 py-4 rounded-2xl font-bold hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,255,255,0.25)]"
+
+            className={`
+              w-full
+              py-5
+              rounded-[24px]
+
+              text-sm
+              tracking-[0.28em]
+              font-semibold
+
+              transition-all
+              duration-300
+
+              ${
+                loading
+
+                  ? "bg-zinc-700 opacity-70"
+
+                  : "bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-400 text-white shadow-[0_0_60px_rgba(168,85,247,0.35)] hover:shadow-[0_0_90px_rgba(168,85,247,0.5)]"
+              }
+            `}
           >
-            {loading
-              ? "SAVING..."
-              : "CONTINUE"}
-          </button>
+
+            {
+
+              loading
+                ? "SAVING..."
+                : "CONTINUE"
+
+            }
+
+          </motion.button>
 
           <button
+
             onClick={() =>
               setScreen(
                 "vibes"
               )
             }
-            className="w-full py-4 rounded-2xl font-semibold bg-white/5 border border-white/10 text-zinc-300 hover:bg-white/10 transition-all duration-300"
+
+            className="
+              w-full
+              py-4
+              rounded-[22px]
+
+              bg-white/[0.04]
+
+              border
+              border-white/10
+
+              text-zinc-300
+
+              hover:bg-white/[0.06]
+
+              transition-all
+              duration-300
+            "
           >
+
             Skip For Now
+
           </button>
 
         </div>
 
-      </motion.div>
+      </div>
 
-    </div>
-  );
+      {/* COPYRIGHT */}
+      <p className="
+        mt-8
+        text-xs
+        text-zinc-500
+        text-center
+        tracking-wide
+        leading-relaxed
+      ">
+
+        © 2026 VibeLink™ — Dhruv Dhanuka.
+
+      </p>
+
+    </motion.div>
+
+  </div>
+
+);
 }
