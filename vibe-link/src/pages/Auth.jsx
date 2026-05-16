@@ -37,8 +37,6 @@ export default function Auth({
 
   const [loading, setLoading] = useState(false);
 
-  const [rememberMe, setRememberMe] = useState(false);
-
   const [dob, setDob] = useState("");
 
   const [agreedAge, setAgreedAge] = useState(false);
@@ -178,21 +176,6 @@ export default function Auth({
       try {
 
         if (isLogin) {
-
-          if (rememberMe) {
-
-            localStorage.setItem(
-              "rememberMe",
-              "true"
-            );
-
-          } else {
-
-            localStorage.removeItem(
-              "rememberMe"
-            );
-
-          }
 
           await loginUser();
 
@@ -807,62 +790,7 @@ export default function Auth({
   )
 }
 
-          {/* LOGIN OPTIONS */}
-          {
-            isLogin && (
-
-              <div className="
-                flex
-                items-center
-                justify-between
-                text-sm
-                pt-1
-              ">
-
-                <label className="
-                  flex
-                  items-center
-                  gap-2
-                  text-zinc-400
-                ">
-
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={() =>
-                      setRememberMe(
-                        !rememberMe
-                      )
-                    }
-                  />
-
-                  Remember me
-
-                </label>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setScreen(
-                      "forgotPassword"
-                    )
-                  }
-                  className="
-                    text-cyan-400
-                    hover:text-cyan-300
-                    transition-all
-                    cursor-pointer
-                  "
-                >
-
-                  Forgot Password?
-
-                </button>
-
-              </div>
-
-            )
-          }
+          
 
           {/* SIGNUP OPTIONS */}
           {
