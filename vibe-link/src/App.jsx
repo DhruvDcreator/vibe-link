@@ -120,11 +120,13 @@ export default function App() {
     try {
 
       const usernameRef =
-        doc(
-          db,
-          "usernames",
-          username
-        );
+  doc(
+    db,
+    "usernames",
+    username
+      .trim()
+      .toLowerCase()
+  );
 
       const usernameSnap =
         await getDoc(
@@ -282,6 +284,8 @@ export default function App() {
   !appReady
 ) {
 
+  return (
+
     <div className="
   w-screen
   h-screen
@@ -324,6 +328,7 @@ export default function App() {
   />
 
 </div>
+  );
 
   }
 
