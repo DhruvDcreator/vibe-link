@@ -152,7 +152,7 @@ const [
       );
 
       setScreen(
-        "vibes"
+        "introSlides"
       );
 
     } catch (error) {
@@ -569,7 +569,7 @@ const [
 
             onClick={() =>
               setScreen(
-                "vibes"
+                "introSlides"
               )
             }
 

@@ -50,6 +50,8 @@ import emailjs from "@emailjs/browser";
 
 import welcomeLogo from "./assets/vllogo.png";
 
+import IntroSlides from "./pages/IntroSlides";
+
 export default function App() {
 
   const [initializing, setInitializing] =
@@ -828,6 +830,23 @@ if (
     );
 
   }
+
+  if (
+  screen ===
+  "introSlides"
+) {
+
+  return (
+
+    <IntroSlides
+      setScreen={
+        setScreen
+      }
+    />
+
+  );
+
+}
 
   if (
     screen ===
