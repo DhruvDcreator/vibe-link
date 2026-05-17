@@ -82,7 +82,7 @@ export default function Terms({
                 </p>
 
                 <p>
-                  Last Updated: May 15, 2026
+                  Last Updated: May 16, 2026
                 </p>
 
               </section>
