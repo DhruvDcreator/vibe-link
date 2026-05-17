@@ -78,7 +78,7 @@ export default function Privacy({
                 </h2>
 
                 <p>
-                  Effective Date: May 13, 2026
+                  Effective Date: May 17, 2026
                 </p>
 
                 <p>
