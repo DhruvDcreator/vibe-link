@@ -351,16 +351,26 @@ console.log(
         );
 
         await setDoc(
-          doc(
-            db,
-            "usernames",
-            username
-          ),
-          {
-            uid:
-              user.uid,
-          }
-        );
+
+  doc(
+    db,
+    "usernames",
+    username
+      .trim()
+      .toLowerCase()
+  ),
+
+  {
+
+    uid:
+      user.uid,
+
+    email:
+      email,
+
+  }
+
+);
 
         localStorage.removeItem(
           "pendingSignup"
