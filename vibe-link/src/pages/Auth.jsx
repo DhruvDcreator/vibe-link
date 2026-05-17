@@ -257,7 +257,12 @@ export default function Auth({
 
           }
 
-          await sendOtp();
+          localStorage.setItem(
+  "vibeLinkDOB",
+  dob
+);
+
+await sendOtp();
 
         }
 

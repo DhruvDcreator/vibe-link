@@ -52,6 +52,8 @@ import welcomeLogo from "./assets/vllogo.png";
 
 import IntroSlides from "./pages/IntroSlides";
 
+import Selector from "./pages/Selector";
+
 export default function App() {
 
   const [initializing, setInitializing] =
@@ -844,6 +846,23 @@ if (
   return (
 
     <IntroSlides
+      setScreen={
+        setScreen
+      }
+    />
+
+  );
+
+}
+
+if (
+  screen ===
+  "selector"
+) {
+
+  return (
+
+    <Selector
       setScreen={
         setScreen
       }
