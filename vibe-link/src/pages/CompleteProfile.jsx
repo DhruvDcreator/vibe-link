@@ -98,8 +98,8 @@ export default function CompleteProfile({
         );
 
         await emailjs.send(
-          "service_otz8q9a",
-          "template_y8t4pe2",
+          "service_6xy30ia",
+          "template_0dyw2wl",
           {
             to_email:
               email,
@@ -107,7 +107,7 @@ export default function CompleteProfile({
             otp:
               otp,
           },
-          "uYochmrCEWfNwQTMA"
+          "agiLAySvLuJA74eKO"
         );
 
         setScreen(
