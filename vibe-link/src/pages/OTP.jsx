@@ -248,7 +248,10 @@ export default function OTP({
               merge: true,
             }
           );
-
+console.log(
+  "EMAIL VALUE:",
+  email
+);
           await setDoc(
 
   doc(
