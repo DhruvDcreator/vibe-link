@@ -470,9 +470,9 @@ export default function App() {
     const response =
       await emailjs.send(
 
-        "service_otz8q9a",
+        "service_6xy30ia",
 
-        "template_y8t4pe2",
+        "template_0dyw2wl",
 
         {
 
@@ -484,7 +484,7 @@ export default function App() {
 
         },
 
-        "uYochmrCEWfNwQTMA"
+        "agiLAySvLuJA74eKO"
 
       );
 
