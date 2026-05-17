@@ -78,7 +78,7 @@ export default function Terms({
                 </h2>
 
                 <p>
-                  Effective Date: May 13, 2026
+                  Effective Date: May 15, 2026
                 </p>
 
                 <p>
