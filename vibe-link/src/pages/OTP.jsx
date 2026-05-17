@@ -395,21 +395,23 @@ console.log(
           setOtpLocked(false);
 
         if (
-          error.code ===
-          "auth/email-already-in-use"
-        ) {
 
-          alert(
-            "Email already exists"
-          );
+  error.code ===
+  "auth/email-already-in-use"
 
-          setScreen(
-            "login"
-          );
+) {
 
-          return;
+  alert(
+    "An account with this email already exists."
+  );
 
-        }
+  setScreen(
+    "auth"
+  );
+
+  return;
+
+}
 
         alert(
           error.message
@@ -485,8 +487,8 @@ console.log(
         );
 
         await emailjs.send(
-          "service_otz8q9a",
-          "template_y8t4pe2",
+          "service_6xy30ia",
+          "template_0dyw2wl",
           {
             to_email:
               email,
@@ -494,7 +496,7 @@ console.log(
             otp:
               newOtp,
           },
-          "uYochmrCEWfNwQTMA"
+          "agiLAySvLuJA74eKO"
         );
 
         setResendCount(

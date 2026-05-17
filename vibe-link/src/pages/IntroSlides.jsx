@@ -7,67 +7,76 @@ import {
   AnimatePresence,
 } from "framer-motion";
 
-import welcomeLogo from "../assets/vllogo.png";
+import slide1 from "../assets/onboarding/slide1.png";
+import slide2 from "../assets/onboarding/slide2.png";
+import slide3 from "../assets/onboarding/slide3.png";
+import slide4 from "../assets/onboarding/slide4.png";
+import slide5 from "../assets/onboarding/slide5.png";
 
 const slides = [
 
   {
 
+    image:
+      slide1,
+
     title:
       "Welcome to VibeLink",
 
     description:
-      "A new kind of social space built around identity, belonging, and real connection.",
-
-    visual: "logo",
+      "A universe built around connection, creativity, belonging, and the people who truly understand your energy.",
 
   },
 
   {
 
+    image:
+      slide2,
+
     title:
-      "Find People Who Feel Familiar",
+      "Real People. Real Vibes.",
 
     description:
-      "Connect through personality, energy, humor, interests, and shared worlds.",
-
-    visual: "energy",
+      "Meet people through personality, humor, interests, emotions, and shared worlds — not fake perfection.",
 
   },
 
   {
 
+    image:
+      slide3,
+
     title:
-      "Communities That Actually Feel Alive",
+      "Communities That Feel Alive",
 
     description:
-      "Join tribes filled with conversations, creativity, chaos, and culture.",
-
-    visual: "tribes",
+      "Join tribes filled with gaming, music, anime, creators, builders, conversations, chaos, and culture.",
 
   },
 
   {
 
+    image:
+      slide4,
+
     title:
-      "Express Yourself. Build Your Future.",
+      "Build Together.",
 
     description:
-      "From meaningful friendships to ambitious collaborations — VibeLink grows with you.",
-
-    visual: "duality",
+      "From friendships to ambitious dreams — VibeLink grows with your passions, ideas, and future.",
 
   },
 
   {
 
+    image:
+      slide5,
+
     title:
-      "Your World Starts Here",
+      "This Is Your Universe.",
 
     description:
-      "Step into the next generation of connection.",
-
-    visual: "final",
+      "Discover your people. Express yourself. Create your world.",
 
   },
 
@@ -115,444 +124,88 @@ export default function IntroSlides({
 
   };
 
-  const renderVisual =
-    () => {
-
-      const visual =
-        slides[current]
-          .visual;
-
-      if (
-        visual ===
-        "logo"
-      ) {
-
-        return (
-
-          <motion.div
-
-            animate={{
-              y: [0, -8, 0],
-            }}
-
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-
-            className="
-              relative
-              w-[230px]
-              h-[230px]
-              rounded-full
-              flex
-              items-center
-              justify-center
-              bg-gradient-to-br
-              from-cyan-500/10
-              to-purple-500/10
-              border
-              border-white/10
-              shadow-[0_0_70px_rgba(0,212,255,0.08)]
-            "
-          >
-
-            <div className="
-              absolute
-              inset-[-10px]
-              rounded-full
-              border
-              border-cyan-400/10
-            "></div>
-
-            <img
-              src={welcomeLogo}
-              alt="VibeLink"
-              className="
-                w-[140px]
-                object-contain
-                drop-shadow-[0_0_50px_rgba(168,85,247,0.2)]
-              "
-            />
-
-          </motion.div>
-
-        );
-
-      }
-
-      if (
-        visual ===
-        "energy"
-      ) {
-
-        return (
-
-          <div className="
-            relative
-            w-[240px]
-            h-[240px]
-            flex
-            items-center
-            justify-center
-          ">
-
-            <motion.div
-
-              animate={{
-                scale: [1, 1.06, 1],
-              }}
-
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-              }}
-
-              className="
-                absolute
-                w-[180px]
-                h-[180px]
-                rounded-full
-                bg-cyan-400/10
-                blur-[10px]
-              "
-            ></motion.div>
-
-            <motion.div
-
-              animate={{
-                scale: [1.08, 1, 1.08],
-              }}
-
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-              }}
-
-              className="
-                absolute
-                w-[120px]
-                h-[120px]
-                rounded-full
-                bg-purple-400/20
-                blur-[8px]
-              "
-            ></motion.div>
-
-            <div className="
-              absolute
-              w-[14px]
-              h-[14px]
-              rounded-full
-              bg-cyan-300
-              top-[35px]
-              left-[45px]
-            "></div>
-
-            <div className="
-              absolute
-              w-[10px]
-              h-[10px]
-              rounded-full
-              bg-pink-300
-              bottom-[40px]
-              right-[50px]
-            "></div>
-
-            <div className="
-              absolute
-              w-[8px]
-              h-[8px]
-              rounded-full
-              bg-purple-300
-              top-[55px]
-              right-[55px]
-            "></div>
-
-          </div>
-
-        );
-
-      }
-
-      if (
-        visual ===
-        "tribes"
-      ) {
-
-        return (
-
-          <div className="
-            relative
-            w-[240px]
-            h-[240px]
-            flex
-            items-center
-            justify-center
-          ">
-
-            <motion.div
-
-              animate={{
-                rotate: 360,
-              }}
-
-              transition={{
-                duration: 18,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-
-              className="
-                absolute
-                w-[200px]
-                h-[200px]
-                rounded-full
-                border
-                border-cyan-400/10
-              "
-            ></motion.div>
-
-            <motion.div
-
-              animate={{
-                rotate: -360,
-              }}
-
-              transition={{
-                duration: 24,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-
-              className="
-                absolute
-                w-[140px]
-                h-[140px]
-                rounded-full
-                border
-                border-purple-400/10
-              "
-            ></motion.div>
-
-            <div className="
-              w-[80px]
-              h-[80px]
-              rounded-full
-              bg-gradient-to-br
-              from-cyan-400/20
-              to-purple-500/20
-              border
-              border-white/10
-              backdrop-blur-xl
-            "></div>
-
-          </div>
-
-        );
-
-      }
-
-      if (
-        visual ===
-        "duality"
-      ) {
-
-        return (
-
-          <div className="
-            relative
-            w-[240px]
-            h-[240px]
-            flex
-            items-center
-            justify-center
-          ">
-
-            <motion.div
-
-              animate={{
-                x: [-10, 10, -10],
-              }}
-
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-              }}
-
-              className="
-                absolute
-                left-[35px]
-                w-[100px]
-                h-[180px]
-                rounded-[40px]
-                bg-cyan-400/10
-                border
-                border-cyan-300/10
-                backdrop-blur-xl
-              "
-            ></motion.div>
-
-            <motion.div
-
-              animate={{
-                x: [10, -10, 10],
-              }}
-
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-              }}
-
-              className="
-                absolute
-                right-[35px]
-                w-[100px]
-                h-[180px]
-                rounded-[40px]
-                bg-purple-400/10
-                border
-                border-purple-300/10
-                backdrop-blur-xl
-              "
-            ></motion.div>
-
-          </div>
-
-        );
-
-      }
-
-      return (
-
-        <motion.div
-
-          animate={{
-            scale: [1, 1.04, 1],
-          }}
-
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-          }}
-
-          className="
-            relative
-            w-[220px]
-            h-[220px]
-            rounded-full
-            bg-gradient-to-br
-            from-cyan-500/10
-            to-purple-500/10
-            border
-            border-white/10
-            flex
-            items-center
-            justify-center
-          "
-        >
-
-          <div className="
-            text-6xl
-            font-black
-            bg-gradient-to-r
-            from-cyan-300
-            via-purple-300
-            to-pink-300
-            text-transparent
-            bg-clip-text
-          ">
-
-            VL
-
-          </div>
-
-        </motion.div>
-
-      );
-
-    };
-
   return (
 
     <div className="
       relative
       min-h-screen
+      bg-black
       overflow-hidden
-      bg-[#03040A]
+      text-white
       flex
       items-center
       justify-center
-      text-white
-      px-6
-      py-10
+      px-5
+      py-8
     ">
 
-      {/* background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.05),transparent_45%)]"></div>
-
-      {/* glows */}
-      <div className="
-        absolute
-        top-[8%]
-        left-[5%]
-        w-[320px]
-        h-[320px]
-        bg-cyan-500/10
-        rounded-full
-        blur-[120px]
-      "></div>
-
-      <div className="
-        absolute
-        bottom-[8%]
-        right-[5%]
-        w-[320px]
-        h-[320px]
-        bg-purple-500/10
-        rounded-full
-        blur-[120px]
-      "></div>
-
-      {/* stars */}
+      {/* background glow */}
       <div className="
         absolute
         inset-0
-        pointer-events-none
-        opacity-70
-      ">
 
-        <div className="absolute top-[15%] left-[20%] w-[2px] h-[2px] bg-white rounded-full animate-pulse"></div>
+        bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.14),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.16),transparent_32%),radial-gradient(circle_at_center,rgba(255,0,128,0.05),transparent_45%)]
+      "></div>
 
-        <div className="absolute top-[25%] right-[18%] w-[3px] h-[3px] bg-cyan-300 rounded-full animate-pulse"></div>
+      {/* side glows */}
+      <div className="
+        absolute
+        top-[5%]
+        left-[-80px]
 
-        <div className="absolute bottom-[20%] left-[15%] w-[2px] h-[2px] bg-purple-300 rounded-full animate-pulse"></div>
+        w-[240px]
+        h-[240px]
 
-      </div>
+        rounded-full
+
+        bg-cyan-500/10
+
+        blur-[120px]
+      "></div>
+
+      <div className="
+        absolute
+        bottom-[5%]
+        right-[-80px]
+
+        w-[240px]
+        h-[240px]
+
+        rounded-full
+
+        bg-purple-500/10
+
+        blur-[120px]
+      "></div>
 
       {/* main */}
       <div className="
         relative
         z-10
+
         w-full
         max-w-[430px]
       ">
 
         {/* card */}
         <div className="
+          relative
+
+          overflow-hidden
+
+          rounded-[38px]
+
           bg-white/[0.035]
+
           border
           border-white/10
-          rounded-[36px]
-          px-7
-          pt-10
-          pb-8
+
           backdrop-blur-3xl
-          shadow-[0_0_80px_rgba(0,212,255,0.06)]
-          overflow-hidden
-          relative
-          min-h-[620px]
+
+          shadow-[0_0_80px_rgba(0,0,0,0.4)]
+
+          min-h-[720px]
+
           flex
           flex-col
           justify-between
@@ -561,21 +214,25 @@ export default function IntroSlides({
           <AnimatePresence mode="wait">
 
             <motion.div
+
               key={current}
 
               initial={{
                 opacity: 0,
+                scale: 0.98,
                 y: 30,
               }}
 
               animate={{
                 opacity: 1,
+                scale: 1,
                 y: 0,
               }}
 
               exit={{
                 opacity: 0,
-                y: -30,
+                scale: 0.98,
+                y: -20,
               }}
 
               transition={{
@@ -585,38 +242,119 @@ export default function IntroSlides({
               className="
                 flex
                 flex-col
-                items-center
-                text-center
               "
             >
 
-              {renderVisual()}
+              {/* image */}
+              <div className="
+                relative
+                w-full
+                h-[430px]
+                overflow-hidden
+              ">
 
-              <div className="mt-14">
+                <img
+                  src={
+                    slides[current]
+                      .image
+                  }
 
-                <h1 className="
-                  text-[38px]
-                  font-black
-                  leading-[1.08]
-                  tracking-[-0.03em]
-                ">
+                  alt="slide"
 
-                  {slides[current].title}
+                  className="
+                    w-full
+                    h-full
+                    object-cover
+                  "
+                />
 
-                </h1>
+                {/* overlay */}
+                <div className="
+                  absolute
+                  inset-0
 
-                <p className="
-                  mt-5
-                  text-zinc-400
-                  text-[15px]
-                  leading-relaxed
-                  max-w-[300px]
-                  mx-auto
-                ">
+                  bg-gradient-to-t
+                  from-[#03040A]
+                  via-black/10
+                  to-transparent
+                "></div>
 
-                  {slides[current].description}
+              </div>
 
-                </p>
+              {/* text */}
+              <div className="
+                px-7
+                pt-6
+                pb-2
+                text-center
+              ">
+
+                <motion.h1
+
+                  initial={{
+                    opacity: 0,
+                    y: 10,
+                  }}
+
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+
+                  transition={{
+                    delay: 0.15,
+                  }}
+
+                  className="
+                    text-[40px]
+                    leading-[1.02]
+                    tracking-[-0.05em]
+                    font-black
+                  "
+                >
+
+                  {
+                    slides[current]
+                      .title
+                  }
+
+                </motion.h1>
+
+                <motion.p
+
+                  initial={{
+                    opacity: 0,
+                    y: 10,
+                  }}
+
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+
+                  transition={{
+                    delay: 0.25,
+                  }}
+
+                  className="
+                    mt-5
+
+                    text-zinc-400
+
+                    text-[15px]
+                    leading-relaxed
+
+                    max-w-[310px]
+                    mx-auto
+                  "
+                >
+
+                  {
+                    slides[current]
+                      .description
+                  }
+
+                </motion.p>
 
               </div>
 
@@ -625,44 +363,57 @@ export default function IntroSlides({
           </AnimatePresence>
 
           {/* bottom */}
-          <div className="mt-12">
+          <div className="
+            px-7
+            pb-7
+            pt-5
+          ">
 
             {/* dots */}
             <div className="
               flex
-              items-center
               justify-center
+              items-center
               gap-3
-              mb-10
+              mb-9
             ">
 
-              {slides.map((_, index) => (
+              {
+                slides.map(
+                  (_, index) => (
 
-                <motion.div
-                  key={index}
+                    <motion.div
 
-                  animate={{
-                    width:
-                      current === index
-                        ? 30
-                        : 8,
-                  }}
+                      key={index}
 
-                  className={`
-                    h-[8px]
-                    rounded-full
-                    transition-all
-                    duration-300
+                      animate={{
 
-                    ${
-                      current === index
-                        ? "bg-cyan-300"
-                        : "bg-white/15"
-                    }
-                  `}
-                />
+                        width:
+                          current === index
+                            ? 30
+                            : 8,
 
-              ))}
+                      }}
+
+                      className={`
+                        h-[8px]
+                        rounded-full
+                        transition-all
+                        duration-300
+
+                        ${
+                          current === index
+
+                            ? "bg-cyan-300"
+
+                            : "bg-white/15"
+                        }
+                      `}
+                    />
+
+                  )
+                )
+              }
 
             </div>
 
@@ -674,18 +425,27 @@ export default function IntroSlides({
             ">
 
               <button
-                onClick={prevSlide}
-                disabled={current === 0}
+
+                onClick={
+                  prevSlide
+                }
+
+                disabled={
+                  current === 0
+                }
+
                 className={`
                   text-sm
-                  tracking-[0.25em]
+
+                  tracking-[0.22em]
+
                   transition-all
                   duration-300
 
                   ${
                     current === 0
 
-                      ? "text-zinc-700 cursor-default"
+                      ? "text-zinc-700"
 
                       : "text-zinc-400 hover:text-white"
                   }
@@ -706,11 +466,14 @@ export default function IntroSlides({
                   scale: 0.97,
                 }}
 
-                onClick={nextSlide}
+                onClick={
+                  nextSlide
+                }
 
                 className="
-                  px-7
+                  px-8
                   py-4
+
                   rounded-[22px]
 
                   bg-gradient-to-r
@@ -720,8 +483,9 @@ export default function IntroSlides({
 
                   text-white
                   text-sm
-                  tracking-[0.22em]
                   font-semibold
+
+                  tracking-[0.22em]
 
                   shadow-[0_0_50px_rgba(168,85,247,0.28)]
                 "
@@ -746,10 +510,13 @@ export default function IntroSlides({
 
         {/* copyright */}
         <p className="
-          mt-8
-          text-xs
-          text-zinc-500
+          mt-7
+
           text-center
+
+          text-xs
+          text-zinc-600
+
           tracking-wide
           leading-relaxed
         ">
