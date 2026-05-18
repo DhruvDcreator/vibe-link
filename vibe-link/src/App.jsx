@@ -54,6 +54,8 @@ import IntroSlides from "./pages/IntroSlides";
 
 import Selector from "./pages/Selector";
 
+import VibeIntro from "./screens/VibeIntro";
+
 export default function App() {
 
   const [initializing, setInitializing] =
@@ -866,6 +868,21 @@ if (
       setScreen={
         setScreen
       }
+    />
+
+  );
+
+}
+
+if (
+  screen ===
+  "vibeIntro"
+) {
+
+  return (
+
+    <VibeIntro
+      setScreen={setScreen}
     />
 
   );
