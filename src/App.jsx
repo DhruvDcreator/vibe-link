@@ -54,7 +54,7 @@ import IntroSlides from "./pages/IntroSlides";
 
 import Selector from "./pages/Selector";
 
-import VibeIntro from "./screens/VibeIntro";
+import VibeIntro from "./pages/VibeIntro";
 
 export default function App() {
 
