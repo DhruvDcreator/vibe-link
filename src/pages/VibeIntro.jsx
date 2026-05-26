@@ -34,7 +34,7 @@ export default function VibeIntro({
         absolute
         inset-0
 
-        bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.14),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.06),transparent_45%)]
+        bg-[#03040A]
       "></div>
 
       {/* GLOW 1 */}
@@ -50,7 +50,7 @@ export default function VibeIntro({
 
         bg-cyan-500/10
 
-        blur-[120px]
+        blur-3xl
       "></div>
 
       {/* GLOW 2 */}
@@ -66,7 +66,7 @@ export default function VibeIntro({
 
         bg-purple-500/10
 
-        blur-[120px]
+        blur-3xl
       "></div>
 
       {/* FLOATING PARTICLES */}
@@ -173,7 +173,7 @@ export default function VibeIntro({
 
           bg-white/[0.04]
 
-          backdrop-blur-3xl
+          backdrop-blur-xl
 
           p-8
 
@@ -193,7 +193,7 @@ export default function VibeIntro({
 
             bg-cyan-400/10
 
-            blur-[90px]
+            blur-2xl
           "></div>
 
           {/* LOGO */}

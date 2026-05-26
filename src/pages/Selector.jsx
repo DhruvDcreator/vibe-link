@@ -118,7 +118,7 @@ export default function Selector({
         absolute
         inset-0
 
-        bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.14),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.05),transparent_45%)]
+        bg-[#03040A]
       "></div>
 
       {/* GLOWS */}
@@ -134,7 +134,7 @@ export default function Selector({
 
         bg-cyan-500/10
 
-        blur-[120px]
+        blur-3xl
       "></div>
 
       <div className="
@@ -149,7 +149,7 @@ export default function Selector({
 
         bg-purple-500/10
 
-        blur-[120px]
+        blur-3xl
       "></div>
 
       {/* MAIN */}
@@ -334,7 +334,7 @@ export default function Selector({
 
               bg-[linear-gradient(145deg,rgba(0,212,255,0.10),rgba(168,85,247,0.10),rgba(255,0,128,0.08))]
 
-              backdrop-blur-3xl
+              backdrop-blur-xl
 
               p-7
 
@@ -485,7 +485,7 @@ export default function Selector({
 
               border
 
-              backdrop-blur-3xl
+              backdrop-blur-xl
 
               p-7
 
