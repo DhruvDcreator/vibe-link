@@ -27,279 +27,618 @@ import {
   Trophy,
   Brain,
   Shirt,
-  Ghost,
   Laugh,
+  Ghost,
+  Flame,
+  Stars,
+  Zap,
+  Headphones,
+  Clapperboard,
+  Laptop,
+  Mountain,
+  Sun,
+  CloudMoon,
   Check,
 } from "lucide-react";
 
 import { motion } from "framer-motion";
 
-const vibes = [
+const sections = [
+
   {
-    name: "Music",
-    icon: Music,
+    title: "Your Core Vibe",
+    subtitle: "What defines your personality?",
+    limit: 3,
+
+    options: [
+
+      {
+        name: "Chaotic",
+        icon: Zap,
+      },
+
+      {
+        name: "Deep",
+        icon: Brain,
+      },
+
+      {
+        name: "Funny",
+        icon: Laugh,
+      },
+
+      {
+        name: "Chill",
+        icon: CloudMoon,
+      },
+
+      {
+        name: "Creative",
+        icon: Palette,
+      },
+
+      {
+        name: "Romantic",
+        icon: Heart,
+      },
+
+      {
+        name: "Ambitious",
+        icon: Trophy,
+      },
+
+      {
+        name: "Night Owl",
+        icon: Moon,
+      },
+
+    ],
   },
+
   {
-    name: "Gaming",
-    icon: Gamepad2,
+    title: "Your Interests",
+    subtitle: "Choose what you genuinely enjoy",
+    limit: 6,
+
+    options: [
+
+      {
+        name: "Music",
+        icon: Music,
+      },
+
+      {
+        name: "Gaming",
+        icon: Gamepad2,
+      },
+
+      {
+        name: "Coding",
+        icon: Code2,
+      },
+
+      {
+        name: "Movies",
+        icon: Film,
+      },
+
+      {
+        name: "Travel",
+        icon: Plane,
+      },
+
+      {
+        name: "Photography",
+        icon: Camera,
+      },
+
+      {
+        name: "Reading",
+        icon: BookOpen,
+      },
+
+      {
+        name: "Anime",
+        icon: Sparkles,
+      },
+
+      {
+        name: "Sports",
+        icon: Dumbbell,
+      },
+
+      {
+        name: "Fashion",
+        icon: Shirt,
+      },
+
+      {
+        name: "Food",
+        icon: Pizza,
+      },
+
+      {
+        name: "Startups",
+        icon: Laptop,
+      },
+
+    ],
   },
+
   {
-    name: "Fitness",
-    icon: Dumbbell,
+    title: "Social Energy",
+    subtitle: "How do you connect with people?",
+    limit: 2,
+
+    options: [
+
+      {
+        name: "Introvert",
+        icon: Headphones,
+      },
+
+      {
+        name: "Extrovert",
+        icon: Flame,
+      },
+
+      {
+        name: "Yapper",
+        icon: Mic2,
+      },
+
+      {
+        name: "Listener",
+        icon: Coffee,
+      },
+
+      {
+        name: "Overthinker",
+        icon: Brain,
+      },
+
+      {
+        name: "Observer",
+        icon: Stars,
+      },
+
+    ],
   },
+
   {
-    name: "Photography",
-    icon: Camera,
+    title: "Lifestyle",
+    subtitle: "Your everyday energy",
+    limit: 4,
+
+    options: [
+
+      {
+        name: "Gym",
+        icon: Dumbbell,
+      },
+
+      {
+        name: "Coffee Lover",
+        icon: Coffee,
+      },
+
+      {
+        name: "Late Nights",
+        icon: Moon,
+      },
+
+      {
+        name: "Travel Freak",
+        icon: Mountain,
+      },
+
+      {
+        name: "Aesthetic",
+        icon: Sparkles,
+      },
+
+      {
+        name: "Minimal",
+        icon: Sun,
+      },
+
+      {
+        name: "Party Person",
+        icon: Flame,
+      },
+
+      {
+        name: "Calm Soul",
+        icon: CloudMoon,
+      },
+
+    ],
   },
+
   {
-    name: "Travel",
-    icon: Plane,
+    title: "Entertainment",
+    subtitle: "What keeps you entertained?",
+    limit: 4,
+
+    options: [
+
+      {
+        name: "Netflix",
+        icon: Clapperboard,
+      },
+
+      {
+        name: "Dark Humor",
+        icon: Ghost,
+      },
+
+      {
+        name: "Memes",
+        icon: Laugh,
+      },
+
+      {
+        name: "Podcasts",
+        icon: Headphones,
+      },
+
+      {
+        name: "Concerts",
+        icon: Music,
+      },
+
+      {
+        name: "Football",
+        icon: Trophy,
+      },
+
+      {
+        name: "Singing",
+        icon: Mic2,
+      },
+
+      {
+        name: "Art",
+        icon: Palette,
+      },
+
+    ],
   },
-  {
-    name: "Movies",
-    icon: Film,
-  },
-  {
-    name: "Dating",
-    icon: Heart,
-  },
-  {
-    name: "Reading",
-    icon: BookOpen,
-  },
-  {
-    name: "Singing",
-    icon: Mic2,
-  },
-  {
-    name: "Coding",
-    icon: Code2,
-  },
-  {
-    name: "Food",
-    icon: Pizza,
-  },
-  {
-    name: "Aesthetic",
-    icon: Sparkles,
-  },
-  {
-    name: "Night Owl",
-    icon: Moon,
-  },
-  {
-    name: "Coffee",
-    icon: Coffee,
-  },
-  {
-    name: "Art",
-    icon: Palette,
-  },
-  {
-    name: "Sports",
-    icon: Trophy,
-  },
-  {
-    name: "Deep Talks",
-    icon: Brain,
-  },
-  {
-    name: "Fashion",
-    icon: Shirt,
-  },
-  {
-    name: "Memes",
-    icon: Laugh,
-  },
-  {
-    name: "Dark Humor",
-    icon: Ghost,
-  },
+
 ];
 
 export default function Vibes({
 
   setScreen,
 
-  selectedVibes,
-
-  setSelectedVibes,
-
 }) {
 
-  const toggleVibe =
-    (vibe) => {
+  const selected = JSON.parse(
+    localStorage.getItem("vibelink-vibes") || "{}"
+  );
 
-      if (
-        selectedVibes.includes(
-          vibe
-        )
-      ) {
+  const toggleOption = (
+    sectionTitle,
+    optionName,
+    limit
+  ) => {
 
-        setSelectedVibes(
-          selectedVibes.filter(
-            (v) =>
-              v !== vibe
-          )
+    const current =
+      selected[sectionTitle] || [];
+
+    let updated;
+
+    if (
+      current.includes(optionName)
+    ) {
+
+      updated =
+        current.filter(
+          (item) =>
+            item !== optionName
         );
 
-      } else {
+    } else {
 
-        if (
-          selectedVibes.length >= 7
-        ) {
+      if (
+        current.length >= limit
+      ) {
 
-          return;
-
-        }
-
-        setSelectedVibes([
-          ...selectedVibes,
-          vibe,
-        ]);
+        return;
 
       }
 
-    };
+      updated = [
+        ...current,
+        optionName,
+      ];
+
+    }
+
+    selected[sectionTitle] =
+      updated;
+
+    localStorage.setItem(
+      "vibelink-vibes",
+      JSON.stringify(selected)
+    );
+
+    window.location.reload();
+
+  };
+
+  const canContinue =
+    sections.every(
+
+      (section) =>
+
+        (
+          selected[
+            section.title
+          ] || []
+        ).length >= 1
+
+    );
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative px-6 py-10">
+
+    <div className="min-h-screen bg-[#03040A] text-white overflow-hidden relative">
 
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
 
-      <div className="absolute w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[160px] top-[-180px] left-[-150px]"></div>
+      <div className="absolute top-0 left-0 w-[250px] h-[250px] bg-cyan-500/20 rounded-full blur-3xl"></div>
 
-      <div className="absolute w-[500px] h-[500px] bg-purple-500/20 rounded-full blur-[160px] bottom-[-180px] right-[-150px]"></div>
+      <div className="absolute bottom-0 right-0 w-[250px] h-[250px] bg-purple-500/20 rounded-full blur-3xl"></div>
 
-      <motion.div
-        initial={{
-          opacity: 0,
-          y: 40,
-        }}
-        animate={{
-          opacity: 1,
-          y: 0,
-        }}
-        transition={{
-          duration: 0.8,
-        }}
-        className="relative z-10 max-w-6xl mx-auto"
-      >
-
-        <h1 className="text-6xl font-black text-center bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
-          PICK YOUR VIBES
-        </h1>
-
-        <p className="text-center text-zinc-400 mt-4 text-lg">
-          Select what matches your personality
-        </p>
-
-        <p className="text-center text-cyan-400 mt-5 font-bold text-xl">
-          {selectedVibes.length}/7 vibes selected
-        </p>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-14">
-
-          {vibes.map((vibe,
-            index) => {
-
-            const Icon =
-              vibe.icon;
-
-            const isSelected =
-              selectedVibes.includes(
-                vibe.name
-              );
-
-            return (
-              <motion.button
-                key={index}
-                whileHover={{
-                  y: -8,
-                  scale: 1.03,
-                }}
-                whileTap={{
-                  scale: 0.96,
-                }}
-                onClick={() =>
-                  toggleVibe(
-                    vibe.name
-                  )
-                }
-                className={`relative overflow-hidden rounded-[30px] border p-6 flex flex-col items-center justify-center gap-4 transition-all duration-300 backdrop-blur-xl min-h-[170px]
-
-                ${
-                  isSelected
-                    ? "bg-gradient-to-br from-cyan-500/30 to-purple-500/30 border-cyan-400 shadow-[0_0_40px_rgba(0,255,255,0.25)]"
-                    : "bg-white/5 border-white/10 hover:border-cyan-400/50"
-                }
-                `}
-              >
-
-                <div
-                  className={`absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300
-
-                  ${
-                    isSelected
-                      ? "bg-green-400 text-black scale-100"
-                      : "bg-white/10 scale-0"
-                  }
-                  `}
-                >
-                  <Check
-                    size={18}
-                  />
-                </div>
-
-                <div
-                  className={`p-5 rounded-2xl transition-all duration-300
-
-                  ${
-                    isSelected
-                      ? "bg-cyan-400/20"
-                      : "bg-white/5"
-                  }
-                  `}
-                >
-                  <Icon
-                    size={40}
-                    className={
-                      isSelected
-                        ? "text-cyan-300"
-                        : "text-white"
-                    }
-                  />
-                </div>
-
-                <h2 className="text-lg font-bold text-center">
-                  {vibe.name}
-                </h2>
-
-              </motion.button>
-            );
-          })}
-
-        </div>
+      <div className="relative z-10 px-5 md:px-10 py-12 max-w-7xl mx-auto">
 
         <motion.div
+
           initial={{
             opacity: 0,
-            y: 20,
+            y: 30,
           }}
+
           animate={{
             opacity: 1,
             y: 0,
           }}
+
+          transition={{
+            duration: 0.8,
+          }}
+
+        >
+
+          <h1 className="text-4xl md:text-6xl font-black text-center bg-gradient-to-r from-cyan-400 to-purple-500 text-transparent bg-clip-text">
+
+            BUILD YOUR VIBE
+
+          </h1>
+
+          <p className="text-center text-zinc-400 mt-5 text-sm md:text-lg max-w-2xl mx-auto leading-relaxed">
+
+            Your vibe shapes the people, tribes, and conversations you’ll discover on VibeLink.
+
+          </p>
+
+        </motion.div>
+
+        <div className="mt-16 space-y-16">
+
+          {sections.map(
+            (
+              section,
+              sectionIndex
+            ) => {
+
+              const selectedItems =
+                selected[
+                  section.title
+                ] || [];
+
+              return (
+
+                <motion.div
+
+                  key={sectionIndex}
+
+                  initial={{
+                    opacity: 0,
+                    y: 40,
+                  }}
+
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+
+                  transition={{
+                    delay:
+                      sectionIndex *
+                      0.1,
+                  }}
+
+                >
+
+                  <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-8">
+
+                    <div>
+
+                      <h2 className="text-2xl md:text-3xl font-black">
+
+                        {section.title}
+
+                      </h2>
+
+                      <p className="text-zinc-400 mt-2">
+
+                        {section.subtitle}
+
+                      </p>
+
+                    </div>
+
+                    <div className="text-cyan-400 font-bold text-sm md:text-base">
+
+                      {selectedItems.length}/{section.limit} selected
+
+                    </div>
+
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+
+                    {section.options.map(
+                      (
+                        option,
+                        index
+                      ) => {
+
+                        const Icon =
+                          option.icon;
+
+                        const isSelected =
+                          selectedItems.includes(
+                            option.name
+                          );
+
+                        return (
+
+                          <motion.button
+
+                            key={index}
+
+                            whileHover={{
+                              y: -5,
+                              scale: 1.02,
+                            }}
+
+                            whileTap={{
+                              scale: 0.97,
+                            }}
+
+                            onClick={() =>
+                              toggleOption(
+                                section.title,
+                                option.name,
+                                section.limit
+                              )
+                            }
+
+                            className={`relative overflow-hidden rounded-[28px] border p-5 min-h-[150px] md:min-h-[170px] flex flex-col items-center justify-center gap-4 transition-all duration-300 backdrop-blur-xl
+
+                            ${
+                              isSelected
+
+                                ? "bg-gradient-to-br from-cyan-500/30 to-purple-500/30 border-cyan-400 shadow-[0_0_35px_rgba(0,255,255,0.18)]"
+
+                                : "bg-white/5 border-white/10 hover:border-cyan-400/40"
+                            }
+                            `}
+
+                          >
+
+                            <div
+
+                              className={`absolute top-4 right-4 w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300
+
+                              ${
+                                isSelected
+
+                                  ? "bg-green-400 text-black scale-100"
+
+                                  : "bg-white/10 scale-0"
+                              }
+                              `}
+
+                            >
+
+                              <Check
+                                size={15}
+                              />
+
+                            </div>
+
+                            <div
+
+                              className={`p-4 rounded-2xl transition-all duration-300
+
+                              ${
+                                isSelected
+
+                                  ? "bg-cyan-400/20"
+
+                                  : "bg-white/5"
+                              }
+                              `}
+
+                            >
+
+                              <Icon
+
+                                size={32}
+
+                                className={
+                                  isSelected
+
+                                    ? "text-cyan-300"
+
+                                    : "text-zinc-200"
+                                }
+
+                              />
+
+                            </div>
+
+                            <h3 className="text-center font-bold text-sm md:text-base">
+
+                              {option.name}
+
+                            </h3>
+
+                          </motion.button>
+
+                        );
+
+                      }
+                    )}
+
+                  </div>
+
+                </motion.div>
+
+              );
+
+            }
+          )}
+
+        </div>
+
+        <motion.div
+
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+
           transition={{
             delay: 0.5,
           }}
-          className="flex justify-center mt-14"
+
+          className="flex justify-center mt-20"
+
         >
 
           <button
-            disabled={
-              selectedVibes.length === 0
-            }
+
+            disabled={!canContinue}
+
             onClick={async () => {
 
               try {
@@ -318,21 +657,23 @@ export default function Vibes({
                 }
 
                 await setDoc(
-  doc(
-    db,
-    "users",
-    user.uid
-  ),
 
-  {
-    vibes:
-      selectedVibes,
-  },
+                  doc(
+                    db,
+                    "users",
+                    user.uid
+                  ),
 
-  {
-    merge: true,
-  }
-);
+                  {
+                    vibes:
+                      selected,
+                  },
+
+                  {
+                    merge: true,
+                  }
+
+                );
 
                 setScreen(
                   "home"
@@ -351,22 +692,30 @@ export default function Vibes({
               }
 
             }}
-            className={`px-14 py-5 rounded-3xl text-white font-black text-xl transition-all duration-300
+
+            className={`px-12 py-5 rounded-3xl text-white font-black text-lg md:text-xl transition-all duration-300
 
             ${
-              selectedVibes.length > 0
-                ? "bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 shadow-[0_0_50px_rgba(0,255,255,0.3)]"
+              canContinue
+
+                ? "bg-gradient-to-r from-cyan-500 to-purple-600 hover:scale-105 shadow-[0_0_40px_rgba(0,255,255,0.25)]"
+
                 : "bg-zinc-700 cursor-not-allowed"
             }
             `}
+
           >
-            NEXT →
+
+            ENTER VIBE →
+
           </button>
 
         </motion.div>
 
-      </motion.div>
+      </div>
 
     </div>
+
   );
+
 }
