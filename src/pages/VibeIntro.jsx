@@ -428,7 +428,7 @@ export default function VibeIntro({
 
             onClick={() =>
               setScreen(
-                "vibeSelection"
+                "vibes"
               )
             }
 
