@@ -911,29 +911,21 @@ if (
   }
 
   if (
-    screen ===
-    "vibes"
-  ) {
+  screen ===
+  "vibes"
+) {
 
-    return (
+  return (
 
-      <Vibes
-        setScreen={
-          setScreen
-        }
+    <Vibes
+      setScreen={
+        setScreen
+      }
+    />
 
-        selectedVibes={
-          selectedVibes
-        }
+  );
 
-        setSelectedVibes={
-          setSelectedVibes
-        }
-      />
-
-    );
-
-  }
+}
 
   if (
     screen ===
