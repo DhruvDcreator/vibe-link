@@ -313,9 +313,19 @@ export default function Vibes({
 
 }) {
 
-  const selected = JSON.parse(
-    localStorage.getItem("vibelink-vibes") || "{}"
-  );
+  let selected = {};
+
+try {
+
+  selected = JSON.parse(
+    localStorage.getItem("vibelink-vibes")
+  ) || {};
+
+} catch {
+
+  selected = {};
+
+}
 
   const toggleOption = (
     sectionTitle,
