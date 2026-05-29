@@ -15,70 +15,60 @@ import slide5 from "../assets/onboarding/slide5.png";
 
 const slides = [
 
-  {
+{
+image: slide1,
 
-    image:
-      slide1,
+title:
+  "Your Vibe.\nYour Tribe.",
 
-    title:
-      "Welcome to VibeLink",
+description:
+  "The people around you shape your world. Find the ones who feel right.",
 
-    description:
-      "A universe built around connection, creativity, belonging, and the people who truly understand your energy.",
+},
 
-  },
+{
+image: slide2,
 
-  {
+title:
+  "Less Scrolling.\nMore Connecting.",
 
-    image:
-      slide2,
+description:
+  "Not followers. Not numbers. Just real people, real conversations, and shared energy.",
 
-    title:
-      "Real People. Real Vibes.",
+},
 
-    description:
-      "Meet people through personality, humor, interests, emotions, and shared worlds — not fake perfection.",
+{
+image: slide3,
 
-  },
+title:
+  "Built Around\nWho You Are.",
 
-  {
+description:
+  "Your personality, interests, and vibe matter. Discover people who genuinely connect with who you are.",
 
-    image:
-      slide3,
+},
 
-    title:
-      "Communities That Feel Alive",
+{
+image: slide4,
 
-    description:
-      "Join tribes filled with gaming, music, anime, creators, builders, conversations, chaos, and culture.",
+title:
+  "Find People\nWho Get You.",
 
-  },
+description:
+  "From movie lovers and music addicts to dreamers, creators, and late-night thinkers — every vibe belongs here.",
 
-  {
+},
 
-    image:
-      slide4,
+{
+image: slide5,
 
-    title:
-      "Build Together.",
+title:
+  "Welcome To\nVibeLink.",
 
-    description:
-      "From friendships to ambitious dreams — VibeLink grows with your passions, ideas, and future.",
+description:
+  "Discover your people. Build your tribe.",
 
-  },
-
-  {
-
-    image:
-      slide5,
-
-    title:
-      "This Is Your Universe.",
-
-    description:
-      "Discover your people. Express yourself. Create your world.",
-
-  },
+},
 
 ];
 
@@ -184,7 +174,7 @@ export default function IntroSlides({
         z-10
 
         w-full
-        max-w-[430px]
+        max-w-[460px]
       ">
 
         {/* card */}
@@ -306,11 +296,14 @@ export default function IntroSlides({
                   }}
 
                   className="
-                    text-[40px]
-                    leading-[1.02]
-                    tracking-[-0.05em]
-                    font-black
-                  "
+text-[44px]
+md:text-[56px]
+leading-[0.95]
+tracking-[-0.08em]
+font-black
+whitespace-pre-line
+"
+
                 >
 
                   {
@@ -495,7 +488,7 @@ export default function IntroSlides({
                   current ===
                   slides.length - 1
 
-                    ? "ENTER"
+                    ? "GET STARTED"
 
                     : "NEXT"
                 }

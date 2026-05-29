@@ -373,7 +373,7 @@ try {
       JSON.stringify(selected)
     );
 
-    window.location.reload();
+    
 
   };
 

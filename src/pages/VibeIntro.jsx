@@ -156,7 +156,7 @@ export default function VibeIntro({
           z-10
 
           w-full
-          max-w-[430px]
+          max-w-[460px]
         "
       >
 
@@ -244,7 +244,8 @@ export default function VibeIntro({
           ">
 
             <h1 className="
-              text-[52px]
+              text-[58px]
+              md:text-[68px]
 
               font-black
 
@@ -257,7 +258,7 @@ export default function VibeIntro({
 
               <br />
 
-              People
+              Tribe
 
             </h1>
 
@@ -280,10 +281,12 @@ export default function VibeIntro({
               mx-auto
             ">
 
-              Discover tribes,
-              friendships, conversations,
-              and communities built around
-              shared energy and identity.
+              Some people instantly understand
+              your humour, your energy, and the
+              way you see the world.
+
+              Vibe helps you find them.
+
 
             </p>
 
@@ -327,9 +330,10 @@ export default function VibeIntro({
                 leading-relaxed
               ">
 
-                Meet people who
-                genuinely match your
-                humor, energy, and interests.
+                Meet people who genuinely connect
+                with your personality, interests,
+                and vibe.
+
 
               </p>
 
@@ -366,10 +370,10 @@ export default function VibeIntro({
                 leading-relaxed
               ">
 
-                Join communities
-                that feel alive,
-                chaotic, creative,
-                and real.
+                Join communities built around
+                shared passions, conversations,
+                and experiences.
+
 
               </p>
 
@@ -406,8 +410,10 @@ export default function VibeIntro({
                 leading-relaxed
               ">
 
-                Human energy over
-                influencer perfection.
+                Less pressure.
+                Less pretending.
+
+                More authentic connections.
 
               </p>
 
@@ -457,7 +463,7 @@ export default function VibeIntro({
             "
           >
 
-            CONTINUE
+            FIND MY TRIBE
 
           </motion.button>
 

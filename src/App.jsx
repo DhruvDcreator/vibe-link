@@ -201,51 +201,23 @@ export default function App() {
   !pendingSignup
 ) {
 
-  requestAnimationFrame(() => {
+  setScreen("home");
 
-  setScreen(
-    "home"
-  );
+setAuthChecked(true);
 
-  setTimeout(() => {
-
-    setAuthChecked(
-      true
-    );
-
-    setAppReady(
-      true
-    );
-
-  }, 0);
-
-});
+setAppReady(true);
 
 } else {
 
-  requestAnimationFrame(() => {
+  if (!screen) {
 
- if (!screen) {
-
-  setScreen(
-    "welcome"
-  );
+  setScreen("welcome");
 
 }
 
-  setTimeout(() => {
+setAuthChecked(true);
 
-    setAuthChecked(
-      true
-    );
-
-    setAppReady(
-      true
-    );
-
-  }, 0);
-
-});
+setAppReady(true);
 
 }
 
@@ -926,34 +898,6 @@ if (
   );
 
 }
-
-
-/*
-if (
-  screen ===
-  "vibes"
-) {
-
-  return (
-
-    <div
-      style={{
-        background: "black",
-        color: "white",
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "40px",
-      }}
-    >
-      TEST PAGE
-    </div>
-
-  );
-
-}
-*/
 
   if (
     screen ===
