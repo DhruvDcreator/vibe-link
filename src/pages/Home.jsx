@@ -50,7 +50,16 @@ export default function Home() {
 
   useEffect(() => {
 
-  requestNotificationPermission();
+  const isSafari =
+    /^((?!chrome|android).)*safari/i.test(
+      navigator.userAgent
+    );
+
+  if (!isSafari) {
+
+    requestNotificationPermission();
+
+  }
 
 }, []);
 
