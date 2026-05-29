@@ -82,7 +82,7 @@ export default function Privacy({
                 </p>
 
                 <p>
-                  Last Updated: May 18, 2026
+                  Last Updated: May 28, 2026
                 </p>
 
               </section>
