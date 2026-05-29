@@ -1,4 +1,3 @@
-/*
 import {
   auth,
   db,
@@ -724,51 +723,6 @@ try {
         </motion.div>
 
       </div>
-
-    </div>
-
-  );
-
-}
-*/
-export default function Vibes({ setScreen }) {
-
-  return (
-
-    <div
-      style={{
-        background: "black",
-        color: "white",
-        minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: "40px",
-        flexDirection: "column",
-        gap: "20px",
-      }}
-    >
-
-      VIBES WORKING
-
-      <button
-        onClick={() =>
-          setScreen("home")
-        }
-        style={{
-          padding: "12px 24px",
-          background: "cyan",
-          color: "black",
-          border: "none",
-          borderRadius: "12px",
-          fontWeight: "bold",
-          cursor: "pointer",
-        }}
-      >
-
-        GO HOME
-
-      </button>
 
     </div>
 

@@ -910,6 +910,7 @@ if (
 
   }
 
+  /*
   if (
   screen ===
   "vibes"
@@ -922,6 +923,32 @@ if (
         setScreen
       }
     />
+
+  );
+
+}
+  */
+
+if (
+  screen ===
+  "vibes"
+) {
+
+  return (
+
+    <div
+      style={{
+        background: "black",
+        color: "white",
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        fontSize: "40px",
+      }}
+    >
+      TEST PAGE
+    </div>
 
   );
 
