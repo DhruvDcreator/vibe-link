@@ -15,9 +15,9 @@ import {
   getStorage,
 } from "firebase/storage";
 
-import {
-  getMessaging,
-} from "firebase/messaging";
+// import {
+//   getMessaging,
+// } from "firebase/messaging";
 
 const firebaseConfig = {
 
@@ -63,5 +63,5 @@ export const storage =
 export const googleProvider =
   new GoogleAuthProvider();
 
-  export const messaging =
-  getMessaging(app);
+//   export const messaging =
+//   getMessaging(app);
