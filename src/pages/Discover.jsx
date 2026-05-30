@@ -174,34 +174,29 @@ export default function Discover({
   }, []);
 
   const calculateCompatibility =
-    (userVibes = []) => {
+  (userVibes = []) => {
 
-      if (
-        !userData.vibes ||
-        userData.vibes.length ===
-          0
-      ) {
+    const myVibes = Object.values(
+      userData.vibes || {}
+    ).flat();
 
-        return 0;
+    if (
+      myVibes.length === 0
+    ) {
+      return 0;
+    }
 
-      }
+    const shared =
+      userVibes.filter(
+        (vibe) =>
+          myVibes.includes(vibe)
+      ).length;
 
-      const shared =
-        userVibes.filter(
-          (vibe) =>
-            userData.vibes.includes(
-              vibe
-            )
-        ).length;
+    return Math.round(
+      (shared / myVibes.length) * 100
+    );
 
-      return Math.round(
-        (
-          shared /
-          userData.vibes.length
-        ) * 100
-      );
-
-    };
+};
 
   const matchedUsers =
     useMemo(() => {
@@ -450,21 +445,21 @@ export default function Discover({
       currentUser.vibes
     );
 
-  const sharedVibes =
-    currentUser.vibes.filter(
-      (vibe) =>
-        userData.vibes.includes(
-          vibe
-        )
-    );
+  const myVibes = Object.values(
+  userData.vibes || {}
+).flat();
+
+const sharedVibes =
+  (currentUser.vibes || []).filter(
+    (vibe) =>
+      myVibes.includes(vibe)
+  );
 
   const otherVibes =
-    currentUser.vibes.filter(
-      (vibe) =>
-        !userData.vibes.includes(
-          vibe
-        )
-    );
+  (currentUser.vibes || []).filter(
+    (vibe) =>
+      !myVibes.includes(vibe)
+  );
 
   return (
 
