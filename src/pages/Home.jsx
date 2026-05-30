@@ -1,502 +1,510 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import VibeHome from "../components/VibeHome";
 import {
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  motion,
-} from "framer-motion";
-
-import {
+  Activity,
+  ArrowRight,
+  Award,
+  Check,
+  ChevronRight,
+  CircleUserRound,
   Compass,
+  Flame,
+  Home as HomeIcon,
+  LoaderCircle,
   MessageCircle,
+  MessagesSquare,
+  Radio,
+  RefreshCw,
+  Search,
+  Sparkles,
+  Trophy,
   User,
+  Users,
+  X,
+  Zap,
 } from "lucide-react";
-
-import {
-  onAuthStateChanged,
-} from "firebase/auth";
-
+import { onAuthStateChanged } from "firebase/auth";
 import {
   collection,
   doc,
   getDoc,
+  getDocs,
   onSnapshot,
   query,
   setDoc,
   where,
 } from "firebase/firestore";
-
-import {
-  auth,
-  db,
-} from "../firebase/firebase";
-
-import {
-  requestNotificationPermission,
-} from "../notifications";
-
+import { auth, db } from "../firebase/firebase";
+import { requestNotificationPermission } from "../notifications";
 import Discover from "./Discover";
-
 import Profile from "./Profile";
-
 import EditVibes from "./EditVibes";
-
 import Chats from "./Chats";
-
 import ChatRoom from "./ChatRoom";
 
+const FALLBACK_PROFILE = "https://i.pravatar.cc/300";
+const PRESENCE_INTERVAL_MS = 30000;
+
+const FALLBACK_TRIBES = [
+  { id: "movies", name: "Movie Lovers", icon: "🎬", online: 128, members: 1840 },
+  { id: "tech", name: "Tech India", icon: "⚡", online: 94, members: 1320 },
+  { id: "night", name: "Night Owls", icon: "🌙", online: 76, members: 980 },
+];
+
+const MISSIONS = [
+  { id: "connect", title: "Connect with 1 new person", reward: 80, progress: 0, total: 1 },
+  { id: "answer", title: "Answer Today's Vibe", reward: 50, progress: 1, total: 1 },
+  { id: "discussion", title: "Join a tribe discussion", reward: 100, progress: 0, total: 1 },
+  { id: "invite", title: "Invite 1 friend", reward: 120, progress: 0, total: 1 },
+];
+
+const FALLBACK_ACTIVITY = [
+  { id: "a1", text: "Aryan joined Tech India", time: "2m ago", icon: Users },
+  { id: "a2", text: "Riya posted a vibe", time: "8m ago", icon: Sparkles },
+  { id: "a3", text: "Kabir reached Rank #4", time: "14m ago", icon: Trophy },
+];
+
+function safeArray(value) {
+  return Array.isArray(value) ? value : [];
+}
+
+function getFlattenedVibes(vibes) {
+  if (!vibes) return [];
+
+  const source = Array.isArray(vibes)
+    ? vibes
+    : typeof vibes === "object"
+      ? Object.values(vibes)
+      : [];
+
+  const flattened = [];
+
+  source.forEach((value) => {
+    if (Array.isArray(value)) {
+      value.forEach((item) => {
+        if (typeof item === "string" && item.trim()) flattened.push(item.trim());
+      });
+      return;
+    }
+
+    if (typeof value === "string" && value.trim()) flattened.push(value.trim());
+  });
+
+  return [...new Set(flattened)];
+}
+
+function getCompatibility(myVibes, otherVibes) {
+  const mine = safeArray(myVibes);
+  const theirs = getFlattenedVibes(otherVibes);
+
+  if (mine.length === 0 || theirs.length === 0) return 0;
+
+  const shared = theirs.filter((vibe) => mine.includes(vibe));
+  return Math.min(100, Math.round((shared.length / mine.length) * 100));
+}
+
+function getGreeting() {
+  const hour = new Date().getHours();
+
+  if (hour < 12) return "Good Morning";
+  if (hour < 18) return "Good Afternoon";
+  return "Good Evening";
+}
+
+function formatNumber(value) {
+  const number = Number(value);
+  return Number.isFinite(number) ? number.toLocaleString() : "0";
+}
+
+function Avatar({ src, name, className = "" }) {
+  return (
+    <img
+      src={src || FALLBACK_PROFILE}
+      alt={`${name || "VibeLink user"} profile`}
+      onError={(event) => {
+        event.currentTarget.onerror = null;
+        event.currentTarget.src = FALLBACK_PROFILE;
+      }}
+      className={`object-cover ${className}`}
+    />
+  );
+}
+
+function SectionTitle({ title, subtitle, action }) {
+  return (
+    <div className="mb-4 flex items-end justify-between gap-4">
+      <div>
+        <h2 className="text-xl font-black tracking-tight sm:text-2xl">{title}</h2>
+        {subtitle && <p className="mt-1 text-xs font-medium text-zinc-500">{subtitle}</p>}
+      </div>
+      {action}
+    </div>
+  );
+}
+
+function SkeletonHome() {
+  return (
+    <div className="min-h-screen bg-[#03040A] px-4 pb-28 pt-7 text-white">
+      <div className="mx-auto max-w-6xl animate-pulse">
+        <div className="h-4 w-32 rounded-full bg-white/10" />
+        <div className="mt-4 h-10 w-64 rounded-2xl bg-white/10" />
+        <div className="mt-8 h-14 rounded-2xl bg-white/10" />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="h-48 rounded-[28px] bg-white/10" />
+          <div className="h-48 rounded-[28px] bg-white/10" />
+        </div>
+        <div className="mt-10 h-72 rounded-[30px] bg-white/10" />
+        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+          <div className="h-64 rounded-[28px] bg-white/10" />
+          <div className="h-64 rounded-[28px] bg-white/10" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ModeSwitch({ mode, setMode }) {
+  return (
+    <div className="relative grid grid-cols-2 rounded-2xl border border-white/10 bg-white/[0.055] p-1.5 backdrop-blur-2xl">
+      {["vibe", "link"].map((item) => (
+        <button
+          key={item}
+          type="button"
+          onClick={() => setMode(item)}
+          className="relative z-10 flex min-h-11 items-center justify-center gap-2 rounded-xl text-xs font-black tracking-[0.2em]"
+        >
+          {mode === item && (
+            <motion.div
+              layoutId="mode-highlight"
+              className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500/90 to-purple-600/90 shadow-[0_0_26px_rgba(34,211,238,0.2)]"
+              transition={{ type: "spring", stiffness: 360, damping: 30 }}
+            />
+          )}
+          <span className={`relative ${mode === item ? "text-white" : "text-zinc-500"}`}>
+            {item.toUpperCase()}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function PersonCard({ person, myVibes, onOpen }) {
+  const vibes = getFlattenedVibes(person?.vibes).slice(0, 3);
+  const compatibility = getCompatibility(myVibes, person?.vibes);
+
+  return (
+    <motion.button
+      type="button"
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      onClick={() => onOpen(person)}
+      className="relative overflow-hidden rounded-[26px] border border-white/10 bg-white/[0.055] p-4 text-left backdrop-blur-2xl"
+    >
+      <div className="absolute -right-12 -top-12 h-28 w-28 rounded-full bg-cyan-400/15 blur-[48px]" />
+      <div className="relative flex items-center gap-3">
+        <Avatar
+          src={person?.profilePic}
+          name={person?.username}
+          className="h-14 w-14 rounded-2xl border border-white/15"
+        />
+        <div className="min-w-0">
+          <p className="truncate font-black">{person?.username || "Vibe Seeker"}</p>
+          <p className="mt-1 text-xs font-bold text-cyan-300">{compatibility}% Vibed</p>
+        </div>
+      </div>
+      <div className="relative mt-4 flex flex-wrap gap-2">
+        {(vibes.length > 0 ? vibes : ["Discovering vibes"]).map((vibe) => (
+          <span
+            key={vibe}
+            className="rounded-full border border-white/10 bg-white/[0.055] px-2.5 py-1 text-[10px] font-bold text-zinc-300"
+          >
+            {vibe}
+          </span>
+        ))}
+      </div>
+    </motion.button>
+  );
+}
+
+function Dashboard({
+  userData,
+  people,
+  setCurrentTab,
+  setSelectedChatUser,
+}) {
+  return (
+    <VibeHome
+      userData={userData}
+      people={people}
+      setCurrentTab={setCurrentTab}
+      setSelectedChatUser={setSelectedChatUser}
+    />
+  );
+}
+
+function TribePage() {
+  return (
+    <div className="mx-auto max-w-4xl px-4 pb-32 pt-8 sm:px-6">
+      <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-300">Communities</p>
+      <h1 className="mt-3 text-4xl font-black">Find Your Tribes</h1>
+      <p className="mt-3 text-sm font-medium text-zinc-500">Join conversations built around the things you genuinely enjoy.</p>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        {FALLBACK_TRIBES.map((tribe) => (
+          <div key={tribe.id} className="rounded-[26px] border border-white/10 bg-white/[0.05] p-5 backdrop-blur-2xl">
+            <div className="text-3xl">{tribe.icon}</div>
+            <h2 className="mt-4 text-xl font-black">{tribe.name}</h2>
+            <p className="mt-2 text-xs font-bold text-zinc-500">{tribe.online} online • {formatNumber(tribe.members)} members</p>
+            <button type="button" className="mt-5 flex items-center gap-2 text-sm font-black text-cyan-300">View Tribe <ArrowRight size={16} /></button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function BottomNav({ currentTab, setCurrentTab, hasUnread }) {
+  const items = [
+    { key: "home", label: "Home", icon: HomeIcon },
+    { key: "discover", label: "Discover", icon: Compass },
+    { key: "tribe", label: "Tribe", icon: Users },
+    { key: "chats", label: "Chats", icon: MessageCircle },
+    { key: "profile", label: "Profile", icon: User },
+  ];
+
+  return (
+    <nav className="fixed bottom-4 left-1/2 z-50 w-[calc(100%-24px)] max-w-xl -translate-x-1/2 rounded-[25px] border border-white/10 bg-[#11121b]/80 px-2 py-2 shadow-[0_0_42px_rgba(34,211,238,0.14)] backdrop-blur-2xl">
+      <div className="grid grid-cols-5 gap-1">
+        {items.map((item) => {
+          const Icon = item.icon;
+          const active = currentTab === item.key;
+
+          return (
+            <button type="button" key={item.key} onClick={() => setCurrentTab(item.key)} className="relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-2xl">
+              {active && (
+                <motion.div
+                  layoutId="nav-highlight"
+                  className="absolute inset-0 rounded-2xl border border-cyan-300/15 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 shadow-[0_0_22px_rgba(34,211,238,0.12)]"
+                />
+              )}
+              <div className="relative">
+                <Icon size={19} className={active ? "text-cyan-300" : "text-zinc-500"} />
+                {item.key === "chats" && hasUnread && <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-purple-400 shadow-[0_0_10px_rgba(192,132,252,0.9)]" />}
+              </div>
+              <span className={`relative text-[10px] font-black ${active ? "text-cyan-200" : "text-zinc-600"}`}>{item.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
 export default function Home() {
+  const [currentTab, setCurrentTab] = useState("home");
+  const [userData, setUserData] = useState(null);
+  const [selectedChatUser, setSelectedChatUser] = useState(null);
+  const [people, setPeople] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pageError, setPageError] = useState("");
+  const [hasUnread, setHasUnread] = useState(false);
 
   useEffect(() => {
+    if (typeof navigator === "undefined") return;
 
-  const isSafari =
-    /^((?!chrome|android).)*safari/i.test(
-      navigator.userAgent
-    );
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent || "");
 
-  if (!isSafari) {
-
-    requestNotificationPermission();
-
-  }
-
-}, []);
-
-  const [
-    currentTab,
-    setCurrentTab,
-  ] = useState(
-    "discover"
-  );
-
-  const [
-    userData,
-    setUserData,
-  ] = useState({});
-
-  const [
-    selectedChatUser,
-    setSelectedChatUser,
-  ] = useState(null);
-
-  const [
-    loading,
-    setLoading,
-  ] = useState(true);
-
-  const [
-    hasUnread,
-    setHasUnread,
-  ] = useState(false);
-
-  useEffect(() => {
-
-    let interval;
-
-    const unsubscribe =
-      onAuthStateChanged(
-        auth,
-
-        async (user) => {
-
-          try {
-
-            if (!user) {
-
-              setLoading(
-                false
-              );
-
-              return;
-
-            }
-
-            const snapshot =
-              await getDoc(
-                doc(
-                  db,
-                  "users",
-                  user.uid
-                )
-              );
-
-            if (
-              snapshot.exists()
-            ) {
-
-              setUserData({
-                uid:
-                  user.uid,
-
-                ...snapshot.data(),
-              });
-
-              await setDoc(
-                doc(
-                  db,
-                  "presence",
-                  user.uid
-                ),
-                {
-                  lastActive:
-                    Date.now(),
-                }
-              );
-
-              interval =
-                setInterval(
-                  async () => {
-
-                    if (
-                      auth.currentUser
-                    ) {
-
-                      await setDoc(
-                        doc(
-                          db,
-                          "presence",
-                          auth.currentUser.uid
-                        ),
-                        {
-                          lastActive:
-                            Date.now(),
-                        }
-                      );
-
-                    }
-
-                  },
-
-                  2000
-                );
-
-              const q =
-  query(
-    collection(
-      db,
-      "chatMeta"
-    ),
-
-    where(
-      "users",
-      "array-contains",
-      user.uid
-    )
-  );
-
-              onSnapshot(
-                q,
-
-                (snapshot) => {
-
-                  let unread =
-                    false;
-
-                  snapshot.forEach(
-                    (
-                      docItem
-                    ) => {
-
-                      const data =
-                        docItem.data();
-
-                      if (
-                        data
-                          ?.unreadCounts?.[
-                          user.uid
-                        ] > 0
-                      ) {
-
-                        unread =
-                          true;
-
-                      }
-
-                    }
-                  );
-
-                  setHasUnread(
-                    unread
-                  );
-
-                }
-              );
-
-            }
-
-          } catch (error) {
-
-            console.log(
-              error
-            );
-
-          } finally {
-
-            setLoading(
-              false
-            );
-
-          }
-
-        }
-      );
-
-    return () => {
-
-      if (
-        interval
-      ) {
-
-        clearInterval(
-          interval
-        );
-
-      }
-
-      unsubscribe();
-
-    };
-
+    if (!isSafari && typeof requestNotificationPermission === "function") {
+      Promise.resolve(requestNotificationPermission()).catch(() => {});
+    }
   }, []);
 
-  if (
-    loading ||
-    !userData
-  ) {
+  useEffect(() => {
+    let mounted = true;
+    let presenceInterval = null;
+    let unsubscribeUnread = null;
 
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center text-white">
+    const unsubscribeAuth = onAuthStateChanged(
+      auth,
+      async (signedInUser) => {
+        if (!signedInUser?.uid) {
+          if (mounted) {
+            setLoading(false);
+            setPageError("Please sign in to continue.");
+          }
+          return;
+        }
 
-        <h1 className="text-3xl font-bold animate-pulse">
+        try {
+          if (mounted) {
+            setLoading(true);
+            setPageError("");
+          }
 
-          Loading...
+          const [userSnapshot, usersSnapshot] = await Promise.all([
+            getDoc(doc(db, "users", signedInUser.uid)),
+            getDocs(collection(db, "users")),
+          ]);
 
-        </h1>
+          const profile = userSnapshot.exists() ? userSnapshot.data() || {} : {};
+          const availablePeople = [];
 
-      </div>
+          usersSnapshot.forEach((item) => {
+            if (!item?.id || item.id === signedInUser.uid) return;
+            availablePeople.push({ id: item.id, ...(item.data() || {}) });
+          });
+
+          if (mounted) {
+            setUserData({ uid: signedInUser.uid, ...profile });
+            setPeople(availablePeople);
+          }
+
+          const updatePresence = async () => {
+            if (!auth?.currentUser?.uid) return;
+
+            try {
+              await setDoc(
+                doc(db, "presence", auth.currentUser.uid),
+                { lastActive: Date.now() },
+                { merge: true }
+              );
+            } catch (error) {
+              console.error("Unable to update presence:", error);
+            }
+          };
+
+          await updatePresence();
+          presenceInterval = setInterval(updatePresence, PRESENCE_INTERVAL_MS);
+
+          const unreadQuery = query(
+            collection(db, "chatMeta"),
+            where("users", "array-contains", signedInUser.uid)
+          );
+
+          unsubscribeUnread = onSnapshot(
+            unreadQuery,
+            (snapshot) => {
+              let unread = false;
+
+              snapshot.forEach((item) => {
+                const data = item?.data?.() || {};
+                const unreadCount = Number(data?.unreadCounts?.[signedInUser.uid] || 0);
+                if (unreadCount > 0) unread = true;
+              });
+
+              if (mounted) setHasUnread(unread);
+            },
+            (error) => {
+              console.error("Unable to load unread messages:", error);
+            }
+          );
+        } catch (error) {
+          console.error("Unable to load Home:", error);
+
+          if (mounted) {
+            setPageError("Something went wrong while loading VibeLink.");
+          }
+        } finally {
+          if (mounted) setLoading(false);
+        }
+      },
+      (error) => {
+        console.error("Unable to verify authentication:", error);
+
+        if (mounted) {
+          setPageError("Something went wrong while loading VibeLink.");
+          setLoading(false);
+        }
+      }
     );
 
+    return () => {
+      mounted = false;
+      unsubscribeAuth();
+      if (unsubscribeUnread) unsubscribeUnread();
+      if (presenceInterval) clearInterval(presenceInterval);
+    };
+  }, []);
+
+  if (loading) return <SkeletonHome />;
+
+  if (pageError || !userData) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#03040A] p-6 text-center text-white">
+        <div>
+          <Sparkles className="mx-auto text-cyan-300" size={34} />
+          <h1 className="mt-5 text-2xl font-black">{pageError || "Unable to load VibeLink."}</h1>
+        </div>
+      </div>
+    );
   }
 
   return (
+    <div className="relative min-h-screen overflow-hidden bg-[#03040A] text-white">
+      <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
+      <div className="pointer-events-none fixed -left-32 -top-24 h-[340px] w-[340px] rounded-full bg-cyan-500/15 blur-[110px]" />
+      <div className="pointer-events-none fixed -bottom-28 -right-20 h-[360px] w-[360px] rounded-full bg-purple-500/15 blur-[120px]" />
 
-    <div className="min-h-screen bg-black text-white relative overflow-hidden">
+      <div className="relative z-10">
+        {currentTab === "home" && (
+          <Dashboard
+            userData={userData}
+            people={people}
+            setCurrentTab={setCurrentTab}
+            setSelectedChatUser={setSelectedChatUser}
+          />
+        )}
 
-      <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
-
-      <div className="absolute w-[450px] h-[450px] bg-cyan-500/20 rounded-full blur-[80px] top-[-150px] left-[-120px]"></div>
-
-      <div className="absolute w-[450px] h-[450px] bg-purple-500/20 rounded-full blur-[80px] bottom-[-150px] right-[-120px]"></div>
-
-      {currentTab !==
-      "chatRoom" && (
-
-        <>
-
-          <div className="relative z-20 px-6 pt-8">
-
-            <div className="flex items-center justify-between">
-
-              <div>
-
-                <p className="text-zinc-400 text-sm">
-
-                  Your vibe.
-
-                </p>
-
-                <h1 className="text-4xl font-black mt-1">
-
-                  Your tribe.
-
-                </h1>
-
-              </div>
-
-              <motion.button
-                whileTap={{
-                  scale: 0.92,
-                }}
-                onClick={() =>
-                  setCurrentTab(
-                    "profile"
-                  )
-                }
-                className="w-14 h-14 rounded-full overflow-hidden border-2 border-cyan-400/40 shadow-[0_0_30px_rgba(0,255,255,0.2)]"
-              >
-
-                <img
-                  src={
-                    userData.profilePic
-                  }
-                  alt="profile"
-                  className="w-full h-full object-cover"
-                />
-
-              </motion.button>
-
-            </div>
-
+        {currentTab === "discover" && (
+          <div className="pb-28 pt-5">
+            <Discover
+              userData={userData}
+              setCurrentTab={setCurrentTab}
+              setSelectedChatUser={setSelectedChatUser}
+            />
           </div>
+        )}
 
-          <div className="relative z-10 pt-6 pb-24 px-4">
+        {currentTab === "tribe" && <TribePage />}
 
-            {currentTab ===
-            "discover" && (
-
-              <Discover
-                userData={
-                  userData
-                }
-
-                setCurrentTab={
-                  setCurrentTab
-                }
-
-                setSelectedChatUser={
-                  setSelectedChatUser
-                }
-              />
-
-            )}
-
-            {currentTab ===
-            "chats" && (
-
-              <Chats
-                setCurrentTab={
-                  setCurrentTab
-                }
-
-                setSelectedChatUser={
-                  setSelectedChatUser
-                }
-              />
-
-            )}
-
-            {currentTab ===
-            "profile" && (
-
-              <Profile
-                userData={
-                  userData
-                }
-
-                setCurrentTab={
-                  setCurrentTab
-                }
-              />
-
-            )}
-
-            {currentTab ===
-            "editVibes" && (
-
-              <EditVibes
-                userData={
-                  userData
-                }
-
-                setUserData={
-                  setUserData
-                }
-
-                setCurrentTab={
-                  setCurrentTab
-                }
-              />
-
-            )}
-
+        {currentTab === "chats" && (
+          <div className="pb-28 pt-5">
+            <Chats
+              setCurrentTab={setCurrentTab}
+              setSelectedChatUser={setSelectedChatUser}
+            />
           </div>
+        )}
 
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 backdrop-blur-xl bg-white/5 border border-white/10 rounded-full px-8 py-4 flex items-center gap-10 shadow-[0_0_40px_rgba(0,255,255,0.15)]">
-
-            <button
-              onClick={() =>
-                setCurrentTab(
-                  "discover"
-                )
-              }
-              className={`transition-all duration-300 ${
-                currentTab ===
-                "discover"
-                  ? "text-cyan-400 scale-110"
-                  : "text-zinc-500"
-              }`}
-            >
-
-              <Compass size={30} />
-
-            </button>
-
-            <button
-              onClick={() =>
-                setCurrentTab(
-                  "chats"
-                )
-              }
-              className={`relative transition-all duration-300 ${
-                currentTab ===
-                "chats"
-                  ? "text-cyan-400 scale-110"
-                  : "text-zinc-500"
-              }`}
-            >
-
-              <MessageCircle size={30} />
-
-              {hasUnread && (
-
-                <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-purple-500 shadow-[0_0_15px_rgba(168,85,247,0.9)]"></div>
-
-              )}
-
-            </button>
-
-            <button
-              onClick={() =>
-                setCurrentTab(
-                  "profile"
-                )
-              }
-              className={`transition-all duration-300 ${
-                currentTab ===
-                "profile"
-                  ? "text-cyan-400 scale-110"
-                  : "text-zinc-500"
-              }`}
-            >
-
-              <User size={30} />
-
-            </button>
-
+        {currentTab === "profile" && (
+          <div className="pb-28 pt-5">
+            <Profile userData={userData} setCurrentTab={setCurrentTab} />
           </div>
+        )}
 
-        </>
+        {currentTab === "editVibes" && (
+          <div className="pb-28 pt-5">
+            <EditVibes
+              userData={userData}
+              setUserData={setUserData}
+              setCurrentTab={setCurrentTab}
+            />
+          </div>
+        )}
 
-      )}
+        {currentTab === "chatRoom" && (
+          <ChatRoom selectedUser={selectedChatUser} setCurrentTab={setCurrentTab} />
+        )}
+      </div>
 
-      {currentTab ===
-      "chatRoom" && (
-
-        <ChatRoom
-          selectedUser={
-            selectedChatUser
-          }
-
-          setCurrentTab={
-            setCurrentTab
-          }
+      {currentTab !== "chatRoom" && (
+        <BottomNav
+          currentTab={currentTab}
+          setCurrentTab={setCurrentTab}
+          hasUnread={hasUnread}
         />
-
       )}
-
     </div>
-
   );
-
 }
