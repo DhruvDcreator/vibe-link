@@ -609,9 +609,22 @@ export default function VibeHome({
         setRewardClaimed(taskData.rewardClaimed);
         setStories(storyData);
         setPins(pinData);
-      } catch {
-        if (mounted) setError("Something went wrong while loading VIBE Home.");
-      } finally {
+      } catch (error) {
+
+  console.error(
+    "VIBE HOME ERROR:",
+    error
+  );
+
+  if (mounted) {
+
+    setError(
+      String(error?.message || error)
+    );
+
+  }
+
+} finally {
         if (mounted) setLoading(false);
       }
     };
