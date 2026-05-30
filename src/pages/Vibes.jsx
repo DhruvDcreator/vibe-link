@@ -797,7 +797,7 @@ import {
   Trophy,
   Utensils,
   WandSparkles,
-  Youtube,
+  MonitorPlay,
   Zap,
 } from "lucide-react";
 import { auth, db } from "../firebase/firebase";
@@ -905,7 +905,7 @@ const SECTIONS = [
       { name: "Memes", icon: Laugh },
       { name: "Podcasts", icon: Podcast },
       { name: "Netflix", icon: Clapperboard },
-      { name: "YouTube", icon: Youtube },
+      { name: "YouTube", icon: MonitorPlay },
       { name: "Concerts", icon: Music },
       { name: "Singing", icon: Mic2 },
       { name: "Dancing", icon: PartyPopper },
