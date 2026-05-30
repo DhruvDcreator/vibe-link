@@ -25,8 +25,6 @@ import {
   Zap,
 } from "lucide-react";
 import { auth } from "../firebase/firebase";
-import vibeLogo from "../assets/branding/vibelink-logo.png";
-import vibeWordmark from "../assets/branding/vibelink-wordmark.png";
 import {
   FALLBACK_PROFILE,
   calculateCompatibility,
@@ -104,10 +102,18 @@ function ModeSwitch({ mode, onChange }) {
         >
           {mode === item && (
             <motion.div
-              layoutId="vibelink-mode"
-              className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 shadow-[0_0_24px_rgba(34,211,238,0.2)]"
-              transition={{ type: "spring", stiffness: 360, damping: 30 }}
-            />
+  layoutId="vibelink-mode"
+  className={`absolute inset-0 rounded-xl ${
+    mode === "vibe"
+      ? "bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 shadow-[0_0_24px_rgba(34,211,238,0.35)]"
+      : "bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500 shadow-[0_0_24px_rgba(168,85,247,0.35)]"
+  }`}
+  transition={{
+    type: "spring",
+    stiffness: 280,
+    damping: 24,
+  }}
+/>
           )}
           <span className={`relative ${mode === item ? "text-white" : "text-zinc-500"}`}>
             {item.toUpperCase()}
@@ -477,8 +483,18 @@ function Leaderboard({ uid, onClose }) {
   ];
 
   return (
-    <div className="fixed inset-0 z-[90] flex items-end justify-center bg-black/75 p-4 backdrop-blur-md sm:items-center">
-      <motion.div initial={{ opacity: 0, y: 34 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md rounded-[30px] border border-white/10 bg-[#10111a] p-5">
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/75 p-4 backdrop-blur-md">
+      <motion.div initial={{ opacity: 0, y: 34 }} animate={{ opacity: 1, y: 0 }} className="
+w-full
+max-w-md
+max-h-[85vh]
+overflow-y-auto
+rounded-[30px]
+border
+border-white/10
+bg-[#10111a]
+p-5
+">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-black">Leaderboard</h2>
           <button type="button" onClick={onClose}><X size={20} /></button>
@@ -597,10 +613,11 @@ export default function VibeHome({
 
       <main className="relative z-10 mx-auto max-w-5xl px-4 pb-28 pt-5 sm:px-6">
         <nav className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <img src={vibeLogo} alt="VibeLink" className="h-8 w-auto" />
-            <img src={vibeWordmark} alt="VibeLink" className="h-5 w-auto" />
-          </div>
+          <div className="flex items-center">
+  <h1 className="text-lg font-black tracking-wide text-white">
+    VibeLink
+  </h1>
+</div>
 
           <button type="button" onClick={() => setLeaderboardOpen(true)} className="flex h-11 w-11 items-center justify-center rounded-full border border-cyan-300/20 bg-white/[0.06] text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.12)] backdrop-blur-xl">
             <Crown size={20} />
@@ -610,8 +627,13 @@ export default function VibeHome({
         <div className="mt-6">
           <ModeSwitch mode={mode} onChange={changeMode} />
           <AnimatePresence mode="wait">
-            <motion.h1 key={mode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="mt-7 text-center text-3xl font-black tracking-tight sm:text-4xl">
-              {mode === "vibe" ? "Good Vibes. Real People." : "Build Real Connections."}
+            <motion.h1 key={mode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{
+  duration: 0.35,
+  ease: "easeOut",
+}}className="mt-7 text-center text-3xl font-black tracking-tight sm:text-4xl">
+              {mode === "vibe"
+  ? "Find Your People."
+  : "Build Your Circle."}
             </motion.h1>
           </AnimatePresence>
         </div>
