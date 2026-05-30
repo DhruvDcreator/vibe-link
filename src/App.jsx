@@ -209,11 +209,7 @@ setAppReady(true);
 
 } else {
 
-  if (!screen) {
-
-  setScreen("welcome");
-
-}
+setScreen("welcome");
 
 setAuthChecked(true);
 
