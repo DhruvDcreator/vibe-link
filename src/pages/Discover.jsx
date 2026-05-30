@@ -198,7 +198,7 @@ export default function Discover({
 
 };
 
-  const matchedUsers =
+  /*const matchedUsers =
     useMemo(() => {
 
       return users
@@ -244,7 +244,9 @@ export default function Discover({
             )
         );
 
-    }, [users]);
+    }, [users]);*/
+  
+    const matchedUsers = users;
 
   const currentUser =
     matchedUsers[
