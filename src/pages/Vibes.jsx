@@ -42,6 +42,7 @@ import {
 } from "lucide-react";
 
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const sections = [
 
@@ -313,19 +314,25 @@ export default function Vibes({
 
 }) {
 
-  let selected = {};
+  const [selected, setSelected] = useState(() => {
 
-try {
+  try {
 
-  selected = JSON.parse(
-    localStorage.getItem("vibelink-vibes")
-  ) || {};
+    return (
+      JSON.parse(
+        localStorage.getItem(
+          "vibelink-vibes"
+        )
+      ) || {}
+    );
 
-} catch {
+  } catch {
 
-  selected = {};
+    return {};
 
-}
+  }
+
+});
 
   const toggleOption = (
     sectionTitle,
@@ -365,13 +372,28 @@ try {
 
     }
 
-    selected[sectionTitle] =
-      updated;
+    const newSelected = {
 
-    localStorage.setItem(
-      "vibelink-vibes",
-      JSON.stringify(selected)
-    );
+  ...selected,
+
+  [sectionTitle]:
+    updated,
+
+};
+
+setSelected(
+  newSelected
+);
+
+localStorage.setItem(
+
+  "vibelink-vibes",
+
+  JSON.stringify(
+    newSelected
+  )
+
+);
 
     
 
