@@ -253,7 +253,7 @@ setAppReady(true);
 
   }, [screen]);
 
-  if (
+  /*if (
   initializing ||
   !authChecked ||
   !screen ||
@@ -273,7 +273,7 @@ setAppReady(true);
   relative
 ">
 
-  {/* glow */}
+  
   <div className="
     absolute
     w-[300px]
@@ -292,7 +292,7 @@ setAppReady(true);
     blur-[120px]
   "></div>
 
-  {/* logo */}
+  
   <img
     src={welcomeLogo}
     alt="VibeLink"
@@ -306,7 +306,34 @@ setAppReady(true);
 </div>
   );
 
-  }
+  }*/
+
+  if (
+  initializing ||
+  !authChecked ||
+  !screen ||
+  !appReady
+) {
+
+  return (
+
+    <div
+      style={{
+        background: "black",
+        color: "white",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        fontSize: "32px",
+      }}
+    >
+      LOADING APP
+    </div>
+
+  );
+
+}
 
   if (
     screen ===
