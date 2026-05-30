@@ -964,6 +964,11 @@ if (
 }
 */
 import Welcome from "./pages/Welcome";
+import IntroSlides from "./pages/IntroSlides";
 export default function App() {
-  return <Welcome setScreen={() => {}} />;
+  return (
+    <IntroSlides
+      setScreen={() => {}}
+    />
+  );
 }
