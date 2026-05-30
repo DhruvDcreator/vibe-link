@@ -963,8 +963,139 @@ if (
 
 }
 */
-import Home from "./pages/Home";
+import { useState } from "react";
+
+import Welcome from "./pages/Welcome";
+import Auth from "./pages/Auth";
+import OTP from "./pages/OTP";
+import CompleteProfile from "./pages/CompleteProfile";
+import ProfilePicture from "./pages/ProfilePicture";
+import IntroSlides from "./pages/IntroSlides";
+import Selector from "./pages/Selector";
+import VibeIntro from "./pages/VibeIntro";
+import Vibes from "./pages/Vibes";
 
 export default function App() {
-  return <Home />;
+
+  const [screen, setScreen] =
+    useState("welcome");
+
+  if (screen === "welcome") {
+    return (
+      <Welcome
+        setScreen={setScreen}
+      />
+    );
+  }
+
+  if (screen === "auth") {
+    return (
+      <Auth
+        setScreen={setScreen}
+        isLogin={false}
+        setIsLogin={() => {}}
+        username=""
+        setUsername={() => {}}
+        email=""
+        setEmail={() => {}}
+        password=""
+        setPassword={() => {}}
+        age=""
+        setAge={() => {}}
+        phone=""
+        setPhone={() => {}}
+        showPassword={false}
+        setShowPassword={() => {}}
+        loginUser={() => {}}
+        sendOtp={() =>
+          setScreen("otp")
+        }
+      />
+    );
+  }
+
+  if (screen === "otp") {
+    return (
+      <OTP
+        email=""
+        password=""
+        username=""
+        phone=""
+        age=""
+        gender=""
+        country=""
+        bio=""
+        generatedOtp="1234"
+        setGeneratedOtp={() => {}}
+        isGoogleSignup={false}
+        setScreen={setScreen}
+      />
+    );
+  }
+
+  if (screen === "completeProfile") {
+    return (
+      <CompleteProfile
+        setScreen={setScreen}
+        email=""
+        password=""
+        setPassword={() => {}}
+        showPassword={false}
+        setShowPassword={() => {}}
+        setGeneratedOtp={() => {}}
+        phone=""
+        setPhone={() => {}}
+        age=""
+        setAge={() => {}}
+        gender=""
+        setGender={() => {}}
+        country=""
+        setCountry={() => {}}
+        bio=""
+        setBio={() => {}}
+      />
+    );
+  }
+
+  if (screen === "profilePicture") {
+    return (
+      <ProfilePicture
+        setScreen={setScreen}
+      />
+    );
+  }
+
+  if (screen === "introSlides") {
+    return (
+      <IntroSlides
+        setScreen={setScreen}
+      />
+    );
+  }
+
+  if (screen === "selector") {
+    return (
+      <Selector
+        setScreen={setScreen}
+      />
+    );
+  }
+
+  if (screen === "vibeIntro") {
+    return (
+      <VibeIntro
+        setScreen={setScreen}
+      />
+    );
+  }
+
+  if (screen === "vibes") {
+    return (
+      <Vibes
+        setScreen={setScreen}
+      />
+    );
+  }
+
+  return null;
 }
