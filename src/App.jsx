@@ -963,11 +963,11 @@ if (
 
 }
 */
-import Welcome from "./pages/Welcome";
-import IntroSlides from "./pages/IntroSlides";
+import Selector from "./pages/Selector";
+
 export default function App() {
   return (
-    <IntroSlides
+    <Selector
       setScreen={() => {}}
     />
   );
