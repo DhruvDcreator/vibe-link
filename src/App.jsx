@@ -260,7 +260,7 @@ setAppReady(true);
   !appReady
 ) {
 
-  return (
+  /*return (
 
     <div className="
   w-screen
@@ -273,7 +273,7 @@ setAppReady(true);
   relative
 ">
 
-  {/* glow */}
+  {/* glow *}
   <div className="
     absolute
     w-[300px]
@@ -292,7 +292,7 @@ setAppReady(true);
     blur-[120px]
   "></div>
 
-  {/* logo */}
+  {/* logo *}
   <img
     src={welcomeLogo}
     alt="VibeLink"
@@ -304,7 +304,25 @@ setAppReady(true);
   />
 
 </div>
-  );
+  );*/
+
+  return (
+
+  <div
+    style={{
+      background: "black",
+      color: "white",
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "32px",
+    }}
+  >
+    LOADING APP
+  </div>
+
+);
 
   }
 
