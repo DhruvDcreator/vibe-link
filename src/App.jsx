@@ -963,11 +963,11 @@ if (
 
 }
 */
-import VibeIntro from "./pages/VibeIntro";
+import Vibes from "./pages/Vibes";
 
 export default function App() {
   return (
-    <VibeIntro
+    <Vibes
       setScreen={() => {}}
     />
   );
