@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import vibeWordmark from "../assets/branding/vibelink-wordmark.png";
 import {
   ArrowRight,
   Check,
@@ -92,30 +93,58 @@ function SectionTitle({ children, subtitle }) {
 
 function ModeSwitch({ mode, onChange }) {
   return (
-    <div className="relative grid grid-cols-2 rounded-2xl border border-white/10 bg-white/[0.055] p-1.5 backdrop-blur-2xl">
+    <div className="
+relative
+grid
+grid-cols-2
+rounded-2xl
+border
+border-white/10
+bg-white/[0.04]
+backdrop-blur-xl
+p-1
+shadow-[0_8px_30px_rgba(0,0,0,0.35)]
+">
       {["vibe", "link"].map((item) => (
         <button
-          key={item}
-          type="button"
-          onClick={() => onChange(item)}
-          className="relative flex min-h-11 items-center justify-center rounded-xl text-xs font-black tracking-[0.2em]"
-        >
+  key={item}
+  type="button"
+  onClick={() => onChange(item)}
+  className="
+relative
+z-10
+flex
+items-center
+justify-center
+py-3
+text-sm
+font-bold
+transition-all
+duration-300
+"
+>
           {mode === item && (
             <motion.div
   layoutId="vibelink-mode"
   className={`absolute inset-0 rounded-xl ${
     mode === "vibe"
-      ? "bg-gradient-to-r from-cyan-500 via-sky-500 to-blue-600 shadow-[0_0_24px_rgba(34,211,238,0.35)]"
-      : "bg-gradient-to-r from-purple-500 via-fuchsia-500 to-pink-500 shadow-[0_0_24px_rgba(168,85,247,0.35)]"
+  ? "bg-gradient-to-r from-[#122033] via-[#17324A] to-[#214761]"
+  : "bg-gradient-to-r from-[#171A2A] via-[#24244A] to-[#31295A]"
   }`}
   transition={{
     type: "spring",
-    stiffness: 280,
+    stiffness: 260,
     damping: 24,
   }}
 />
           )}
-          <span className={`relative ${mode === item ? "text-white" : "text-zinc-500"}`}>
+          <span
+  className={`relative transition-colors duration-300 ${
+    mode === item
+      ? "text-white"
+      : "text-white/55"
+  }`}
+>
             {item.toUpperCase()}
           </span>
         </button>
@@ -614,9 +643,11 @@ export default function VibeHome({
       <main className="relative z-10 mx-auto max-w-5xl px-4 pb-28 pt-5 sm:px-6">
         <nav className="flex items-center justify-between">
           <div className="flex items-center">
-  <h1 className="text-lg font-black tracking-wide text-white">
-    VibeLink
-  </h1>
+  <img
+    src={vibeWordmark}
+    alt="VibeLink"
+    className="h-5 w-auto object-contain"
+  />
 </div>
 
           <button type="button" onClick={() => setLeaderboardOpen(true)} className="flex h-11 w-11 items-center justify-center rounded-full border border-cyan-300/20 bg-white/[0.06] text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.12)] backdrop-blur-xl">
