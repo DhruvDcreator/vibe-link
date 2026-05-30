@@ -27,7 +27,9 @@ export default function VibeIntro({
 
       px-6
       py-8
-    ">
+    "style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
 
       {/* BACKGROUND */}
       <div className="

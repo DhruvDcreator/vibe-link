@@ -127,7 +127,9 @@ export default function IntroSlides({
       justify-center
       px-5
       py-8
-    ">
+    "style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
 
       {/* background glow */}
       <div className="

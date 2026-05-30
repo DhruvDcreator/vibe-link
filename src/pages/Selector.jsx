@@ -111,7 +111,9 @@ export default function Selector({
       text-white
       px-5
       py-8
-    ">
+    "style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
 
       {/* BACKGROUND */}
       <div className="

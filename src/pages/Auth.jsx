@@ -276,7 +276,9 @@ await sendOtp();
 
  return (
 
-  <div className="relative min-h-screen overflow-hidden bg-[#03040A] flex items-center justify-center text-white px-6">
+  <div className="relative min-h-screen overflow-hidden bg-[#03040A] flex items-center justify-center text-white px-6"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
 
     {/* BACKGROUND */}
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(0,212,255,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(168,85,247,0.18),transparent_34%),radial-gradient(circle_at_center,rgba(255,0,128,0.05),transparent_45%)]"></div>

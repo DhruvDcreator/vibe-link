@@ -6,7 +6,9 @@ export default function Privacy({
 
   return (
 
-    <div className="relative min-h-screen bg-black overflow-hidden">
+    <div className="relative min-h-screen bg-black overflow-hidden"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
 
       {/* fixed background */}
       <div className="fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>

@@ -88,7 +88,9 @@ export default function LoginSuccess({
   }, []);
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden relative px-6">
+    <div className="min-h-screen bg-black flex items-center justify-center overflow-hidden relative px-6"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
 
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
 

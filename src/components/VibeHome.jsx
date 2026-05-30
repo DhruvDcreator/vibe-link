@@ -648,7 +648,10 @@ export default function VibeHome({
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#03040A] text-white">
+    <div className="relative min-h-screen  overflow-hidden bg-[#03040A] text-white"
+    style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
       <div className="pointer-events-none fixed -left-28 -top-24 h-72 w-72 rounded-full bg-cyan-500/15 blur-[100px]" />
       <div className="pointer-events-none fixed -bottom-24 -right-20 h-80 w-80 rounded-full bg-purple-500/15 blur-[110px]" />

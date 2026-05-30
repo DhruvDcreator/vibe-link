@@ -145,7 +145,9 @@ function SectionTitle({ title, subtitle, action }) {
 
 function SkeletonHome() {
   return (
-    <div className="min-h-screen bg-[#03040A] px-4 pb-28 pt-7 text-white">
+    <div className="min-h-screen bg-[#03040A] px-4 pb-28 pt-7 text-white"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
       <div className="mx-auto max-w-6xl animate-pulse">
         <div className="h-4 w-32 rounded-full bg-white/10" />
         <div className="mt-4 h-10 w-64 rounded-2xl bg-white/10" />
@@ -431,7 +433,9 @@ export default function Home() {
 
   if (pageError || !userData) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#03040A] p-6 text-center text-white">
+      <div className="flex min-h-screen items-center justify-center bg-[#03040A] p-6 text-center text-white"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
         <div>
           <Sparkles className="mx-auto text-cyan-300" size={34} />
           <h1 className="mt-5 text-2xl font-black">{pageError || "Unable to load VibeLink."}</h1>
@@ -441,7 +445,9 @@ export default function Home() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#03040A] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#03040A] text-white"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
       <div className="pointer-events-none fixed -left-32 -top-24 h-[340px] w-[340px] rounded-full bg-cyan-500/15 blur-[110px]" />
       <div className="pointer-events-none fixed -bottom-28 -right-20 h-[360px] w-[360px] rounded-full bg-purple-500/15 blur-[120px]" />

@@ -319,13 +319,17 @@ export default function Vibes({ setScreen }) {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#03040A] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#03040A] text-white"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
       <div className="pointer-events-none absolute -left-32 -top-24 h-[340px] w-[340px] rounded-full bg-cyan-500/20 blur-[110px]" />
       <div className="pointer-events-none absolute -bottom-32 -right-24 h-[380px] w-[380px] rounded-full bg-purple-500/20 blur-[120px]" />
       <div className="pointer-events-none absolute left-1/2 top-1/3 h-[260px] w-[260px] -translate-x-1/2 rounded-full bg-blue-500/5 blur-[100px]" />
 
-      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 pb-8 pt-6 sm:px-6 md:px-10 md:pb-12 md:pt-10">
+      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 pb-8 pt-6 sm:px-6 md:px-10 md:pb-12 md:pt-10"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
         <motion.header
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}

@@ -290,7 +290,9 @@ const [showCropper,
       transition={{
         duration: 0.5,
       }}
-      className="px-4 pb-24 pt-6 min-h-screen bg-black text-white relative overflow-hidden"
+      className="px-4 pb-24 pt-6 min-h-screen bg-black text-white relative overflow-hidden"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}
     >
 
       {/* background */}

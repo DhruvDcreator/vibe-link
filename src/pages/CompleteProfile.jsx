@@ -130,7 +130,9 @@ export default function CompleteProfile({
 
   return (
 
-    <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white relative overflow-hidden"style={{
+  paddingTop: "env(safe-area-inset-top)"
+}}>
 
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-black to-purple-500/10"></div>
 
