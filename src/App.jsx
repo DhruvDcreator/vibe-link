@@ -1,3 +1,4 @@
+/*
 import {
   useState,
   useEffect,
@@ -273,7 +274,7 @@ setAppReady(true);
   relative
 ">
 
-  {/* glow */}
+  {/* glow *}/*
   <div className="
     absolute
     w-[300px]
@@ -292,7 +293,7 @@ setAppReady(true);
     blur-[120px]
   "></div>
 
-  {/* logo */}
+  {/* logo *}/*
   <img
     src={welcomeLogo}
     alt="VibeLink"
@@ -960,4 +961,9 @@ if (
   </div>
 );
 
+}
+*/
+import Welcome from "./pages/Welcome";
+export default function App() {
+  return <Welcome setScreen={() => {}} />;
 }
