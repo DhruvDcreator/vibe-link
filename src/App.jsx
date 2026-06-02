@@ -249,7 +249,7 @@ setAppReady(true);
 
   }, [screen]);
 
-  /*if (
+  if (
   initializing ||
   !authChecked ||
   !screen ||
@@ -302,9 +302,9 @@ setAppReady(true);
 </div>
   );
 
-  }*/
+  }
 
-  if (
+  /*if (
   initializing ||
   !authChecked ||
   !screen ||
@@ -329,7 +329,7 @@ setAppReady(true);
 
   );
 
-}
+}*/
 
   if (
     screen ===
