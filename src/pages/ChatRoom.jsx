@@ -128,7 +128,7 @@ export default function ChatRoom({
 
         },
 
-        1000
+        60000
       );
 
     return () =>

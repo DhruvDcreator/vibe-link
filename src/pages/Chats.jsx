@@ -68,7 +68,7 @@ export default function Chats({
 
         },
 
-        1000
+        60000
       );
 
     return () =>
