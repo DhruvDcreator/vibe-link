@@ -679,8 +679,8 @@ export default function VibeHome({
   ease: "easeOut",
 }}className="mt-7 text-center text-3xl font-black tracking-tight sm:text-4xl">
               {mode === "vibe"
-  ? "Find Your People."
-  : "Build Your Circle."}
+  ? "Find Your People"
+  : "Build Your Circle"}
             </motion.h1>
           </AnimatePresence>
         </div>
