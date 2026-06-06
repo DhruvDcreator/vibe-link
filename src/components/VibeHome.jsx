@@ -1,5 +1,3 @@
-// src/components/VibeHome.jsx
-
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import vibeWordmark from "../assets/branding/vibelink-wordmark.png";
@@ -45,10 +43,10 @@ import {
 } from "../services/vibeHomeFirestore";
 
 const TRIBES = [
-  { id: "movies", name: "Movie Lovers", icon: "🎬", members: 1840 },
-  { id: "tech", name: "Tech India", icon: "⚡", members: 1320 },
-  { id: "night", name: "Night Owls", icon: "🌙", members: 980 },
-  { id: "gaming", name: "Gaming Arena", icon: "🎮", members: 860 },
+  { id: "movies", name: "Movie Lovers", icon: "ðŸŽ¬", members: 1840 },
+  { id: "tech", name: "Tech India", icon: "âš¡", members: 1320 },
+  { id: "night", name: "Night Owls", icon: "ðŸŒ™", members: 980 },
+  { id: "gaming", name: "Gaming Arena", icon: "ðŸŽ®", members: 860 },
 ];
 
 const ROULETTE_CATEGORIES = ["Movies", "Tech", "Gaming", "Music", "Travel", "Cricket"];
@@ -447,7 +445,7 @@ function Roulette({ uid, userData, onVibe }) {
             <h3 className="mt-4 text-xl font-black">{selected.username || "Vibe Seeker"}</h3>
             <p className="mt-1 text-sm font-black text-cyan-300">{calculateCompatibility(myVibes, selected.vibes)}% Vibed</p>
             <p className="mt-3 text-xs font-bold text-zinc-400">
-              {flattenVibes(selected.vibes).filter((vibe) => myVibes.includes(vibe)).slice(0, 4).join(" • ") || "A new perspective awaits"}
+              {flattenVibes(selected.vibes).filter((vibe) => myVibes.includes(vibe)).slice(0, 4).join(" â€¢ ") || "A new perspective awaits"}
             </p>
             <div className="mt-4 grid grid-cols-2 gap-3">
               <button type="button" onClick={() => onVibe(selected)} className="rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-600 py-3 text-xs font-black">Let&apos;s Vibe</button>
@@ -506,9 +504,9 @@ function Leaderboard({ uid, onClose }) {
   }, [tab, uid]);
 
   const tabs = [
-    { id: "tribeBuilderPoints", label: "🏆 Tribe Builders" },
-    { id: "points", label: "⚡ Points" },
-    { id: "streak", label: "🔥 Streaks" },
+    { id: "tribeBuilderPoints", label: "ðŸ† Tribe Builders" },
+    { id: "points", label: "âš¡ Points" },
+    { id: "streak", label: "ðŸ”¥ Streaks" },
   ];
 
   return (
@@ -551,9 +549,9 @@ p-5
             ))}
 
             <div className="rounded-2xl bg-gradient-to-r from-cyan-500/15 to-purple-500/15 p-4 text-xs font-black">
-              <p>Your Rank: #{data.rank || "—"}</p>
+              <p>Your Rank: #{data.rank || "â€”"}</p>
               <p className="mt-2 text-cyan-300">Your Points: {Number(data.currentUser?.points || 0).toLocaleString()}</p>
-              <p className="mt-3 text-zinc-500">Weekly rewards: #1 +30 • #2 +20 • #3 +10</p>
+              <p className="mt-3 text-zinc-500">Weekly rewards: #1 +30 â€¢ #2 +20 â€¢ #3 +10</p>
             </div>
           </div>
         )}
@@ -648,15 +646,17 @@ export default function VibeHome({
   };
 
   return (
-    <div className="relative min-h-screen  overflow-hidden bg-[#03040A] text-white"
-    style={{
-  paddingTop: "env(safe-area-inset-top)"
-}}>
+    <div className="relative min-h-dvh overflow-hidden bg-[#03040A] text-white">
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
       <div className="pointer-events-none fixed -left-28 -top-24 h-72 w-72 rounded-full bg-cyan-500/15 blur-[100px]" />
       <div className="pointer-events-none fixed -bottom-24 -right-20 h-80 w-80 rounded-full bg-purple-500/15 blur-[110px]" />
 
-      <main className="relative z-10 mx-auto max-w-5xl px-4 pb-28 pt-5 sm:px-6">
+      <main
+        className="relative z-10 mx-auto max-w-5xl px-4 pb-28 sm:px-6"
+        style={{
+          paddingTop: "max(20px, env(safe-area-inset-top))",
+        }}
+      >
         <nav className="flex items-center justify-between">
           <div className="flex items-center">
   <img

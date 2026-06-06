@@ -47,9 +47,9 @@ const FALLBACK_PROFILE = "https://i.pravatar.cc/300";
 const PRESENCE_INTERVAL_MS = 30000;
 
 const FALLBACK_TRIBES = [
-  { id: "movies", name: "Movie Lovers", icon: "🎬", online: 128, members: 1840 },
-  { id: "tech", name: "Tech India", icon: "⚡", online: 94, members: 1320 },
-  { id: "night", name: "Night Owls", icon: "🌙", online: 76, members: 980 },
+  { id: "movies", name: "Movie Lovers", icon: "ðŸŽ¬", online: 128, members: 1840 },
+  { id: "tech", name: "Tech India", icon: "âš¡", online: 94, members: 1320 },
+  { id: "night", name: "Night Owls", icon: "ðŸŒ™", online: 76, members: 980 },
 ];
 
 const MISSIONS = [
@@ -64,6 +64,21 @@ const FALLBACK_ACTIVITY = [
   { id: "a2", text: "Riya posted a vibe", time: "8m ago", icon: Sparkles },
   { id: "a3", text: "Kabir reached Rank #4", time: "14m ago", icon: Trophy },
 ];
+
+function scrollToTop() {
+  try {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "auto",
+    });
+
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  } catch {
+    window.scrollTo(0, 0);
+  }
+}
 
 function safeArray(value) {
   return Array.isArray(value) ? value : [];
@@ -145,21 +160,15 @@ function SectionTitle({ title, subtitle, action }) {
 
 function SkeletonHome() {
   return (
-    <div className="min-h-screen bg-[#03040A] px-4 pb-28 pt-7 text-white"style={{
-  paddingTop: "env(safe-area-inset-top)"
-}}>
-      <div className="mx-auto max-w-6xl animate-pulse">
-        <div className="h-4 w-32 rounded-full bg-white/10" />
-        <div className="mt-4 h-10 w-64 rounded-2xl bg-white/10" />
-        <div className="mt-8 h-14 rounded-2xl bg-white/10" />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          <div className="h-48 rounded-[28px] bg-white/10" />
-          <div className="h-48 rounded-[28px] bg-white/10" />
-        </div>
-        <div className="mt-10 h-72 rounded-[30px] bg-white/10" />
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
-          <div className="h-64 rounded-[28px] bg-white/10" />
-          <div className="h-64 rounded-[28px] bg-white/10" />
+    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-[#03040A] px-4 text-white">
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-cyan-400/15 blur-[100px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[240px] w-[240px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/15 blur-[100px]" />
+
+      <div className="relative flex flex-col items-center">
+        <Sparkles className="text-cyan-300 drop-shadow-[0_0_20px_rgba(34,211,238,0.45)]" size={42} />
+        <div className="mt-6 h-3 w-32 overflow-hidden rounded-full bg-white/10">
+          <div className="h-full w-1/2 animate-pulse rounded-full bg-gradient-to-r from-cyan-400 to-purple-500" />
         </div>
       </div>
     </div>
@@ -257,7 +266,7 @@ function TribePage() {
           <div key={tribe.id} className="rounded-[26px] border border-white/10 bg-white/[0.05] p-5 backdrop-blur-2xl">
             <div className="text-3xl">{tribe.icon}</div>
             <h2 className="mt-4 text-xl font-black">{tribe.name}</h2>
-            <p className="mt-2 text-xs font-bold text-zinc-500">{tribe.online} online • {formatNumber(tribe.members)} members</p>
+            <p className="mt-2 text-xs font-bold text-zinc-500">{tribe.online} online â€¢ {formatNumber(tribe.members)} members</p>
             <button type="button" className="mt-5 flex items-center gap-2 text-sm font-black text-cyan-300">View Tribe <ArrowRight size={16} /></button>
           </div>
         ))}
@@ -311,6 +320,10 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState("");
   const [hasUnread, setHasUnread] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(scrollToTop);
+  }, [currentTab]);
 
   useEffect(() => {
     if (typeof navigator === "undefined") return;
@@ -433,9 +446,7 @@ export default function Home() {
 
   if (pageError || !userData) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#03040A] p-6 text-center text-white"style={{
-  paddingTop: "env(safe-area-inset-top)"
-}}>
+      <div className="flex min-h-dvh items-center justify-center bg-[#03040A] p-6 text-center text-white">
         <div>
           <Sparkles className="mx-auto text-cyan-300" size={34} />
           <h1 className="mt-5 text-2xl font-black">{pageError || "Unable to load VibeLink."}</h1>
@@ -445,9 +456,7 @@ export default function Home() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#03040A] text-white"style={{
-  paddingTop: "env(safe-area-inset-top)"
-}}>
+    <div className="relative min-h-dvh overflow-hidden bg-[#03040A] text-white">
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
       <div className="pointer-events-none fixed -left-32 -top-24 h-[340px] w-[340px] rounded-full bg-cyan-500/15 blur-[110px]" />
       <div className="pointer-events-none fixed -bottom-28 -right-20 h-[360px] w-[360px] rounded-full bg-purple-500/15 blur-[120px]" />

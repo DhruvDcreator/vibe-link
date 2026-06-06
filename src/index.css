@@ -1,33 +1,9 @@
-/*@import "tailwindcss";
-
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  background: #03040A;
-  overflow-x: hidden;
-}
-
-body {
-  padding-top: env(safe-area-inset-top);
-}
-
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}*/
 /* src/index.css */
 
 @import "tailwindcss";
 
 :root {
-  background: #03040a;
+  background: #03040A;
   color-scheme: dark;
 }
 
@@ -38,11 +14,11 @@ body,
   padding: 0;
   min-height: 100%;
   width: 100%;
-  background: #03040a;
+  background: #03040A;
   overflow-x: hidden;
-  -webkit-text-size-adjust: 100%;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-text-size-adjust: 100%;
 }
 
 html::-webkit-scrollbar,
@@ -65,17 +41,19 @@ body {
   isolation: isolate;
 }
 
-.no-scrollbar {
+.no-scrollbar,
+.hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-.no-scrollbar::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar,
+.hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
 .app-safe-top {
-  padding-top: max(12px, env(safe-area-inset-top));
+  padding-top: max(14px, env(safe-area-inset-top));
 }
 
 .app-safe-bottom {
