@@ -71,7 +71,7 @@ const VIBE_CATEGORIES = [
   { name: "Memes", icon: Sparkles },
   { name: "Podcasts", icon: Podcast },
   { name: "Netflix", icon: Clapperboard },
-  { name: "YouTube", icon: Youtube },
+  { name: "YouTube", icon: MonitorPlay },
   { name: "Concerts", icon: Music },
   { name: "Singing", icon: Mic2 },
   { name: "Dancing", icon: PartyPopper },
