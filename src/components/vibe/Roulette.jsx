@@ -26,6 +26,7 @@ import {
   Palette,
   PartyPopper,
   Plane,
+  Play,
   Podcast,
   RefreshCw,
   Rocket,
@@ -34,7 +35,6 @@ import {
   Trophy,
   Utensils,
   X,
-  Youtube,
   Zap,
 } from "lucide-react";
 
@@ -71,7 +71,7 @@ const VIBE_CATEGORIES = [
   { name: "Memes", icon: Sparkles },
   { name: "Podcasts", icon: Podcast },
   { name: "Netflix", icon: Clapperboard },
-  { name: "YouTube", icon: MonitorPlay },
+  { name: "YouTube", icon: Play },
   { name: "Concerts", icon: Music },
   { name: "Singing", icon: Mic2 },
   { name: "Dancing", icon: PartyPopper },
