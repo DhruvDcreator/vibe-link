@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import VibeHome from "../components/VibeHome";
+import VibeHome from "../pages/VibeHome";
 import {
   Activity,
   ArrowRight,
