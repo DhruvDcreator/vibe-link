@@ -1,61 +1,80 @@
-/* src/index.css */
 
 @import "tailwindcss";
 
 :root {
-  background: #03040A;
-  color-scheme: dark;
+background: #03040A;
+color-scheme: dark;
 }
 
 html,
 body,
 #root {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  width: 100%;
-  background: #03040A;
-  overflow-x: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  -webkit-text-size-adjust: 100%;
+margin: 0;
+padding: 0;
+width: 100%;
+min-height: 100%;
+background: #03040A;
+-webkit-text-size-adjust: 100%;
+}
+
+/* Keep scrolling working */
+html {
+scroll-behavior: smooth;
+}
+
+body {
+min-height: 100vh;
+background: #03040A;
+}
+
+/* Root app */
+#root {
+min-height: 100vh;
+background: #03040A;
+}
+
+/* Hide scrollbars but preserve scrolling */
+html,
+body,
+.no-scrollbar,
+.hide-scrollbar {
+scrollbar-width: none;
+-ms-overflow-style: none;
 }
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar,
-#root::-webkit-scrollbar,
-*::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-body {
-  min-height: 100dvh;
-  overscroll-behavior-y: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-#root {
-  min-height: 100dvh;
-  isolation: isolate;
-}
-
-.no-scrollbar,
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
 .no-scrollbar::-webkit-scrollbar,
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;
+display: none;
+width: 0;
+height: 0;
 }
 
+/* Safe areas for iPhone */
 .app-safe-top {
-  padding-top: max(14px, env(safe-area-inset-top));
+padding-top: env(safe-area-inset-top);
 }
 
 .app-safe-bottom {
-  padding-bottom: max(16px, env(safe-area-inset-bottom));
+padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Loading screen animation */
+@keyframes float {
+0% {
+transform: translateY(0px);
+}
+
+50% {
+transform: translateY(-8px);
+}
+
+100% {
+transform: translateY(0px);
+}
+}
+
+.animate-float {
+animation: float 3s ease-in-out infinite;
 }
