@@ -193,13 +193,15 @@ const unlockDate =
             />
           </div>
 
-          <button
-            type="button"
-            onClick={() => setLeaderboardOpen(true)}
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-cyan-300/20 bg-white/[0.06] text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.12)] backdrop-blur-xl"
-          >
-            <Crown size={20} />
-          </button>
+          {mode === "vibe" && (
+  <button
+    type="button"
+    onClick={() => setLeaderboardOpen(true)}
+    className="flex h-11 w-11 items-center justify-center rounded-full border border-cyan-300/20 bg-white/[0.06] text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.12)] backdrop-blur-xl"
+  >
+    <Crown size={20} />
+  </button>
+)}
         </nav>
 
         <div className="mt-6">
@@ -219,6 +221,22 @@ const unlockDate =
             >
               {mode === "vibe" ? "Find Your People" : "Build Your Circle"}
             </motion.h1>
+            {mode === "link" && (
+  <motion.p
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    className="
+    mt-2
+    text-center
+    text-sm
+    font-bold
+    tracking-[0.2em]
+    text-cyan-300
+    "
+  >
+    UNDER DEVELOPMENT
+  </motion.p>
+)}
           </AnimatePresence>
         </div>
 
@@ -261,11 +279,7 @@ const unlockDate =
     />
   </motion.div>
 ) : (
-  <LinkComingSoon
-    age={age}
-    unlockDate={unlockDate}
-    daysRemaining={daysRemaining}
-  />
+  <LinkComingSoon age={age} />
 )}
         
       </main>
