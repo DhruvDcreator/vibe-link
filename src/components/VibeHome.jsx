@@ -172,15 +172,6 @@ const unlockDate =
       setCurrentTab("chatRoom");
     }
   };
-  if (mode === "link") {
-  return (
-    <LinkComingSoon
-      age={age}
-      unlockDate={unlockDate}
-      daysRemaining={daysRemaining}
-    />
-  );
-}
   return (
     <div className="relative min-h-dvh overflow-hidden bg-[#03040A] text-white">
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
@@ -239,32 +230,44 @@ const unlockDate =
           <div className="mt-9 rounded-[24px] border border-red-300/15 bg-red-400/10 p-5 text-center text-sm font-bold text-red-200">
             {error}
           </div>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-9 space-y-10"
-          >
-            <DailyTasks uid={uid} userData={userData} />
+        ) : mode === "vibe" ? (
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    className="mt-9 space-y-10"
+  >
+    <DailyTasks uid={uid} userData={userData} />
 
-            <VibeDrops uid={uid} userData={userData} />
+    <VibeDrops uid={uid} userData={userData} />
 
-            <AnonymousVibe uid={uid} userData={userData} />
+    <AnonymousVibe
+      uid={uid}
+      userData={userData}
+    />
 
-            <Roulette
-              uid={uid}
-              userData={userData}
-              onVibe={openChat}
-            />
+    <Roulette
+      uid={uid}
+      userData={userData}
+      onVibe={openChat}
+    />
 
-            <Leaderboard
-              uid={uid}
-              userData={userData}
-              preview
-              onOpen={() => setLeaderboardOpen(true)}
-            />
-          </motion.div>
-        )}
+    <Leaderboard
+      uid={uid}
+      userData={userData}
+      preview
+      onOpen={() =>
+        setLeaderboardOpen(true)
+      }
+    />
+  </motion.div>
+) : (
+  <LinkComingSoon
+    age={age}
+    unlockDate={unlockDate}
+    daysRemaining={daysRemaining}
+  />
+)}
+        
       </main>
 
       {leaderboardOpen && (
