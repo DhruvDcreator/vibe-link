@@ -3,6 +3,7 @@
 export const DAILY_TASK_REWARD = 20;
 export const DAILY_TASK_DURATION_MS = 24 * 60 * 60 * 1000;
 
+
 export const DAILY_TASKS = [
   { id: "connect_1", title: "Connect with 1 new person", type: "connections", target: 1 },
   { id: "connect_2", title: "Connect with 2 new people", type: "connections", target: 2 },
@@ -104,3 +105,20 @@ export const DAILY_TASKS = [
   { id: "friend_leaderboard", title: "Check friend rankings", type: "friendLeaderboardViews", target: 1 },
   { id: "streak_leaderboard", title: "Check streak rankings", type: "streakLeaderboardViews", target: 1 },
 ];
+export const DAILY_TASK_COUNT = DAILY_TASKS.length;
+
+export const DAILY_TASK_TYPES = Object.freeze(
+  [...new Set(DAILY_TASKS.map(task => task.type))]
+);
+
+export function getTaskById(taskId) {
+  return DAILY_TASKS.find(
+    task => task.id === taskId
+  );
+}
+
+export function isValidTaskId(taskId) {
+  return DAILY_TASKS.some(
+    task => task.id === taskId
+  );
+}

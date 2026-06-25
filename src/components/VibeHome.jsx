@@ -9,6 +9,7 @@ import VibeDrops from "./vibe/VibeDrops";
 import AnonymousVibe from "./vibe/AnonymousVibe";
 import Roulette from "./vibe/Roulette";
 import Leaderboard from "./vibe/Leaderboard";
+import LinkComingSoon from "../components/link/LinkComingSoon";
 
 function Skeleton() {
   return (
@@ -85,22 +86,79 @@ duration-300
 
 export default function VibeHome({
   userData,
-  onModeChange,
+  people,
   setCurrentTab,
   setSelectedChatUser,
+  mode,
+  setMode,
 }) {
   const uid = auth?.currentUser?.uid || userData?.uid || "";
-  const [mode, setMode] = useState("vibe");
+  const birthDate = userData?.dob
+  ? new Date(userData.dob)
+  : null;
+
+const today = new Date();
+
+let age = 17;
+
+if (birthDate) {
+  age =
+    today.getFullYear() -
+    birthDate.getFullYear();
+
+  const monthDiff =
+    today.getMonth() -
+    birthDate.getMonth();
+
+  if (
+    monthDiff < 0 ||
+    (
+      monthDiff === 0 &&
+      today.getDate() <
+      birthDate.getDate()
+    )
+  ) {
+    age--;
+  }
+}
+
+const unlockDateObj =
+  birthDate
+    ? new Date(
+        birthDate.getFullYear() + 17,
+        birthDate.getMonth(),
+        birthDate.getDate()
+      )
+    : null;
+
+const daysRemaining =
+  unlockDateObj
+    ? Math.max(
+        0,
+        Math.ceil(
+          (unlockDateObj - today) /
+          (1000 * 60 * 60 * 24)
+        )
+      )
+    : 0;
+
+const unlockDate =
+  unlockDateObj
+    ? unlockDateObj.toLocaleDateString(
+        "en-IN",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }
+      )
+    : "";
   const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [loading] = useState(false);
   const [error] = useState("");
 
   const changeMode = (nextMode) => {
     setMode(nextMode);
-
-    if (typeof onModeChange === "function") {
-      onModeChange(nextMode);
-    }
   };
 
   const openChat = (person) => {
@@ -114,7 +172,15 @@ export default function VibeHome({
       setCurrentTab("chatRoom");
     }
   };
-
+  if (mode === "link") {
+  return (
+    <LinkComingSoon
+      age={age}
+      unlockDate={unlockDate}
+      daysRemaining={daysRemaining}
+    />
+  );
+}
   return (
     <div className="relative min-h-dvh overflow-hidden bg-[#03040A] text-white">
       <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />

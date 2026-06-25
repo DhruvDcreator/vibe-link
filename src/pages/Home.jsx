@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import VibeHome from "../components/VibeHome";
+import LinkComingSoon from "../components/link/LinkComingSoon";
 import {
   Activity,
   ArrowRight,
@@ -244,14 +245,18 @@ function Dashboard({
   people,
   setCurrentTab,
   setSelectedChatUser,
+  mode,
+  setMode,
 }) {
   return (
     <VibeHome
-      userData={userData}
-      people={people}
-      setCurrentTab={setCurrentTab}
-      setSelectedChatUser={setSelectedChatUser}
-    />
+  userData={userData}
+  people={people}
+  setCurrentTab={setCurrentTab}
+  setSelectedChatUser={setSelectedChatUser}
+  mode={mode}
+  setMode={setMode}
+/>
   );
 }
 
@@ -314,12 +319,74 @@ function BottomNav({ currentTab, setCurrentTab, hasUnread }) {
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState("home");
+  const [selectedMode, setSelectedMode] =
+  useState("vibe");
   const [userData, setUserData] = useState(null);
   const [selectedChatUser, setSelectedChatUser] = useState(null);
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pageError, setPageError] = useState("");
   const [hasUnread, setHasUnread] = useState(false);
+  const birthDate = userData?.dob
+  ? new Date(userData.dob)
+  : null;
+
+const today = new Date();
+
+let age = 17;
+
+if (birthDate) {
+  age =
+    today.getFullYear() -
+    birthDate.getFullYear();
+
+  const monthDiff =
+    today.getMonth() -
+    birthDate.getMonth();
+
+  if (
+    monthDiff < 0 ||
+    (
+      monthDiff === 0 &&
+      today.getDate() <
+      birthDate.getDate()
+    )
+  ) {
+    age--;
+  }
+}
+
+const unlockDateObj =
+  birthDate
+    ? new Date(
+        birthDate.getFullYear() + 17,
+        birthDate.getMonth(),
+        birthDate.getDate()
+      )
+    : null;
+
+const daysRemaining =
+  unlockDateObj
+    ? Math.max(
+        0,
+        Math.ceil(
+          (unlockDateObj - today) /
+          (1000 * 60 * 60 * 24)
+        )
+      )
+    : 0;
+
+const unlockDate =
+  unlockDateObj
+    ? unlockDateObj.toLocaleDateString(
+        "en-IN",
+        {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }
+      )
+    : "";
 
   useEffect(() => {
     requestAnimationFrame(scrollToTop);
@@ -464,11 +531,13 @@ export default function Home() {
       <div className="relative z-10">
         {currentTab === "home" && (
           <Dashboard
-            userData={userData}
-            people={people}
-            setCurrentTab={setCurrentTab}
-            setSelectedChatUser={setSelectedChatUser}
-          />
+  userData={userData}
+  people={people}
+  setCurrentTab={setCurrentTab}
+  setSelectedChatUser={setSelectedChatUser}
+  mode={selectedMode}
+  setMode={setSelectedMode}
+/>
         )}
 
         {currentTab === "discover" && (
