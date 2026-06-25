@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import VibeHome from "../components/VibeHome";
-import LinkComingSoon from "../components/link/LinkComingSoon";
 import {
   Activity,
   ArrowRight,
@@ -583,11 +582,39 @@ const unlockDate =
       </div>
 
       {currentTab !== "chatRoom" && (
-        <BottomNav
-          currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
-          hasUnread={hasUnread}
-        />
+        <AnimatePresence
+  mode="wait"
+  initial={false}
+>
+  {!(currentTab === "home" &&
+      selectedMode === "link") && (
+    <motion.div
+      initial={{
+        y: 100,
+        opacity: 0,
+      }}
+      animate={{
+        y: 0,
+        opacity: 1,
+      }}
+      exit={{
+        y: 100,
+        opacity: 0,
+      }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 24,
+      }}
+    >
+      <BottomNav
+        currentTab={currentTab}
+        setCurrentTab={setCurrentTab}
+        hasUnread={hasUnread}
+      />
+    </motion.div>
+  )}
+</AnimatePresence>
       )}
     </div>
   );

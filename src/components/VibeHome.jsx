@@ -64,10 +64,11 @@ duration-300
                   : "bg-gradient-to-r from-[#171A2A] via-[#24244A] to-[#31295A]"
               }`}
               transition={{
-                type: "spring",
-                stiffness: 260,
-                damping: 24,
-              }}
+  type: "spring",
+  stiffness: 180,
+  damping: 20,
+  mass: 0.8,
+}}
             />
           )}
 
@@ -207,36 +208,67 @@ const unlockDate =
         <div className="mt-6">
           <ModeSwitch mode={mode} onChange={changeMode} />
 
-          <AnimatePresence mode="wait">
+          <AnimatePresence
+  mode="wait"
+  initial={false}
+>
             <motion.h1
               key={mode}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
+              initial={{
+  opacity: 0,
+  y: 20,
+  scale: 0.98,
+}}
+animate={{
+  opacity: 1,
+  y: 0,
+  scale: 1,
+}}
+exit={{
+  opacity: 0,
+  y: -20,
+  scale: 0.98,
+}}
               transition={{
-                duration: 0.35,
-                ease: "easeOut",
-              }}
+  type: "spring",
+  stiffness: 120,
+  damping: 18,
+}}
               className="mt-7 text-center text-3xl font-black tracking-tight sm:text-4xl"
             >
               {mode === "vibe" ? "Find Your People" : "Build Your Circle"}
             </motion.h1>
-            {mode === "link" && (
-  <motion.p
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    className="
-    mt-2
-    text-center
-    text-sm
-    font-bold
-    tracking-[0.2em]
-    text-cyan-300
-    "
-  >
-    UNDER DEVELOPMENT
-  </motion.p>
-)}
+            <AnimatePresence>
+  {mode === "link" && (
+    <motion.p
+      initial={{
+        opacity: 0,
+        y: 10,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      exit={{
+        opacity: 0,
+        y: -10,
+      }}
+      transition={{
+        duration: 0.25,
+      }}
+      className="
+      mt-2
+      text-center
+      text-sm
+      font-bold
+      tracking-[0.2em]
+      text-cyan-300
+      "
+    >
+      UNDER DEVELOPMENT
+    </motion.p>
+  )}
+</AnimatePresence>
           </AnimatePresence>
         </div>
 
@@ -248,38 +280,60 @@ const unlockDate =
           <div className="mt-9 rounded-[24px] border border-red-300/15 bg-red-400/10 p-5 text-center text-sm font-bold text-red-200">
             {error}
           </div>
-        ) : mode === "vibe" ? (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    className="mt-9 space-y-10"
-  >
-    <DailyTasks uid={uid} userData={userData} />
+        ) : (
+  <AnimatePresence mode="wait">
+    {mode === "vibe" ? (
+      <motion.div
+        key="vibe"
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -25 }}
+        transition={{
+          duration: 0.35,
+          ease: "easeInOut",
+        }}
+        className="mt-9 space-y-10"
+      >
+        <DailyTasks uid={uid} userData={userData} />
 
-    <VibeDrops uid={uid} userData={userData} />
+        <VibeDrops uid={uid} userData={userData} />
 
-    <AnonymousVibe
-      uid={uid}
-      userData={userData}
-    />
+        <AnonymousVibe
+          uid={uid}
+          userData={userData}
+        />
 
-    <Roulette
-      uid={uid}
-      userData={userData}
-      onVibe={openChat}
-    />
+        <Roulette
+          uid={uid}
+          userData={userData}
+          onVibe={openChat}
+        />
 
-    <Leaderboard
-      uid={uid}
-      userData={userData}
-      preview
-      onOpen={() =>
-        setLeaderboardOpen(true)
-      }
-    />
-  </motion.div>
-) : (
-  <LinkComingSoon age={age} />
+        <Leaderboard
+          uid={uid}
+          userData={userData}
+          preview
+          onOpen={() =>
+            setLeaderboardOpen(true)
+          }
+        />
+      </motion.div>
+    ) : (
+      <motion.div
+        key="link"
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -25 }}
+        transition={{
+          duration: 0.35,
+          ease: "easeInOut",
+        }}
+        className="mt-9"
+      >
+        <LinkComingSoon age={age} />
+      </motion.div>
+    )}
+  </AnimatePresence>
 )}
         
       </main>
