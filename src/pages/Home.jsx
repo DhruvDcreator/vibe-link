@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import Drops from "../components/drops/Drops";
 import { AnimatePresence, motion } from "framer-motion";
 import VibeHome from "../components/VibeHome";
 import {
@@ -283,7 +284,7 @@ function BottomNav({ currentTab, setCurrentTab, hasUnread }) {
   const items = [
     { key: "home", label: "Home", icon: HomeIcon },
     { key: "discover", label: "Discover", icon: Compass },
-    { key: "tribe", label: "Tribe", icon: Users },
+    { key: "drops", label: "Drops", icon: Sparkles },
     { key: "chats", label: "Chats", icon: MessageCircle },
     { key: "profile", label: "Profile", icon: User },
   ];
@@ -549,7 +550,11 @@ const unlockDate =
           </div>
         )}
 
-        {currentTab === "tribe" && <TribePage />}
+        {currentTab === "drops" && (
+  <div className="pb-28 pt-5">
+    <Drops />
+  </div>
+)}
 
         {currentTab === "chats" && (
           <div className="pb-28 pt-5">
