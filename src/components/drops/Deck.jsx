@@ -9,13 +9,18 @@ import DropReactionBar from "./DropReactionBar";
 export default function Deck() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const currentDrop = dummyDrops[currentIndex];
-
   const total = dummyDrops.length;
 
-  function handleReaction() {
+  const currentDrop = dummyDrops[currentIndex];
+
+  function handleReaction(type) {
+    // We'll save the reaction to Firestore later.
+    console.log(type);
+
     if (currentIndex < total - 1) {
       setCurrentIndex((prev) => prev + 1);
+    } else {
+      setCurrentIndex(total);
     }
   }
 
@@ -26,24 +31,54 @@ export default function Deck() {
         animate={{ opacity: 1 }}
         className="
         flex
-        min-h-[70vh]
+        min-h-[78vh]
         items-center
         justify-center
+        px-6
         text-center
         "
       >
-        <div>
+        <div className="max-w-sm">
 
-          <h1 className="text-4xl font-black">
-            🎉
+          <motion.div
+            initial={{
+              scale: 0.7,
+              opacity: 0,
+            }}
+            animate={{
+              scale: 1,
+              opacity: 1,
+            }}
+            transition={{
+              type: "spring",
+              stiffness: 180,
+            }}
+            className="
+            mx-auto
+            flex
+            h-24
+            w-24
+            items-center
+            justify-center
+            rounded-full
+            bg-gradient-to-br
+            from-cyan-500/20
+            to-purple-500/20
+            "
+          >
+            <span className="text-5xl">
+              🎉
+            </span>
+          </motion.div>
+
+          <h1 className="mt-8 text-4xl font-black">
+            Deck Complete
           </h1>
 
-          <h2 className="mt-5 text-3xl font-black">
-            Deck Complete
-          </h2>
-
-          <p className="mt-3 text-zinc-400">
-            Come back tomorrow for a new deck.
+          <p className="mt-4 text-zinc-400 leading-relaxed">
+            You've finished today's deck.
+            <br />
+            Come back tomorrow for new Drops.
           </p>
 
         </div>
@@ -52,21 +87,30 @@ export default function Deck() {
   }
 
   return (
-    <div>
-
+    <div
+      className="
+      mx-auto
+      max-w-xl
+      px-1
+      pt-8
+      pb-32
+      "
+    >
       <DropProgress
         current={currentIndex + 1}
         total={total}
       />
 
-      <AnimatePresence mode="wait">
-
+      <AnimatePresence
+        mode="wait"
+        initial={false}
+      >
         <motion.div
           key={currentDrop.id}
           initial={{
             opacity: 0,
-            y: 40,
-            scale: 0.97,
+            y: 60,
+            scale: 0.96,
           }}
           animate={{
             opacity: 1,
@@ -75,11 +119,12 @@ export default function Deck() {
           }}
           exit={{
             opacity: 0,
-            y: -40,
-            scale: 0.97,
+            y: -60,
+            scale: 0.96,
           }}
           transition={{
             duration: 0.35,
+            ease: "easeOut",
           }}
         >
           <DropCard
@@ -90,9 +135,7 @@ export default function Deck() {
             onReact={handleReaction}
           />
         </motion.div>
-
       </AnimatePresence>
-
     </div>
   );
 }

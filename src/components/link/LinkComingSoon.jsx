@@ -175,7 +175,7 @@ export default function LinkComingSoon({ age }) {
           </p>
 
           <p className="mt-4 text-zinc-300">
-            LINK will launch in a future
+            LINK BETA will launch in a future
             VibeLink update.
           </p>
         </motion.div>

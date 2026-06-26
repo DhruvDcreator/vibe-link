@@ -4,37 +4,103 @@ export default function DropProgress({
   current = 1,
   total = 20,
 }) {
-  const percent = (current / total) * 100;
+  const progress = (current / total) * 100;
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 px-2">
 
-      <div className="flex items-center justify-between">
+      <motion.div
+        initial={{
+          opacity: 0,
+          y: -15,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+        }}
+        transition={{
+          duration: 0.35,
+        }}
+      >
 
-        <h2 className="text-2xl font-black">
-          Today's Deck
-        </h2>
+        <div className="flex items-end justify-between">
 
-        <span className="text-sm font-bold text-zinc-400">
-          {current}/{total}
-        </span>
+          <div>
 
-      </div>
+            <p
+              className="
+              text-sm
+              font-bold
+              tracking-[0.18em]
+              uppercase
+              text-cyan-300
+              "
+            >
+              Today's Deck
+            </p>
 
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+            <h1
+              className="
+              mt-1
+              text-3xl
+              font-black
+              tracking-tight
+              "
+            >
+              {current}
+              <span className="text-zinc-500">
+                {" "}
+                / {total}
+              </span>
+            </h1>
 
-        <motion.div
-          initial={{ width: 0 }}
-          animate={{
-            width: `${percent}%`,
-          }}
-          transition={{
-            duration: 0.45,
-          }}
-          className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-cyan-300 to-purple-500"
-        />
+          </div>
 
-      </div>
+          <p
+            className="
+            text-sm
+            font-semibold
+            text-zinc-500
+            "
+          >
+            Curated for You
+          </p>
+
+        </div>
+
+        <div
+          className="
+          mt-5
+          h-3
+          overflow-hidden
+          rounded-full
+          bg-white/[0.06]
+          "
+        >
+
+          <motion.div
+            initial={{
+              width: 0,
+            }}
+            animate={{
+              width: `${progress}%`,
+            }}
+            transition={{
+              duration: 0.4,
+            }}
+            className="
+            h-full
+            rounded-full
+            bg-gradient-to-r
+            from-cyan-400
+            via-cyan-300
+            to-purple-500
+            "
+          />
+
+        </div>
+
+      </motion.div>
 
     </div>
   );

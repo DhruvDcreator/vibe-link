@@ -5,61 +5,88 @@ const reactions = [
     id: "me",
     emoji: "✨",
     label: "ME",
-    color: "from-cyan-500/25 to-cyan-400/10",
+    glow: "shadow-[0_0_25px_rgba(34,211,238,0.25)]",
   },
   {
     id: "neutral",
     emoji: "😐",
     label: "NEUTRAL",
-    color: "from-white/15 to-white/5",
+    glow: "",
   },
   {
-    id: "notMe",
-    emoji: "🙅",
-    label: "NOT ME",
-    color: "from-purple-500/20 to-purple-400/10",
+    id: "different",
+    emoji: "🌍",
+    label: "DIFFERENT",
+    glow: "shadow-[0_0_25px_rgba(168,85,247,0.18)]",
   },
 ];
 
-export default function DropReactionBar({
-  onReact,
-}) {
+export default function DropReactionBar({ onReact }) {
   return (
-    <div className="mt-8 grid grid-cols-3 gap-3">
+    <div
+      className="
+      -mt-1
+      rounded-b-[36px]
+      border-x
+      border-b
+      border-white/10
+      bg-white/[0.045]
+      backdrop-blur-3xl
+      px-5
+      pb-6
+      pt-5
+      shadow-[0_20px_60px_rgba(0,0,0,0.35)]
+      "
+    >
+      <div className="mb-5 h-px bg-white/10" />
 
-      {reactions.map((reaction) => (
-        <motion.button
-          key={reaction.id}
-          whileHover={{
-            scale: 1.03,
-          }}
-          whileTap={{
-            scale: 0.95,
-          }}
-          onClick={() =>
-            onReact?.(reaction.id)
-          }
-          className={`
-            rounded-[22px]
-            border
-            border-white/10
-            bg-gradient-to-br
-            ${reaction.color}
-            backdrop-blur-2xl
-            py-5
-            transition-all
-          `}
-        >
-          <p className="text-2xl">
-            {reaction.emoji}
-          </p>
+      <div className="grid grid-cols-3 gap-3">
 
-          <p className="mt-2 text-xs font-black tracking-wide">
-            {reaction.label}
-          </p>
-        </motion.button>
-      ))}
+        {reactions.map((reaction) => (
+          <motion.button
+            key={reaction.id}
+            whileHover={{
+              scale: 1.04,
+              y: -2,
+            }}
+            whileTap={{
+              scale: 0.95,
+            }}
+            transition={{
+              duration: 0.18,
+            }}
+            onClick={() => onReact(reaction.id)}
+            className={`
+              ${reaction.glow}
+              rounded-2xl
+              border
+              border-white/10
+              bg-white/[0.04]
+              py-5
+              transition-all
+              duration-300
+              hover:bg-white/[0.07]
+            `}
+          >
+            <div className="text-3xl">
+              {reaction.emoji}
+            </div>
 
+            <div
+              className="
+              mt-3
+              text-[11px]
+              font-black
+              tracking-[0.18em]
+              text-white/90
+              "
+            >
+              {reaction.label}
+            </div>
+          </motion.button>
+        ))}
+
+      </div>
     </div>
   );
 }
