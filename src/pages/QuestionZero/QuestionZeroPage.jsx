@@ -49,48 +49,47 @@ export default function QuestionZeroPage({
   }, []);
 
   async function load() {
+  try {
     setLoading(true);
 
-    const q =
-      await getCurrentQuestion();
+    const q = await getCurrentQuestion();
 
     if (!q) {
-      setLoading(false);
+      setQuestion(null);
       return;
     }
 
     setQuestion(q);
 
-    const already =
-      await hasAnswered(
-        uid,
-        q.currentQuestionId
-      );
+    const already = await hasAnswered(
+      uid,
+      q.currentQuestionId
+    );
 
     setAnswered(already);
 
     if (already) {
       const { answers } =
-  await getAnswers(
-    q.currentQuestionId
-  );
-
-setAnswers(answers);
-
-      const mine =
-        list.find(
-          (a) => a.uid === uid
+        await getAnswers(
+          q.currentQuestionId
         );
+
+      setAnswers(answers);
+
+      const mine = answers.find(
+        (a) => a.uid === uid
+      );
 
       if (mine) {
-        setMyAnswer(
-          mine.answer
-        );
+        setMyAnswer(mine.answer);
       }
     }
-
+  } catch (err) {
+    console.error("Q0 Load Error:", err);
+  } finally {
     setLoading(false);
   }
+}
 
   useEffect(() => {
     const interval =
