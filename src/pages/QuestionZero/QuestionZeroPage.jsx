@@ -241,7 +241,12 @@ setAnswers(answers);
       </div>
     );
   }
-
+console.log({
+  answered,
+  myAnswer,
+  answers,
+  uid,
+});
   return (
     <>
       <div className="min-h-dvh bg-[#03040A] text-white">
