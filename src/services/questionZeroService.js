@@ -12,15 +12,37 @@ import {
   increment,
   arrayUnion,
   arrayRemove,
+  limit,
+  startAfter,
 } from "firebase/firestore";
 
 import { db } from "../firebase/firebase";
 
-/*
-|--------------------------------------------------------------------------
-| Current Question
-|--------------------------------------------------------------------------
-*/
+/* -------------------------------------------------------------------------- */
+/*                               Helper Methods                               */
+/* -------------------------------------------------------------------------- */
+
+export function answerDocumentId(questionId, uid) {
+  return `${questionId}_${uid}`;
+}
+
+export function getRemainingTime() {
+  const now = new Date();
+
+  const midnight = new Date();
+  midnight.setHours(24, 0, 0, 0);
+
+  const diff = midnight - now;
+
+  return {
+    hours: Math.floor(diff / 1000 / 60 / 60),
+    minutes: Math.floor((diff / 1000 / 60) % 60),
+  };
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            Current Question                                */
+/* -------------------------------------------------------------------------- */
 
 export async function getCurrentQuestion() {
   const ref = doc(db, "q0", "current");
@@ -35,48 +57,46 @@ export async function getCurrentQuestion() {
   };
 }
 
-/*
-|--------------------------------------------------------------------------
-| Has User Answered?
-|--------------------------------------------------------------------------
-*/
+/* -------------------------------------------------------------------------- */
+/*                           Has User Answered                                */
+/* -------------------------------------------------------------------------- */
 
 export async function hasAnswered(uid, questionId) {
-  const answerRef = doc(
+  const ref = doc(
     db,
     "q0Answers",
-    `${questionId}_${uid}`
+    answerDocumentId(questionId, uid)
   );
 
-  const snap = await getDoc(answerRef);
+  const snap = await getDoc(ref);
 
   return snap.exists();
 }
 
-/*
-|--------------------------------------------------------------------------
-| Submit Answer
-|--------------------------------------------------------------------------
-*/
+/* -------------------------------------------------------------------------- */
+/*                              Submit Answer                                 */
+/* -------------------------------------------------------------------------- */
 
 export async function submitAnswer({
   uid,
   username,
-  profilePic,
+  profilePic = "",
   answer,
   questionId,
 }) {
-  const answerRef = doc(
+  const ref = doc(
     db,
     "q0Answers",
-    `${questionId}_${uid}`
+    answerDocumentId(questionId, uid)
   );
 
-  await setDoc(answerRef, {
+  await setDoc(ref, {
     uid,
     username,
-    profilePic: profilePic || "",
+    profilePic,
+
     answer,
+
     questionId,
 
     meCount: 0,
@@ -94,11 +114,9 @@ export async function submitAnswer({
   );
 }
 
-/*
-|--------------------------------------------------------------------------
-| Edit Answer
-|--------------------------------------------------------------------------
-*/
+/* -------------------------------------------------------------------------- */
+/*                               Edit Answer                                  */
+/* -------------------------------------------------------------------------- */
 
 export async function updateAnswer(
   uid,
@@ -108,7 +126,7 @@ export async function updateAnswer(
   const ref = doc(
     db,
     "q0Answers",
-    `${questionId}_${uid}`
+    answerDocumentId(questionId, uid)
   );
 
   await updateDoc(ref, {
@@ -117,44 +135,61 @@ export async function updateAnswer(
   });
 }
 
-/*
-|--------------------------------------------------------------------------
-| Get Community Answers
-|--------------------------------------------------------------------------
-*/
+/* -------------------------------------------------------------------------- */
+/*                             Community Answers                             */
+/* -------------------------------------------------------------------------- */
 
 export async function getAnswers(
-  questionId
+  questionId,
+  lastVisible = null
 ) {
-  const q = query(
-    collection(db, "q0Answers"),
-    where(
-      "questionId",
-      "==",
-      questionId
-    ),
-    orderBy(
-      "meCount",
-      "desc"
-    )
-  );
+  let q;
 
-  const snapshot =
-    await getDocs(q);
+  if (lastVisible) {
+    q = query(
+      collection(db, "q0Answers"),
+      where(
+        "questionId",
+        "==",
+        questionId
+      ),
+      orderBy("meCount", "desc"),
+      startAfter(lastVisible),
+      limit(20)
+    );
+  } else {
+    q = query(
+      collection(db, "q0Answers"),
+      where(
+        "questionId",
+        "==",
+        questionId
+      ),
+      orderBy("meCount", "desc"),
+      limit(20)
+    );
+  }
 
-  return snapshot.docs.map(
-    (doc) => ({
+  const snapshot = await getDocs(q);
+
+  return {
+    answers: snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
-    })
-  );
+    })),
+
+    lastDoc:
+      snapshot.docs.length > 0
+        ? snapshot.docs[
+            snapshot.docs.length - 1
+          ]
+        : null,
+  };
 }
 
-/*
-|--------------------------------------------------------------------------
-| Toggle ME
-|--------------------------------------------------------------------------
-*/
+/* -------------------------------------------------------------------------- */
+/*                                 Toggle ME                                  */
+/* -------------------------------------------------------------------------- */
 
 export async function toggleMe({
   answerId,
@@ -172,10 +207,12 @@ export async function toggleMe({
       meCount: increment(-1),
       meBy: arrayRemove(uid),
     });
-  } else {
-    await updateDoc(ref, {
-      meCount: increment(1),
-      meBy: arrayUnion(uid),
-    });
+
+    return;
   }
+
+  await updateDoc(ref, {
+    meCount: increment(1),
+    meBy: arrayUnion(uid),
+  });
 }

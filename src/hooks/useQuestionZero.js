@@ -1,41 +1,166 @@
 import { useCallback, useEffect, useState } from "react";
-import { getCurrentQuestion } from "../services/questionZeroService";
+
+import { auth } from "../firebase/firebase";
+
+import {
+  getCurrentQuestion,
+  getAnswers,
+  hasAnswered,
+  submitAnswer,
+  updateAnswer,
+  toggleMe,
+} from "../services/questionZeroService";
 
 export default function useQuestionZero() {
+  const uid = auth.currentUser?.uid || "";
+
   const [question, setQuestion] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  const loadQuestion = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError("");
+  const [answers, setAnswers] = useState([]);
 
-      const data = await getCurrentQuestion();
+  const [myAnswer, setMyAnswer] = useState("");
 
-      if (!data) {
-        setError("No active Question Zero.");
-        setQuestion(null);
-      } else {
-        setQuestion(data);
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load Question Zero.");
-      setQuestion(null);
-    } finally {
+  const [answered, setAnswered] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [saving, setSaving] =
+    useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+
+    const current =
+      await getCurrentQuestion();
+
+    if (!current) {
       setLoading(false);
+      return;
     }
-  }, []);
+
+    setQuestion(current);
+
+    const already =
+      await hasAnswered(
+        uid,
+        current.currentQuestionId
+      );
+
+    setAnswered(already);
+
+    if (already) {
+      const { answers } =
+  await getAnswers(
+    current.currentQuestionId
+  );
+
+setAnswers(answers);
+
+      const mine =
+        list.find(
+          (item) =>
+            item.uid === uid
+        );
+
+      if (mine) {
+        setMyAnswer(
+          mine.answer
+        );
+      }
+    }
+
+    setLoading(false);
+  }, [uid]);
 
   useEffect(() => {
-    loadQuestion();
-  }, [loadQuestion]);
+    load();
+  }, [load]);
+
+  async function submit(value) {
+    if (!question) return;
+
+    setSaving(true);
+
+    await submitAnswer({
+      uid,
+
+      username:
+        auth.currentUser
+          ?.displayName ||
+        "User",
+
+      profilePic:
+        auth.currentUser
+          ?.photoURL || "",
+
+      answer: value,
+
+      questionId:
+        question.currentQuestionId,
+    });
+
+    await load();
+
+    setSaving(false);
+  }
+
+  async function edit(value) {
+    if (!question) return;
+
+    setSaving(true);
+
+    await updateAnswer(
+      uid,
+      question.currentQuestionId,
+      value
+    );
+
+    await load();
+
+    setSaving(false);
+  }
+
+  async function react(answer) {
+    const already =
+      answer.meBy?.includes(uid);
+
+    await toggleMe({
+      answerId: answer.id,
+
+      uid,
+
+      alreadyMe: already,
+    });
+
+    const { answers } =
+  await getAnswers(
+    question.currentQuestionId
+  );
+
+setAnswers(answers);
+  }
 
   return {
     question,
+
+    answers,
+
+    answered,
+
+    myAnswer,
+
     loading,
-    error,
-    refresh: loadQuestion,
+
+    saving,
+
+    submit,
+
+    edit,
+
+    react,
+
+    refresh: load,
   };
 }
