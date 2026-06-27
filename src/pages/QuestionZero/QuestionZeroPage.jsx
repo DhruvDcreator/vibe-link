@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-
 import { auth } from "../../firebase/firebase";
 
 import QuestionHeader from "../../components/q0/QuestionHeader";
@@ -18,9 +16,9 @@ import {
   hasAnswered,
 } from "../../services/questionZeroService";
 
-export default function QuestionZeroPage() {
-  const navigate = useNavigate();
-
+export default function QuestionZeroPage({
+  setCurrentTab,
+}) {
   const currentUser = auth.currentUser;
 
   const uid = currentUser?.uid || "";
@@ -261,7 +259,7 @@ setAnswers(answers);
             question={question.question}
             answerCount={answerCount}
             expiresText={expiresText}
-            onBack={() => navigate(-1)}
+            onBack={() => setCurrentTab("home")}
           />
 
           <div className="mt-8">

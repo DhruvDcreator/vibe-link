@@ -1,125 +1,132 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Globe2, ChevronRight } from "lucide-react";
-import useQuestionZero from "../../hooks/useQuestionZero";
+import {
+  getCurrentQuestion,
+  getRemainingTime,
+} from "../../services/questionZeroService";
 
-export default function QuestionZeroCard({ onOpen }) {
-  const {
-    question,
-    loading,
-    error,
-  } = useQuestionZero();
+export default function QuestionZeroCard({
+  setCurrentTab,
+}) {  const [question, setQuestion] = useState(null);
 
-  function getTimeRemaining() {
-    if (!question?.expiresAt) return "";
+  const [time, setTime] = useState(
+    getRemainingTime()
+  );
 
-    const expiry =
-      question.expiresAt.toDate();
+  useEffect(() => {
+    loadQuestion();
 
-    const diff =
-      expiry.getTime() -
-      Date.now();
+    const interval = setInterval(() => {
+      setTime(getRemainingTime());
+    }, 60000);
 
-    if (diff <= 0)
-      return "Expired";
+    return () => clearInterval(interval);
+  }, []);
 
-    const hours = Math.floor(
-      diff / (1000 * 60 * 60)
-    );
+  async function loadQuestion() {
+    const q = await getCurrentQuestion();
 
-    const minutes = Math.floor(
-      (diff %
-        (1000 * 60 * 60)) /
-        (1000 * 60)
-    );
-
-    return `${hours}h ${minutes}m left`;
+    setQuestion(q);
   }
 
-  if (loading) {
-    return (
-      <div className="animate-pulse rounded-[30px] border border-white/10 bg-white/[0.05] p-6">
-        <div className="h-4 w-32 rounded bg-white/10" />
-        <div className="mt-5 h-7 w-full rounded bg-white/10" />
-        <div className="mt-3 h-7 w-2/3 rounded bg-white/10" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="rounded-[30px] border border-red-400/20 bg-red-500/10 p-6">
-        <p className="font-bold text-red-200">
-          {error}
-        </p>
-      </div>
-    );
-  }
+  if (!question) return null;
 
   return (
     <motion.button
-      whileTap={{
-        scale: 0.985,
-      }}
-      whileHover={{
-        scale: 1.01,
-      }}
-      onClick={onOpen}
+      whileTap={{ scale: 0.98 }}
+      whileHover={{ y: -2 }}
+      onClick={() =>
+  setCurrentTab("questionZero")
+}
       className="
       relative
       w-full
       overflow-hidden
-      rounded-[32px]
+      rounded-[34px]
       border
-      border-cyan-300/10
-      bg-white/[0.05]
+      border-cyan-400/15
+      bg-gradient-to-br
+      from-cyan-500/10
+      via-white/[0.05]
+      to-purple-500/10
       p-6
       text-left
       backdrop-blur-2xl
       "
     >
-      <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-cyan-500/15 blur-[80px]" />
+      <div className="absolute -right-20 -top-20 h-52 w-52 rounded-full bg-cyan-500/15 blur-[90px]" />
 
       <div className="relative">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between">
 
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-300">
-            <Globe2 size={22} />
+          <div className="flex items-center gap-3">
+
+            <div
+              className="
+              flex
+              h-12
+              w-12
+              items-center
+              justify-center
+              rounded-2xl
+              bg-cyan-400/10
+              text-cyan-300
+              "
+            >
+              <Globe2 size={24} />
+            </div>
+
+            <div>
+
+              <p className="text-xs font-black tracking-[0.22em] text-cyan-300">
+                QUESTION ZERO
+              </p>
+
+              <p className="mt-1 text-xs text-zinc-500">
+                {question.answerCount || 0} answered today
+              </p>
+
+            </div>
+
           </div>
 
-          <div>
-
-            <p className="text-xs font-black tracking-[0.18em] text-cyan-300">
-              QUESTION ZERO
-            </p>
-
-            <p className="mt-1 text-xs font-semibold text-zinc-500">
-              {question.answerCount || 0} answered
-            </p>
-
-          </div>
+          <ChevronRight className="text-zinc-500" />
 
         </div>
 
-        <h2 className="mt-6 text-2xl font-black leading-snug">
+        <h2
+          className="
+          mt-7
+          text-[26px]
+          font-black
+          leading-tight
+          tracking-tight
+          "
+        >
           {question.question}
         </h2>
 
-        <div className="mt-7 flex items-center justify-between">
+        <div className="mt-8 flex items-center justify-between">
 
-          <span className="text-sm font-bold text-zinc-400">
-            {getTimeRemaining()}
+          <span className="text-sm text-zinc-400">
+            Ends in {time.hours}h {time.minutes}m
           </span>
 
-          <div className="flex items-center gap-2 text-cyan-300">
-
-            <span className="text-sm font-black">
-              Answer
-            </span>
-
-            <ChevronRight size={18} />
-
-          </div>
+          <span
+            className="
+            rounded-full
+            bg-cyan-400/10
+            px-3
+            py-2
+            text-xs
+            font-black
+            text-cyan-300
+            "
+          >
+            LIVE
+          </span>
 
         </div>
 

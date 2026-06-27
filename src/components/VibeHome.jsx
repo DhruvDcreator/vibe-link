@@ -5,10 +5,9 @@ import { Crown } from "lucide-react";
 import { auth } from "../firebase/firebase";
 
 import DailyTasks from "./vibe/DailyTasks";
-import VibeDrops from "./vibe/VibeDrops";
 import AnonymousVibe from "./vibe/AnonymousVibe";
-import Roulette from "./vibe/Roulette";
 import Leaderboard from "./vibe/Leaderboard";
+import QuestionZeroCard from "./vibe/QuestionZeroCard";
 import LinkComingSoon from "../components/link/LinkComingSoon";
 
 function Skeleton() {
@@ -294,29 +293,19 @@ exit={{
         }}
         className="mt-9 space-y-10"
       >
-        <DailyTasks uid={uid} userData={userData} />
+        <QuestionZeroCard
+  setCurrentTab={setCurrentTab}
+/>
 
-        <VibeDrops uid={uid} userData={userData} />
+<DailyTasks
+  uid={uid}
+  userData={userData}
+/>
 
-        <AnonymousVibe
-          uid={uid}
-          userData={userData}
-        />
-
-        <Roulette
-          uid={uid}
-          userData={userData}
-          onVibe={openChat}
-        />
-
-        <Leaderboard
-          uid={uid}
-          userData={userData}
-          preview
-          onOpen={() =>
-            setLeaderboardOpen(true)
-          }
-        />
+<AnonymousVibe
+  uid={uid}
+  userData={userData}
+/>
       </motion.div>
     ) : (
       <motion.div

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Drops from "../components/drops/Drops";
 import { AnimatePresence, motion } from "framer-motion";
+import QuestionZeroPage from "./QuestionZero/QuestionZeroPage";
 import VibeHome from "../components/VibeHome";
 import {
   Activity,
@@ -570,6 +571,14 @@ const unlockDate =
             <Profile userData={userData} setCurrentTab={setCurrentTab} />
           </div>
         )}
+
+        {currentTab === "questionZero" && (
+  <div className="pb-28 pt-5">
+    <QuestionZeroPage
+      setCurrentTab={setCurrentTab}
+    />
+  </div>
+)}
 
         {currentTab === "editVibes" && (
           <div className="pb-28 pt-5">
