@@ -6,6 +6,8 @@ import QuestionHeader from "../../components/q0/QuestionHeader";
 import AnswerComposer from "../../components/q0/AnswerComposer";
 import AnswerList from "../../components/q0/AnswerList";
 import UserPreview from "../../components/q0/UserPreview";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/firebase";
 
 import {
   getCurrentQuestion,
@@ -145,16 +147,19 @@ export default function QuestionZeroPage({
     setSaving(true);
 
     if (!answered) {
+      const userSnap = await getDoc(
+  doc(db, "users", uid)
+);
+
+const userData = userSnap.data();
       await submitAnswer({
         uid,
 
         username:
-          currentUser.displayName ||
-          "User",
+  userData?.username || "User",
 
-        profilePic:
-          currentUser.photoURL ||
-          "",
+profilePic:
+  userData?.profilePic || "",
 
         answer: value,
 
