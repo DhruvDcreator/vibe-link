@@ -284,12 +284,12 @@ function TribePage() {
 
 function BottomNav({ currentTab, setCurrentTab, hasUnread }) {
   const items = [
-    { key: "home", label: "Home", icon: HomeIcon },
-    { key: "explore", label: "Explore", icon: Compass },
-    { key: "drops", label: "Drops", icon: Sparkles },
-    { key: "chats", label: "Chats", icon: MessageCircle },
-    { key: "profile", label: "Profile", icon: User },
-  ];
+  { key: ROUTES.HOME, label: "Home", icon: HomeIcon },
+  { key: ROUTES.EXPLORE, label: "Explore", icon: Compass },
+  { key: ROUTES.DROPS, label: "Drops", icon: Sparkles },
+  { key: ROUTES.CHATS, label: "Chats", icon: MessageCircle },
+  { key: ROUTES.PROFILE, label: "Profile", icon: User },
+];
 
   return (
     <nav className="fixed bottom-4 left-1/2 z-50 w-[calc(100%-24px)] max-w-xl -translate-x-1/2 rounded-[25px] border border-white/10 bg-[#11121b]/80 px-2 py-2 shadow-[0_0_42px_rgba(34,211,238,0.14)] backdrop-blur-2xl">
