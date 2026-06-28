@@ -1,3 +1,4 @@
+import { ROUTES } from "../app/routes";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Drops from "../components/drops/Drops";
 import { AnimatePresence, motion } from "framer-motion";
@@ -39,7 +40,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { requestNotificationPermission } from "../notifications";
-import Discover from "./Discover";
+import Discover from "./Explore";
 import Profile from "./Profile";
 import EditVibes from "./EditVibes";
 import Chats from "./Chats";
@@ -284,7 +285,7 @@ function TribePage() {
 function BottomNav({ currentTab, setCurrentTab, hasUnread }) {
   const items = [
     { key: "home", label: "Home", icon: HomeIcon },
-    { key: "discover", label: "Discover", icon: Compass },
+    { key: "explore", label: "Explore", icon: Compass },
     { key: "drops", label: "Drops", icon: Sparkles },
     { key: "chats", label: "Chats", icon: MessageCircle },
     { key: "profile", label: "Profile", icon: User },
@@ -319,7 +320,7 @@ function BottomNav({ currentTab, setCurrentTab, hasUnread }) {
 }
 
 export default function Home() {
-  const [currentTab, setCurrentTab] = useState("home");
+const [currentTab, setCurrentTab] = useState(ROUTES.HOME);
   const [selectedMode, setSelectedMode] =
   useState("vibe");
   const [userData, setUserData] = useState(null);
@@ -541,7 +542,7 @@ const unlockDate =
 />
         )}
 
-        {currentTab === "discover" && (
+        {currentTab === "explore" && (
           <div className="pb-28 pt-5">
             <Discover
               userData={userData}

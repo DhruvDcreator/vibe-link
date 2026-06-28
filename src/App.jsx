@@ -26,7 +26,7 @@ import LoginSuccess from "./pages/LoginSuccess";
 import Vibes from "./pages/Vibes";
 import CompleteProfile from "./pages/CompleteProfile";
 import ProfilePicture from "./pages/ProfilePicture";
-import Discover from "./pages/Discover";
+import Discover from "./pages/Explore";
 import Home from "./pages/Home";
 import ForgotPassword from "./pages/ForgotPassword";
 import Terms from "./pages/Terms";
