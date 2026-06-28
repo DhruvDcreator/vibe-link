@@ -4,6 +4,7 @@ import Drops from "../components/drops/Drops";
 import { AnimatePresence, motion } from "framer-motion";
 import QuestionZeroPage from "./QuestionZero/QuestionZeroPage";
 import VibeHome from "../components/VibeHome";
+import Background from "../app/layout/Background";
 import {
   Activity,
   ArrowRight,
@@ -526,10 +527,7 @@ const unlockDate =
 
   return (
     <div className="relative min-h-dvh overflow-hidden bg-[#03040A] text-white">
-      <div className="pointer-events-none fixed inset-0 bg-gradient-to-br from-cyan-500/10 via-[#03040A] to-purple-500/10" />
-      <div className="pointer-events-none fixed -left-32 -top-24 h-[340px] w-[340px] rounded-full bg-cyan-500/15 blur-[110px]" />
-      <div className="pointer-events-none fixed -bottom-28 -right-20 h-[360px] w-[360px] rounded-full bg-purple-500/15 blur-[120px]" />
-
+<Background />
       <div className="relative z-10">
         {currentTab === "home" && (
           <Dashboard
