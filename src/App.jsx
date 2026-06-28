@@ -280,19 +280,14 @@ export default function App() {
   );
 }
 
-  if (
-    screen ===
-    "forgotPassword"
-  ) {
-    return (
-      <ForgotPassword
-        setScreen={
-          setScreen
-        }
-      />
-    );
-  }
-
+  if (screen === "forgotPassword") {
+  return (
+    <AuthRouter
+      screen={screen}
+      setScreen={setScreen}
+    />
+  );
+}
   if (
     screen ===
     "auth"

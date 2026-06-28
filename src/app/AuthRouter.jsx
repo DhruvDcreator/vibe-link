@@ -19,6 +19,18 @@ export default function AuthRouter({
   if (screen === "welcome") {
     return <Welcome setScreen={setScreen} />;
   }
+if (
+    screen ===
+    "forgotPassword"
+  ) {
+    return (
+      <ForgotPassword
+        setScreen={
+          setScreen
+        }
+      />
+    );
+  }
 
   return null;
 }
