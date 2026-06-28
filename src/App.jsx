@@ -1,3 +1,4 @@
+import AuthRouter from "./app/AuthRouter";
 import {
   useState,
   useEffect,
@@ -270,18 +271,14 @@ export default function App() {
     return <PremiumLoadingScreen />;
   }
 
-  if (
-    screen ===
-    "welcome"
-  ) {
-    return (
-      <Welcome
-        setScreen={
-          setScreen
-        }
-      />
-    );
-  }
+  if (screen === "welcome") {
+  return (
+    <AuthRouter
+      screen={screen}
+      setScreen={setScreen}
+    />
+  );
+}
 
   if (
     screen ===
