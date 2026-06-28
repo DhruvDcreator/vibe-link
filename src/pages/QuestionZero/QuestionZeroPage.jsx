@@ -6,7 +6,10 @@ import QuestionHeader from "../../components/q0/QuestionHeader";
 import AnswerComposer from "../../components/q0/AnswerComposer";
 import AnswerList from "../../components/q0/AnswerList";
 import UserPreview from "../../components/q0/UserPreview";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 
 import {
@@ -20,6 +23,7 @@ import {
 
 export default function QuestionZeroPage({
   setCurrentTab,
+  setSelectedChatUser,
 }) {
   const currentUser = auth.currentUser;
 
@@ -72,11 +76,48 @@ export default function QuestionZeroPage({
 
     if (already) {
       const { answers } =
-        await getAnswers(
-          q.currentQuestionId
+  await getAnswers(
+    q.currentQuestionId
+  );
+
+const mySnap = await getDoc(
+  doc(db, "users", uid)
+);
+
+const myVibes =
+  mySnap.data()?.vibes || [];
+
+const answersWithCommonVibes =
+  await Promise.all(
+    answers.map(async (answer) => {
+      try {
+        const otherSnap = await getDoc(
+          doc(db, "users", answer.uid)
         );
 
-      setAnswers(answers);
+        if (!otherSnap.exists()) {
+          return answer;
+        }
+
+        const otherVibes =
+          otherSnap.data()?.vibes || [];
+
+        const commonVibes =
+          myVibes.filter((vibe) =>
+            otherVibes.includes(vibe)
+          );
+
+        return {
+          ...answer,
+          commonVibes,
+        };
+      } catch {
+        return answer;
+      }
+    })
+  );
+
+setAnswers(answersWithCommonVibes);
 
       const mine = answers.find(
         (a) => a.uid === uid
@@ -212,13 +253,52 @@ profilePic:
 setAnswers(answers);
   }
 
-  function openPreview(
-    user
-  ) {
-    setPreviewUser(user);
+  async function openPreview(answer) {
+  try {
+    const otherSnap = await getDoc(
+      doc(db, "users", answer.uid)
+    );
+
+    const mySnap = await getDoc(
+      doc(db, "users", uid)
+    );
+
+    if (
+      !otherSnap.exists() ||
+      !mySnap.exists()
+    ) {
+      return;
+    }
+
+    const otherUser =
+      otherSnap.data();
+
+    const myUser =
+      mySnap.data();
+
+    const myVibes =
+      myUser.vibes || [];
+
+    const otherVibes =
+      otherUser.vibes || [];
+
+    const commonVibes =
+      myVibes.filter((vibe) =>
+        otherVibes.includes(vibe)
+      );
+
+    setPreviewUser({
+      ...otherUser,
+      uid: answer.uid,
+      commonVibes,
+    });
 
     setPreviewOpen(true);
+
+  } catch (err) {
+    console.error(err);
   }
+}
 
   function closePreview() {
     setPreviewOpen(false);
@@ -337,12 +417,18 @@ console.log({
             <div className="mt-10">
 
               <AnswerList
-                answers={answers}
-                loading={loading}
-                currentUid={uid}
-                onUserClick={openPreview}
-                onToggleMe={handleToggleMe}
-              />
+  answers={answers}
+  loading={loading}
+  currentUid={uid}
+  onUserClick={openPreview}
+  onToggleMe={handleToggleMe}
+  onChat={(user) => {
+    console.log("Chat", user);
+  }}
+  onEdit={() => {
+    setEditing(true);
+  }}
+/>
 
             </div>
 
@@ -363,9 +449,25 @@ console.log({
           "Share similar vibes",
         ]}
         onClose={closePreview}
-        onChat={() => {}}
-        onGame={() => {}}
-        onProfile={() => {}}
+        onChat={() => {
+  closePreview();
+
+  setSelectedChatUser({
+    id: previewUser.uid,
+    username: previewUser.username,
+    profilePic: previewUser.profilePic,
+  });
+
+  setCurrentTab("chatRoom");
+}}
+        onGame={() => {
+  alert("Games are coming soon 🎮");
+}}
+        onProfile={() => {
+  closePreview();
+
+  console.log("Open profile:", previewUser.uid);
+}}
       />
     </>
   );

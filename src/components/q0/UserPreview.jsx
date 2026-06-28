@@ -1,14 +1,15 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   X,
   MessageCircle,
   Gamepad2,
   User,
+  ChevronRight,
   Sparkles,
 } from "lucide-react";
 
 const FALLBACK =
-  "https://ui-avatars.com/api/?background=111827&color=ffffff&name=V";
+  "https://ui-avatars.com/api/?background=111827&color=ffffff&name=U";
 
 export default function UserPreview({
   open,
@@ -20,16 +21,37 @@ export default function UserPreview({
   onGame,
   onProfile,
 }) {
+  const profilePicture =
+    user?.profilePic ||
+    `https://ui-avatars.com/api/?background=111827&color=ffffff&name=${encodeURIComponent(
+      user?.username || "U"
+    )}`;
+
   return (
     <AnimatePresence>
+
       {open && (
+
         <>
+
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
             onClick={onClose}
-            className="fixed inset-0 z-[95] bg-black/70 backdrop-blur-md"
+            className="
+            fixed
+            inset-0
+            z-[95]
+            bg-black/70
+            backdrop-blur-md
+            "
           />
 
           <motion.div
@@ -53,83 +75,154 @@ export default function UserPreview({
             left-0
             right-0
             z-[96]
-            rounded-t-[34px]
+            rounded-t-[38px]
             border-t
             border-white/10
-            bg-[#0A0B11]
-            p-6
+            bg-[#090A11]
+            px-6
+            pt-6
+            pb-8
+            backdrop-blur-3xl
             "
           >
-            <div className="flex items-start justify-between">
 
-              <div className="flex gap-4">
+            <div className="mb-6 flex items-center justify-between">
 
-                <img
-                  src={
-                    user?.profilePic ||
-                    FALLBACK
-                  }
-                  alt=""
-                  className="
-                  h-20
-                  w-20
-                  rounded-3xl
-                  object-cover
-                  "
-                />
-
-                <div>
-
-                  <h2 className="text-2xl font-black">
-                    @{user?.username}
-                  </h2>
-
-                  <p className="mt-1 text-zinc-400">
-                    Find Your People
-                  </p>
-
-                </div>
-
-              </div>
+              <div className="h-1.5 w-16 rounded-full bg-white/10 mx-auto absolute left-1/2 -translate-x-1/2 -top-3" />
 
               <button
                 onClick={onClose}
+                className="
+                ml-auto
+                flex
+                h-11
+                w-11
+                items-center
+                justify-center
+                rounded-full
+                bg-white/5
+                "
               >
-                <X />
+                <X size={20} />
               </button>
 
             </div>
 
-            <div className="mt-8">
+            <button
+              onClick={onProfile}
+              className="
+              w-full
+              rounded-[28px]
+              border
+              border-white/10
+              bg-white/[0.05]
+              p-5
+              text-left
+              transition
+              hover:bg-white/[0.07]
+              "
+            >
 
-              <p className="text-sm font-black text-cyan-300">
-                ✨ Your Common Ground
-              </p>
+              <div className="flex items-center justify-between">
 
-              <div className="mt-3 flex flex-wrap gap-2">
+                <div className="flex items-center gap-4">
 
-                {commonVibes.length === 0 && (
-                  <span className="text-zinc-500 text-sm">
-                    No common vibes yet.
-                  </span>
-                )}
-
-                {commonVibes.map((vibe) => (
-                  <span
-                    key={vibe}
+                  <img
+                    src={profilePicture}
+                    alt=""
                     className="
-                    rounded-full
-                    bg-cyan-400/10
-                    px-4
-                    py-2
+                    h-20
+                    w-20
+                    rounded-[24px]
+                    object-cover
+                    border
+                    border-white/10
+                    "
+                  />
+
+                  <div>
+
+                    <h2 className="text-2xl font-black">
+                      {user?.username}
+                    </h2>
+
+                    <p className="mt-2 text-sm text-zinc-400">
+                      View Profile
+                    </p>
+
+                  </div>
+
+                </div>
+
+                <ChevronRight
+                  size={22}
+                  className="text-zinc-500"
+                />
+
+              </div>
+
+            </button>
+                        <div className="mt-8">
+
+              <div className="flex items-center gap-2">
+
+                <Sparkles
+                  size={18}
+                  className="text-cyan-300"
+                />
+
+                <h3 className="text-lg font-black">
+                  Common Vibes
+                </h3>
+
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-3">
+
+                {commonVibes.length === 0 ? (
+
+                  <div
+                    className="
+                    rounded-2xl
+                    border
+                    border-dashed
+                    border-white/10
+                    px-5
+                    py-4
                     text-sm
-                    font-bold
-                    text-cyan-300
+                    text-zinc-500
                     "
                   >
-                    {vibe}
-                  </span>
-                ))}
+                    You haven't discovered any common vibes yet.
+                  </div>
+
+                ) : (
+
+                  commonVibes.map((vibe) => (
+
+                    <motion.div
+                      key={vibe}
+                      whileTap={{
+                        scale: 0.96,
+                      }}
+                      className="
+                      rounded-full
+                      border
+                      border-cyan-400/20
+                      bg-cyan-400/10
+                      px-5
+                      py-2.5
+                      text-sm
+                      font-black
+                      text-cyan-300
+                      "
+                    >
+                      {vibe}
+                    </motion.div>
+
+                  ))
+
+                )}
 
               </div>
 
@@ -137,105 +230,200 @@ export default function UserPreview({
 
             {commonGround.length > 0 && (
 
-              <div className="mt-8">
+              <div className="mt-9">
 
-                <p className="text-sm font-black text-purple-300">
-                  <Sparkles
-                    size={15}
-                    className="inline mr-2"
-                  />
-                  Things you both did
-                </p>
+                <h3 className="text-lg font-black">
+                  Things You Both Did
+                </h3>
 
-                <div className="mt-3 space-y-2">
+                <div className="mt-4 space-y-3">
 
-                  {commonGround.map(
-                    (item) => (
-                      <div
-                        key={item}
-                        className="
-                        rounded-2xl
-                        bg-white/5
-                        p-3
-                        text-sm
-                        "
-                      >
-                        {item}
+                  {commonGround.map((item) => (
+
+                    <motion.div
+                      key={item}
+                      whileHover={{
+                        x: 4,
+                      }}
+                      className="
+                      rounded-[22px]
+                      border
+                      border-white/10
+                      bg-white/[0.05]
+                      px-5
+                      py-4
+                      "
+                    >
+
+                      <div className="flex items-center gap-3">
+
+                        <Sparkles
+                          size={16}
+                          className="text-purple-300"
+                        />
+
+                        <span className="font-medium">
+                          {item}
+                        </span>
+
                       </div>
-                    )
-                  )}
+
+                    </motion.div>
+
+                  ))}
 
                 </div>
 
               </div>
 
             )}
+                        <div className="mt-10 grid grid-cols-3 gap-4">
 
-            <div className="mt-8 grid grid-cols-3 gap-3">
-
-              <button
+              <motion.button
+                whileHover={{
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
                 onClick={onChat}
                 className="
-                flex
-                flex-col
-                items-center
-                gap-2
-                rounded-2xl
-                bg-cyan-500
-                py-4
-                font-black
+                rounded-[24px]
+                bg-gradient-to-br
+                from-cyan-500
+                to-cyan-400
+                p-5
                 text-black
+                shadow-[0_0_25px_rgba(34,211,238,0.25)]
                 "
               >
-                <MessageCircle
-                  size={20}
-                />
-                Vibe
-              </button>
 
-              <button
+                <div className="flex flex-col items-center">
+
+                  <MessageCircle size={24} />
+
+                  <p className="mt-3 text-sm font-black">
+                    Vibe Together
+                  </p>
+
+                </div>
+
+              </motion.button>
+
+              <motion.button
+                whileHover={{
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
                 onClick={onGame}
                 className="
-                flex
-                flex-col
-                items-center
-                gap-2
-                rounded-2xl
-                bg-white/8
-                py-4
-                font-black
+                rounded-[24px]
+                border
+                border-white/10
+                bg-white/[0.05]
+                p-5
+                backdrop-blur-xl
                 "
               >
-                <Gamepad2
-                  size={20}
-                />
-                Play
-              </button>
 
-              <button
+                <div className="flex flex-col items-center">
+
+                  <Gamepad2
+                    size={24}
+                    className="text-white"
+                  />
+
+                  <p className="mt-3 text-sm font-black">
+                    Play Together
+                  </p>
+
+                  <p className="mt-1 text-[11px] text-zinc-500">
+                    Coming Soon
+                  </p>
+
+                </div>
+
+              </motion.button>
+
+              <motion.button
+                whileHover={{
+                  y: -2,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
                 onClick={onProfile}
                 className="
-                flex
-                flex-col
-                items-center
-                gap-2
-                rounded-2xl
-                bg-white/8
-                py-4
-                font-black
+                rounded-[24px]
+                border
+                border-white/10
+                bg-white/[0.05]
+                p-5
+                backdrop-blur-xl
                 "
               >
-                <User
-                  size={20}
-                />
-                Profile
-              </button>
+
+                <div className="flex flex-col items-center">
+
+                  <User
+                    size={24}
+                    className="text-white"
+                  />
+
+                  <p className="mt-3 text-sm font-black">
+                    Full Profile
+                  </p>
+
+                </div>
+
+              </motion.button>
 
             </div>
 
-          </motion.div>
+            <div
+              className="
+              mt-10
+              rounded-[28px]
+              border
+              border-cyan-400/15
+              bg-gradient-to-r
+              from-cyan-500/10
+              via-blue-500/5
+              to-purple-500/10
+              p-5
+              "
+            >
+
+              <div className="flex items-center gap-3">
+
+                <Sparkles
+                  className="text-cyan-300"
+                  size={20}
+                />
+
+                <div>
+
+                  <p className="font-black">
+                    VibeLink Insight
+                  </p>
+
+                  <p className="mt-1 text-sm text-zinc-400">
+                    You both answered today's Question Zero.
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+                      </motion.div>
+
         </>
+
       )}
+
     </AnimatePresence>
   );
 }

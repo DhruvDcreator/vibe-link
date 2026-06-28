@@ -575,8 +575,9 @@ const unlockDate =
         {currentTab === "questionZero" && (
   <div className="pb-28 pt-5">
     <QuestionZeroPage
-      setCurrentTab={setCurrentTab}
-    />
+  setCurrentTab={setCurrentTab}
+  setSelectedChatUser={setSelectedChatUser}
+/>
   </div>
 )}
 
@@ -595,7 +596,10 @@ const unlockDate =
         )}
       </div>
 
-      {currentTab !== "chatRoom" && (
+      {![
+  "chatRoom",
+  "questionZero",
+].includes(currentTab) && (
         <AnimatePresence
   mode="wait"
   initial={false}
