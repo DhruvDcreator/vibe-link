@@ -88,37 +88,9 @@ const myVibes =
   mySnap.data()?.vibes || [];
 
 const answersWithCommonVibes =
-  await Promise.all(
-    answers.map(async (answer) => {
-      try {
-        const otherSnap = await getDoc(
-          doc(db, "users", answer.uid)
-        );
-
-        if (!otherSnap.exists()) {
-          return answer;
-        }
-
-        const otherVibes =
-          otherSnap.data()?.vibes || [];
-
-        const commonVibes =
-          myVibes.filter((vibe) =>
-            otherVibes.includes(vibe)
-          );
-
-        return {
-          ...answer,
-          commonVibes,
-        };
-      } catch {
-        return answer;
-      }
-    })
-  );
+  await attachCommonVibes(answers);
 
 setAnswers(answersWithCommonVibes);
-
       const mine = answers.find(
         (a) => a.uid === uid
       );
@@ -179,6 +151,43 @@ setAnswers(answersWithCommonVibes);
         interval
       );
   }, []);
+
+  async function attachCommonVibes(rawAnswers) {
+  const mySnap = await getDoc(
+    doc(db, "users", uid)
+  );
+
+  const myVibes = mySnap.data()?.vibes || [];
+
+  return Promise.all(
+    rawAnswers.map(async (answer) => {
+      try {
+        const otherSnap = await getDoc(
+          doc(db, "users", answer.uid)
+        );
+
+        if (!otherSnap.exists()) {
+          return answer;
+        }
+
+        const otherVibes =
+          otherSnap.data()?.vibes || [];
+
+        const commonVibes =
+          myVibes.filter((vibe) =>
+            otherVibes.includes(vibe)
+          );
+
+        return {
+          ...answer,
+          commonVibes,
+        };
+      } catch {
+        return answer;
+      }
+    })
+  );
+}
 
   async function handleSubmit(
     value
@@ -250,7 +259,12 @@ profilePic:
     question.currentQuestionId
   );
 
-setAnswers(answers);
+const updatedAnswers =
+  await attachCommonVibes(
+    answers
+  );
+
+setAnswers(updatedAnswers);
   }
 
   async function openPreview(answer) {
@@ -423,8 +437,14 @@ console.log({
   onUserClick={openPreview}
   onToggleMe={handleToggleMe}
   onChat={(user) => {
-    console.log("Chat", user);
-  }}
+  setSelectedChatUser({
+    id: user.uid,
+    username: user.username,
+    profilePic: user.profilePic,
+  });
+
+  setCurrentTab("chatRoom");
+}}
   onEdit={() => {
     setEditing(true);
   }}
